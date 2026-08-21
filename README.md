@@ -55,10 +55,10 @@ Cloudflare Dashboard → R2 → bucket oluştur (`thendisch-muzik`) → API toke
 - Senkron "herkes aynı şarkıyı aynı anda dinler" radyo motoru
 - LRC formatlı senkron söz gösterimi
 - 10 tam dinlemede otomatik yeni yükleme hakkı
+- Yükleme Formu, Kategori ve Tür Etiketleri (UI ve mantık)
+- Kuyruk Listesi
+- Yüklenen ses dosyasından tarayıcıda (client-side) otomatik süre (duration) çıkarma
+- Oturum durumuna göre hak bitimi ve yükleme izni UI kontrolü
 
-## Sırada
-- `/müzik` sayfasına yükleme formu + kategori/tür filtre arayüzü
-- Google giriş butonu ve oturum UI'ı
-- Kategori/tür etiket seed listesi (dünya bölgeleri + müzik türleri)
-- Ses dosyasından süre (duration) otomatik çıkarma
-- Kuyruğa eklenen şarkının admin/moderasyon onayı (istenirse)
+## Sırada (İsteğe Bağlı)
+- Kuyruğa eklenen şarkının admin/moderasyon onayı (istenirse eklenebilir)
