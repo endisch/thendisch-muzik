@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  googleId      String   @unique
+  email         String   @unique
+  name          String?
+  image         String?
+  uploadCredits Int      @default(3)     // her girişte 3 hakla başlar
+  songsListened Int      @default(0)     // 10'a ulaşınca +1 hak kazanılır
+  createdAt     DateTime @default(now())
+
+  songs        Song[]
+  playHistory  PlayHistory[]
+}
+
+model Song {
+  id          String   @id @default(cuid())
+  title       String
+  artist      String
+  fileUrl     String   // R2 üzerindeki dosya adresi
+  lyricsLrc   String?  @db.Text // LRC formatında zaman damgalı sözler
+  durationSec Int
+  categories  String[] // ör: ["Türk", "Latin", "Afro"]
+  genres      String[] // ör: ["Pop", "Elektronik", "Halk Müziği"]
+  status      SongStatus @default(QUEUED)
+  uploadedBy  String
+  uploader    User     @relation(fields: [uploadedBy], references: [id])
+  queuePos    Int?     // sıradaki konumu (null = zaten çalındı)
+  createdAt   DateTime @default(now())
+
+  playHistory PlayHistory[]
+
+  @@index([status, queuePos])
+}
+
+enum SongStatus {
+  QUEUED
+  PLAYING
+  PLAYED
+}
+
+// Sistemde her zaman TEK satır olur: şu an ne çalıyor, ne zaman başladı
+model NowPlaying {
+  id        Int      @id @default(1)
+  songId    String?
+  startedAt DateTime?
+}
+
+model PlayHistory {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  songId       String
+  song         Song     @relation(fields: [songId], references: [id])
+  completed    Boolean  @default(false) // %80+ dinlendiyse true
+  listenedAt   DateTime @default(now())
+
+  @@index([userId])
+}

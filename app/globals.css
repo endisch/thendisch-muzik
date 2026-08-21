@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.lyrics .active {
+  color: #2563eb;
+  font-weight: bold;
+}
