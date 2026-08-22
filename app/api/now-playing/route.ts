@@ -23,12 +23,16 @@ export async function GET() {
   );
 
   const playbackUrl = await getPlaybackUrl(current.song!.fileUrl);
+  const coverUrl = current.song!.coverUrl 
+    ? await getPlaybackUrl(current.song!.coverUrl)
+    : null;
 
   return NextResponse.json({
     playing: true,
     songId: current.song!.id,
     title: current.song!.title,
     artist: current.song!.artist,
+    coverUrl: coverUrl,
     lyricsLrc: current.song!.lyricsLrc,
     durationSec: current.song!.durationSec,
     elapsedSec,

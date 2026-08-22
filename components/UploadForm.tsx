@@ -14,6 +14,8 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
@@ -26,6 +28,11 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       setDurationSec(audio.duration);
       URL.revokeObjectURL(url);
     });
+  };
+
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+    if (selected) setCoverFile(selected);
   };
 
   const handleCategoryToggle = (cat: string) => {
@@ -51,19 +58,37 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
     setError("");
 
     try {
-      // 1. Presigned URL al
+      // 1. Presigned URL al (Ses)
       const urlRes = await fetch("/api/upload-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ filename: file.name, contentType: file.type }),
       });
-      if (!urlRes.ok) {
-        const d = await urlRes.json();
-        throw new Error(d.error || "Upload URL alınamadı");
-      }
+      if (!urlRes.ok) throw new Error("Upload URL alınamadı");
       const { uploadUrl, key } = await urlRes.json();
 
-      // 2. R2'ye yükle
+      // 1.5 Presigned URL al (Kapak - Eğer varsa)
+      let coverKey = undefined;
+      if (coverFile) {
+        const coverUrlRes = await fetch("/api/upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename: coverFile.name, contentType: coverFile.type }),
+        });
+        if (!coverUrlRes.ok) throw new Error("Kapak Upload URL alınamadı");
+        const coverData = await coverUrlRes.json();
+        
+        // R2'ye kapağı yükle
+        const coverUploadRes = await fetch(coverData.uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": coverFile.type },
+          body: coverFile,
+        });
+        if (!coverUploadRes.ok) throw new Error("Kapak yüklenirken hata oluştu");
+        coverKey = coverData.key;
+      }
+
+      // 2. R2'ye ses dosyasını yükle
       const uploadRes = await fetch(uploadUrl, {
         method: "PUT",
         headers: { "Content-Type": file.type },
@@ -79,6 +104,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
           title,
           artist,
           fileKey: key,
+          coverKey: coverKey,
           durationSec,
           categories: selectedCategories,
           genres: selectedGenres,
@@ -93,6 +119,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
 
       // Başarılı
       setFile(null);
+      setCoverFile(null);
       setTitle("");
       setArtist("");
       setDurationSec(null);
@@ -136,16 +163,28 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
           </div>
         </div>
 
-        <div>
-          <label className="block mb-1 font-semibold">Ses Dosyası</label>
-          <input 
-            type="file" 
-            accept="audio/*" 
-            onChange={handleFileChange} 
-            className="w-full border p-2 rounded bg-white dark:bg-gray-700" 
-            required 
-          />
-          {durationSec && <span className="text-xs text-gray-500 mt-1 block">Süre: {Math.round(durationSec)} sn</span>}
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <label className="block mb-1 font-semibold">Ses Dosyası (.mp3)</label>
+            <input 
+              type="file" 
+              accept="audio/*" 
+              onChange={handleFileChange} 
+              className="w-full border p-2 rounded bg-white dark:bg-gray-700" 
+              required 
+            />
+            {durationSec && <span className="text-xs text-gray-500 mt-1 block">Süre: {Math.round(durationSec)} sn</span>}
+          </div>
+          <div className="flex-1">
+            <label className="block mb-1 font-semibold">Kapak Görseli (.jpg, .png)</label>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleCoverChange} 
+              className="w-full border p-2 rounded bg-white dark:bg-gray-700" 
+            />
+            <span className="text-xs text-gray-500 mt-1 block">İsteğe bağlı, kare boyut önerilir</span>
+          </div>
         </div>
 
         <div>

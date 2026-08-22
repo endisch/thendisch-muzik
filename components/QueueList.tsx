@@ -8,6 +8,7 @@ type QueuedSong = {
   artist: string;
   durationSec: number;
   votesCount: number;
+  coverUrl?: string | null;
 };
 
 export default function QueueList({ refreshTrigger }: { refreshTrigger: number }) {
@@ -63,6 +64,16 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
             <li key={song.id} className="flex justify-between items-center p-4 rounded-xl bg-gray-800/50 hover:bg-gray-800 transition-all border border-gray-700 hover:border-gray-600 group">
               <div className="flex items-center gap-4">
                 <span className="font-black text-xl text-gray-600 group-hover:text-gray-400 transition-colors w-6 text-center">{idx + 1}</span>
+                
+                {/* Kapak Görseli Thumbnail */}
+                <div className="w-12 h-12 rounded bg-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                  {song.coverUrl ? (
+                    <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />
+                  ) : (
+                    <svg className="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg>
+                  )}
+                </div>
+
                 <div className="flex flex-col">
                   <span className="font-bold text-white text-lg">{song.title}</span>
                   <span className="text-sm text-gray-400">{song.artist}</span>

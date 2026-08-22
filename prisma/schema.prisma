@@ -28,6 +28,7 @@ model Song {
   title       String
   artist      String
   fileUrl     String
+  coverUrl    String?  // Yeni: Kapak fotoğrafı R2 adresi
   lyricsLrc   String?  @db.Text
   durationSec Int
   categories  String[]

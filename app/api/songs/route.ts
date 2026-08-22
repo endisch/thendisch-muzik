@@ -10,6 +10,7 @@ const SongSchema = z.object({
   title: z.string().min(1),
   artist: z.string().min(1),
   fileKey: z.string().min(1),
+  coverKey: z.string().optional(),
   durationSec: z.number().positive(),
   categories: z.array(z.string()).default([]),
   genres: z.array(z.string()).default([]),
@@ -25,13 +26,23 @@ export async function GET() {
       id: true,
       title: true,
       artist: true,
+      coverUrl: true,
       categories: true,
       genres: true,
       durationSec: true,
       votesCount: true,
     },
   });
-  return NextResponse.json({ queue });
+  
+  const { getPlaybackUrl } = await import("@/lib/storage");
+  const queueWithUrls = await Promise.all(
+    queue.map(async (q) => ({
+      ...q,
+      coverUrl: q.coverUrl ? await getPlaybackUrl(q.coverUrl) : null,
+    }))
+  );
+
+  return NextResponse.json({ queue: queueWithUrls });
 }
 
 // POST: R2'ye yükleme tamamlandıktan sonra şarkıyı DB'ye + kuyruğa kaydeder
@@ -57,6 +68,7 @@ export async function POST(req: Request) {
         title: body.title,
         artist: body.artist,
         fileUrl: body.fileKey,
+        coverUrl: body.coverKey,
         durationSec: body.durationSec,
         categories: body.categories,
         genres: body.genres,
