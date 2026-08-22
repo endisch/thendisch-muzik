@@ -13,53 +13,69 @@ export default async function MuzikPage() {
   const session = await getServerSession(authOptions);
 
   return (
-    <main className="max-w-4xl mx-auto p-4 sm:p-6">
-      <header className="mb-8 text-center border-b pb-4">
-        <h1 className="text-3xl font-extrabold text-blue-600 mb-2">Thendisch Müzik</h1>
-        <p className="text-gray-500">7/24 Canlı, Ortak Radyo Deneyimi</p>
+    <div className="min-h-screen bg-black text-gray-100 flex flex-col font-sans selection:bg-emerald-500/30">
+      {/* Sleek Navbar */}
+      <header className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+            <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          </div>
+          <Link href="/">
+            <h1 className="text-2xl font-black text-white tracking-tight hover:text-emerald-400 transition-colors">Thendisch <span className="font-light text-gray-400">Müzik</span></h1>
+          </Link>
+        </div>
+        <div className="flex items-center gap-6">
+          <AuthStatus session={session} />
+        </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div>
-          <div className="sticky top-4">
-            <RadioPlayer />
+      <main className="flex-1 max-w-[1400px] w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-10">
+        
+        {/* Top Charts Banner Strip */}
+        <section className="flex items-center gap-6 overflow-x-auto pb-4 no-scrollbar">
+          <div className="flex-shrink-0 flex items-center justify-center h-24 px-6 rounded-2xl bg-zinc-900 border border-white/5">
+            <span className="text-sm font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">Ayın En<br/>İyileri</span>
           </div>
-        </div>
+          <Link href="/top/10" className="flex-shrink-0 group relative w-64 h-24 rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-105 border border-white/5 hover:border-emerald-500/50 block">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 to-black/80 z-10 group-hover:opacity-60 transition-opacity"></div>
+            <img src="/images/top-10.jpg" alt="Top 10" className="absolute inset-0 w-full h-full object-cover z-0 opacity-70 mix-blend-screen" />
+            <div className="relative z-20 h-full flex items-center px-6">
+              <span className="text-3xl font-black text-white tracking-wider drop-shadow-md">TOP 10</span>
+            </div>
+          </Link>
+          <Link href="/top/20" className="flex-shrink-0 group relative w-64 h-24 rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-105 border border-white/5 hover:border-emerald-500/50 block">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 to-black/80 z-10 group-hover:opacity-60 transition-opacity"></div>
+            <img src="/images/top-20.jpg" alt="Top 20" className="absolute inset-0 w-full h-full object-cover z-0 opacity-70 mix-blend-screen" />
+            <div className="relative z-20 h-full flex items-center px-6">
+              <span className="text-3xl font-black text-white tracking-wider drop-shadow-md">TOP 20</span>
+            </div>
+          </Link>
+          <Link href="/top/50" className="flex-shrink-0 group relative w-64 h-24 rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-105 border border-white/5 hover:border-emerald-500/50 block">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 to-black/80 z-10 group-hover:opacity-60 transition-opacity"></div>
+            <img src="/images/top-50.jpg" alt="Top 50" className="absolute inset-0 w-full h-full object-cover z-0 opacity-70 mix-blend-screen" />
+            <div className="relative z-20 h-full flex items-center px-6">
+              <span className="text-3xl font-black text-white tracking-wider drop-shadow-md">TOP 50</span>
+            </div>
+          </Link>
+        </section>
 
-        <div>
-          <AuthStatus session={session} />
-          <MusicClientView session={session} />
-        </div>
-      </div>
+        {/* Main Content Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left: Player (Takes up 7 cols) */}
+          <div className="lg:col-span-7">
+            <div className="sticky top-28">
+              <RadioPlayer />
+            </div>
+          </div>
 
-      <section className="mt-16 border-t border-gray-800 pt-12">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">Ayın En İyileri</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <Link href="/top/10" className="group relative h-40 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1 block border border-gray-700 hover:border-blue-500">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-purple-900/80 z-10 group-hover:opacity-70 transition-opacity"></div>
-            <img src="/images/top-10.jpg" alt="Top 10" className="absolute inset-0 w-full h-full object-cover z-0 mix-blend-overlay" />
-            <div className="relative z-20 h-full flex items-center justify-center">
-              <span className="text-3xl font-black text-white tracking-widest drop-shadow-lg">TOP 10</span>
-            </div>
-          </Link>
-          
-          <Link href="/top/20" className="group relative h-40 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1 block border border-gray-700 hover:border-orange-500">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 to-red-900/80 z-10 group-hover:opacity-70 transition-opacity"></div>
-            <img src="/images/top-20.jpg" alt="Top 20" className="absolute inset-0 w-full h-full object-cover z-0 mix-blend-overlay" />
-            <div className="relative z-20 h-full flex items-center justify-center">
-              <span className="text-3xl font-black text-white tracking-widest drop-shadow-lg">TOP 20</span>
-            </div>
-          </Link>
-          
-          <Link href="/top/50" className="group relative h-40 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1 block border border-gray-700 hover:border-yellow-500">
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-900/80 to-gray-900/80 z-10 group-hover:opacity-70 transition-opacity"></div>
-            <img src="/images/top-50.jpg" alt="Top 50" className="absolute inset-0 w-full h-full object-cover z-0 mix-blend-overlay" />
-            <div className="relative z-20 h-full flex items-center justify-center">
-              <span className="text-3xl font-black text-white tracking-widest drop-shadow-lg">TOP 50</span>
-            </div>
-          </Link>
+          {/* Right: Client Controls & Queue (Takes up 5 cols) */}
+          <div className="lg:col-span-5 flex flex-col gap-6">
+            <MusicClientView session={session} />
+          </div>
+
         </div>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }

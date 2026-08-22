@@ -93,38 +93,38 @@ export default function RadioPlayer() {
   };
 
   return (
-    <div className="bg-gray-900/80 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl border border-gray-800 flex flex-col items-center overflow-hidden relative">
+    <div className="bg-zinc-950 p-8 rounded-[2.5rem] shadow-2xl border border-white/5 flex flex-col items-center overflow-hidden relative">
       
-      {/* Arka Plan Glow Efekti */}
+      {/* Arka Plan Glow Efekti (Daha sofistike) */}
       {now?.coverUrl && isPlayingLocally && (
-        <div className="absolute inset-0 z-0 opacity-20 blur-3xl transition-all duration-1000">
+        <div className="absolute inset-0 z-0 opacity-10 blur-[100px] transition-all duration-[3000ms]">
           <img src={now.coverUrl} className="w-full h-full object-cover scale-150" alt="" />
         </div>
       )}
 
       <div className="relative z-10 flex flex-col items-center w-full">
         {/* Dönen Plak Kapak Tasarımı */}
-        <div className="relative mb-8 mt-4 group cursor-pointer" onClick={togglePlay}>
-          <div className={`w-64 h-64 md:w-80 md:h-80 rounded-full bg-black border-[8px] border-gray-800 shadow-2xl overflow-hidden flex items-center justify-center relative transition-transform duration-700 ${isPlayingLocally ? 'animate-[spin_10s_linear_infinite] scale-100' : 'scale-95'}`}>
+        <div className="relative mb-10 mt-2 group cursor-pointer" onClick={togglePlay}>
+          <div className={`w-72 h-72 md:w-96 md:h-96 rounded-full bg-black border-[12px] border-zinc-900 shadow-2xl overflow-hidden flex items-center justify-center relative transition-transform duration-700 ${isPlayingLocally ? 'animate-[spin_12s_linear_infinite] scale-100' : 'scale-95'}`}>
             {now?.coverUrl ? (
               <img src={now.coverUrl} alt="Cover" className="w-full h-full object-cover opacity-90" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-900 to-gray-900 flex items-center justify-center opacity-90">
-                <svg className="w-24 h-24 text-gray-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg>
+              <div className="w-full h-full bg-zinc-900 flex items-center justify-center">
+                <svg className="w-24 h-24 text-zinc-800" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg>
               </div>
             )}
             
             {/* Plak Ortası */}
-            <div className="absolute w-12 h-12 bg-gray-900 rounded-full border-2 border-gray-800 z-20 flex items-center justify-center">
-               <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+            <div className="absolute w-16 h-16 bg-zinc-950 rounded-full border-4 border-zinc-900 z-20 flex items-center justify-center">
+               <div className="w-4 h-4 bg-zinc-700 rounded-full"></div>
             </div>
             
             {/* Oynat/Duraklat İkonu Hover'da */}
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-30">
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 backdrop-blur-sm">
                {isPlayingLocally ? (
-                 <svg className="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                 <svg className="w-20 h-20 text-emerald-500 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                ) : (
-                 <svg className="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                 <svg className="w-20 h-20 text-emerald-500 drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                )}
             </div>
           </div>
@@ -133,28 +133,28 @@ export default function RadioPlayer() {
         <audio ref={audioRef} />
         
         {now?.playing ? (
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-black text-white mb-1 truncate max-w-[280px] md:max-w-[320px]">{now.title}</h2>
-            <p className="text-gray-400 font-medium truncate max-w-[280px] md:max-w-[320px]">{now.artist}</p>
+          <div className="text-center mb-10 w-full px-4">
+            <h2 className="text-3xl font-black text-white mb-2 truncate drop-shadow-md">{now.title}</h2>
+            <p className="text-lg text-emerald-500/80 font-medium truncate">{now.artist}</p>
           </div>
         ) : (
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-gray-500 mb-1">Radyo Bekliyor</h2>
-            <p className="text-gray-600 text-sm">Şarkı ekleyin ve kuyruğu başlatın</p>
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold text-zinc-600 mb-2">Radyo Sessiz</h2>
+            <p className="text-zinc-500 text-sm">Listeye yeni bir parça ekleyin.</p>
           </div>
         )}
 
         {/* Şarkı Sözleri */}
-        <div className="w-full bg-black/40 rounded-xl p-4 h-32 overflow-y-auto relative mask-image-b text-center no-scrollbar">
+        <div className="w-full rounded-2xl h-48 overflow-y-auto relative mask-image-b text-center no-scrollbar">
           {lines.length > 0 ? (
-            <div className="flex flex-col gap-4 py-8">
+            <div className="flex flex-col gap-6 py-12">
               {lines.map((line, i) => (
                 <p 
                   key={i} 
-                  className={`transition-all duration-300 text-lg md:text-xl font-medium ${
+                  className={`transition-all duration-500 text-xl md:text-2xl font-bold tracking-tight ${
                     i === activeLine 
-                      ? "text-blue-400 scale-110 drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" 
-                      : i < activeLine ? "text-gray-600" : "text-gray-400"
+                      ? "text-emerald-400 scale-110 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" 
+                      : i < activeLine ? "text-zinc-700" : "text-zinc-600"
                   }`}
                 >
                   {line.text}
@@ -162,8 +162,8 @@ export default function RadioPlayer() {
               ))}
             </div>
           ) : now?.playing ? (
-            <div className="flex items-center justify-center h-full text-gray-600 italic">
-              Bu şarkı için söz bulunmuyor
+            <div className="flex items-center justify-center h-full text-zinc-700 italic font-medium">
+              Sözler mevcut değil
             </div>
           ) : null}
         </div>

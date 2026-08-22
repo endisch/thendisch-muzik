@@ -47,6 +47,13 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
     );
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleUploadSuccess = () => {
+    setIsOpen(false);
+    onUploadSuccess();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !durationSec || !title || !artist) {
@@ -58,7 +65,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
     setError("");
 
     try {
-      // 1. Presigned URL al (Ses)
       const urlRes = await fetch("/api/upload-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,7 +73,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       if (!urlRes.ok) throw new Error("Upload URL alınamadı");
       const { uploadUrl, key } = await urlRes.json();
 
-      // 1.5 Presigned URL al (Kapak - Eğer varsa)
       let coverKey = undefined;
       if (coverFile) {
         const coverUrlRes = await fetch("/api/upload-url", {
@@ -78,7 +83,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         if (!coverUrlRes.ok) throw new Error("Kapak Upload URL alınamadı");
         const coverData = await coverUrlRes.json();
         
-        // R2'ye kapağı yükle
         const coverUploadRes = await fetch(coverData.uploadUrl, {
           method: "PUT",
           headers: { "Content-Type": coverFile.type },
@@ -88,7 +92,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         coverKey = coverData.key;
       }
 
-      // 2. R2'ye ses dosyasını yükle
       const uploadRes = await fetch(uploadUrl, {
         method: "PUT",
         headers: { "Content-Type": file.type },
@@ -96,7 +99,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       });
       if (!uploadRes.ok) throw new Error("Dosya yüklenirken hata oluştu");
 
-      // 3. Veritabanına kaydet
       const songRes = await fetch("/api/songs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -104,7 +106,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
           title,
           artist,
           fileKey: key,
-          coverKey: coverKey,
+          coverKey,
           durationSec,
           categories: selectedCategories,
           genres: selectedGenres,
@@ -117,7 +119,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         throw new Error(d.error || "Şarkı kaydedilemedi");
       }
 
-      // Başarılı
       setFile(null);
       setCoverFile(null);
       setTitle("");
@@ -126,7 +127,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       setSelectedCategories([]);
       setSelectedGenres([]);
       setLyricsLrc("");
-      onUploadSuccess();
+      handleUploadSuccess();
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -135,109 +136,129 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800 shadow-sm mt-4">
-      <h3 className="text-xl font-bold mb-4">Şarkı Yükle</h3>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label className="block mb-1 font-semibold">Başlık</label>
-            <input 
-              type="text" 
-              value={title} 
-              onChange={(e) => setTitle(e.target.value)} 
-              className="w-full border p-2 rounded dark:bg-gray-700" 
-              required 
-            />
+    <div className="bg-zinc-900 border border-white/5 rounded-2xl overflow-hidden shadow-2xl transition-all">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-6 bg-zinc-900/50 hover:bg-zinc-800/50 transition-colors focus:outline-none"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>
           </div>
-          <div className="flex-1">
-            <label className="block mb-1 font-semibold">Sanatçı</label>
-            <input 
-              type="text" 
-              value={artist} 
-              onChange={(e) => setArtist(e.target.value)} 
-              className="w-full border p-2 rounded dark:bg-gray-700" 
-              required 
-            />
-          </div>
+          <span className="text-xl font-bold text-white">Yeni Şarkı Yükle</span>
         </div>
+        <svg className={`w-6 h-6 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+      </button>
 
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label className="block mb-1 font-semibold">Ses Dosyası (.mp3)</label>
-            <input 
-              type="file" 
-              accept="audio/*" 
-              onChange={handleFileChange} 
-              className="w-full border p-2 rounded bg-white dark:bg-gray-700" 
-              required 
-            />
-            {durationSec && <span className="text-xs text-gray-500 mt-1 block">Süre: {Math.round(durationSec)} sn</span>}
-          </div>
-          <div className="flex-1">
-            <label className="block mb-1 font-semibold">Kapak Görseli (.jpg, .png)</label>
-            <input 
-              type="file" 
-              accept="image/*" 
-              onChange={handleCoverChange} 
-              className="w-full border p-2 rounded bg-white dark:bg-gray-700" 
-            />
-            <span className="text-xs text-gray-500 mt-1 block">İsteğe bağlı, kare boyut önerilir</span>
-          </div>
-        </div>
-
-        <div>
-          <label className="block mb-1 font-semibold">Kategoriler</label>
-          <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 border rounded dark:bg-gray-700">
-            {CATEGORIES.map(cat => (
-              <label key={cat} className="flex items-center gap-1 text-sm">
+      {isOpen && (
+        <div className="p-6 border-t border-white/5">
+          {error && <div className="text-red-400 bg-red-400/10 p-3 rounded-lg mb-4 text-sm font-medium">{error}</div>}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <label className="block mb-2 text-sm font-semibold text-gray-300">Başlık</label>
                 <input 
-                  type="checkbox" 
-                  checked={selectedCategories.includes(cat)} 
-                  onChange={() => handleCategoryToggle(cat)} 
+                  type="text" 
+                  value={title} 
+                  onChange={(e) => setTitle(e.target.value)} 
+                  className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-white outline-none" 
+                  required 
                 />
-                {cat}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <label className="block mb-1 font-semibold">Türler (Genres)</label>
-          <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 border rounded dark:bg-gray-700">
-            {GENRES.map(gen => (
-              <label key={gen} className="flex items-center gap-1 text-sm">
+              </div>
+              <div className="flex-1">
+                <label className="block mb-2 text-sm font-semibold text-gray-300">Sanatçı</label>
                 <input 
-                  type="checkbox" 
-                  checked={selectedGenres.includes(gen)} 
-                  onChange={() => handleGenreToggle(gen)} 
+                  type="text" 
+                  value={artist} 
+                  onChange={(e) => setArtist(e.target.value)} 
+                  className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-white outline-none" 
+                  required 
                 />
-                {gen}
-              </label>
-            ))}
-          </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <label className="block mb-2 text-sm font-semibold text-gray-300">Ses Dosyası (.mp3)</label>
+                <input 
+                  type="file" 
+                  accept="audio/*" 
+                  onChange={handleFileChange} 
+                  className="w-full bg-black border border-white/10 p-3 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-emerald-500/20 file:text-emerald-400 hover:file:bg-emerald-500/30 text-gray-400 transition-all" 
+                  required 
+                />
+                {durationSec && <span className="text-xs text-emerald-500 mt-2 block font-medium">Süre: {Math.round(durationSec)} sn</span>}
+              </div>
+              <div className="flex-1">
+                <label className="block mb-2 text-sm font-semibold text-gray-300">Kapak Görseli</label>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleCoverChange} 
+                  className="w-full bg-black border border-white/10 p-3 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-zinc-800 file:text-gray-300 hover:file:bg-zinc-700 text-gray-400 transition-all" 
+                />
+                <span className="text-xs text-gray-500 mt-2 block">İsteğe bağlı (Kare)</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-gray-300">Kategoriler</label>
+                <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 border border-white/10 rounded-xl bg-black no-scrollbar">
+                  {CATEGORIES.map(cat => (
+                    <label key={cat} className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-full cursor-pointer transition-colors ${selectedCategories.includes(cat) ? 'bg-emerald-500 text-black font-bold' : 'bg-zinc-800 text-gray-400 hover:bg-zinc-700'}`}>
+                      <input 
+                        type="checkbox" 
+                        checked={selectedCategories.includes(cat)} 
+                        onChange={() => handleCategoryToggle(cat)} 
+                        className="hidden"
+                      />
+                      {cat}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-gray-300">Türler</label>
+                <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 border border-white/10 rounded-xl bg-black no-scrollbar">
+                  {GENRES.map(gen => (
+                    <label key={gen} className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-full cursor-pointer transition-colors ${selectedGenres.includes(gen) ? 'bg-emerald-500 text-black font-bold' : 'bg-zinc-800 text-gray-400 hover:bg-zinc-700'}`}>
+                      <input 
+                        type="checkbox" 
+                        checked={selectedGenres.includes(gen)} 
+                        onChange={() => handleGenreToggle(gen)}
+                        className="hidden" 
+                      />
+                      {gen}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm font-semibold text-gray-300">Şarkı Sözleri (LRC - Opsiyonel)</label>
+              <textarea 
+                value={lyricsLrc} 
+                onChange={(e) => setLyricsLrc(e.target.value)} 
+                className="w-full bg-black border border-white/10 p-4 rounded-xl h-24 font-mono text-sm text-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all outline-none resize-none no-scrollbar"
+                placeholder="[00:12.50] İlk satır..."
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={loading} 
+              className="w-full bg-emerald-500 text-black font-black py-4 px-6 rounded-xl hover:bg-emerald-400 disabled:opacity-50 disabled:hover:bg-emerald-500 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] mt-2"
+            >
+              {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
+            </button>
+
+          </form>
         </div>
-
-        <div>
-          <label className="block mb-1 font-semibold">Şarkı Sözleri (LRC Formatı - Opsiyonel)</label>
-          <textarea 
-            value={lyricsLrc} 
-            onChange={(e) => setLyricsLrc(e.target.value)} 
-            className="w-full border p-2 rounded h-24 font-mono text-sm dark:bg-gray-700"
-            placeholder="[00:12.50] İlk satır..."
-          />
-        </div>
-
-        <button 
-          type="submit" 
-          disabled={loading} 
-          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
-        </button>
-
-      </form>
+      )}
     </div>
   );
 }
