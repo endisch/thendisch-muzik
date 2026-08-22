@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getPlaybackUrl } from "@/lib/storage";
 import { advanceQueueIfNeeded } from "@/lib/radio";
 
+export const dynamic = "force-dynamic";
+
 // Bu endpoint "gerçek radyo" mantığının kalbidir:
 // - Şu an çalması gereken şarkıyı ve başladığı andan bu yana geçen saniyeyi döner
 // - Her istekte, şarkının süresi dolmuş mu diye kontrol eder; dolduysa

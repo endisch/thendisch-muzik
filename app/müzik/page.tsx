@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import MusicClientView from "./MusicClientView"; // We will create this to manage refresh state
 
+export const dynamic = "force-dynamic";
+
 export default async function MuzikPage() {
   const session = await getServerSession(authOptions);
 
