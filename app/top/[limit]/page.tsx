@@ -10,11 +10,36 @@ export default async function TopPage({ params }: { params: { limit: string } })
     return <div className="text-white p-8 text-center text-2xl">Geçersiz liste limiti.</div>;
   }
 
-  const topSongs = await prisma.song.findMany({
-    where: { votesCount: { gt: 0 } },
-    orderBy: { votesCount: "desc" },
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const topVotes = await prisma.vote.groupBy({
+    by: ['songId'],
+    _count: { songId: true },
+    where: {
+      createdAt: { gte: startOfMonth }
+    },
+    orderBy: {
+      _count: { songId: 'desc' }
+    },
     take: limitNum
   });
+
+  const songIds = topVotes.map(v => v.songId);
+  const songsData = await prisma.song.findMany({
+    where: { id: { in: songIds } }
+  });
+
+  const { getPlaybackUrl } = await import("@/lib/storage");
+
+  const topSongs = await Promise.all(topVotes.map(async (vote) => {
+    const song = songsData.find(s => s.id === vote.songId)!;
+    return {
+      ...song,
+      monthlyVotes: vote._count.songId,
+      coverUrl: song.coverUrl ? await getPlaybackUrl(song.coverUrl) : null
+    };
+  }));
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-8 min-h-screen">
@@ -46,9 +71,19 @@ export default async function TopPage({ params }: { params: { limit: string } })
                   <h3 className="text-xl font-bold text-white mb-1">{song.title}</h3>
                   <p className="text-gray-400">{song.artist}</p>
                 </div>
-                <div className="flex flex-col items-center justify-center bg-gray-900/50 rounded-lg px-4 py-2 border border-gray-800">
-                  <span className="text-2xl font-bold text-blue-400">{song.votesCount}</span>
-                  <span className="text-xs text-gray-500 uppercase font-semibold">Oy</span>
+                
+                {/* Kapak Görseli */}
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg bg-gray-800 border border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-lg">
+                  {song.coverUrl ? (
+                    <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />
+                  ) : (
+                    <svg className="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg>
+                  )}
+                </div>
+
+                <div className="flex flex-col items-center justify-center bg-gray-900/50 rounded-lg px-4 py-2 border border-gray-800 ml-2">
+                  <span className="text-2xl font-bold text-blue-400">{song.monthlyVotes}</span>
+                  <span className="text-xs text-gray-500 uppercase font-semibold">Bu Ay</span>
                 </div>
               </li>
             ))}
