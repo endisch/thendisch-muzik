@@ -5,8 +5,7 @@ import { prisma } from "./prisma";
 // dolduysa PLAYED olarak işaretler ve kuyruktaki bir sonrakini başlatır.
 export async function advanceQueueIfNeeded() {
   let np = await prisma.nowPlaying.findUnique({
-    where: { id: 1 },
-    include: undefined,
+    where: { id: 1 }
   });
 
   if (!np) {
