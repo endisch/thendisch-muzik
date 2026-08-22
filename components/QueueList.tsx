@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { ChevronUp, ArrowUp, ArrowDown, Minus } from "lucide-react";
 
 type QueuedSong = {
   id: string;
@@ -11,9 +13,39 @@ type QueuedSong = {
   coverUrl?: string | null;
 };
 
+const container: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+};
+const rise: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
+
+function TrendBadge({ value }: { value: number }) {
+  if (value === 0)
+    return (
+      <span className="flex items-center gap-0.5 font-mono text-[10px] text-zinc-600">
+        <Minus className="h-2.5 w-2.5" />
+      </span>
+    );
+  const up = value > 0;
+  return (
+    <span
+      className={`flex items-center gap-0.5 font-mono text-[10px] tabular-nums ${
+        up ? "text-emerald-500" : "text-zinc-500"
+      }`}
+    >
+      {up ? <ArrowUp className="h-2.5 w-2.5" /> : <ArrowDown className="h-2.5 w-2.5" />}
+      {Math.abs(value)}
+    </span>
+  );
+}
+
 export default function QueueList({ refreshTrigger }: { refreshTrigger: number }) {
   const [queue, setQueue] = useState<QueuedSong[]>([]);
   const [loading, setLoading] = useState(true);
+  const reduceMotion = useReducedMotion();
 
   const fetchQueue = async () => {
     try {
@@ -54,60 +86,61 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
   if (loading) return <div className="mt-8 text-center text-zinc-500 animate-pulse font-medium">Kuyruk yükleniyor...</div>;
 
   return (
-    <div className="mt-4 bg-zinc-950/50 backdrop-blur-3xl rounded-[2rem] p-6 border border-white/5 shadow-2xl">
-      <div className="flex items-center justify-between mb-8 px-2">
-        <h3 className="text-2xl font-black text-white tracking-tight">Sıradaki <span className="text-emerald-500">Şarkılar</span></h3>
-        <div className="text-sm font-bold text-zinc-500 bg-zinc-900 px-4 py-1.5 rounded-full">{queue.length} Parça</div>
+    <div className="rounded-2xl border border-white/[0.06] bg-zinc-900/40 backdrop-blur-3xl">
+      <div className="flex items-center justify-between px-6 pt-6 mb-4">
+        <h3 className="font-bold text-white text-lg">Sırada</h3>
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-emerald-500">
+          {queue.length} şarkı
+        </span>
       </div>
       
       {queue.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-zinc-500">
-          <svg className="w-16 h-16 mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
           <p className="font-medium">Kuyrukta şarkı yok.</p>
         </div>
       ) : (
-        <ul className="flex flex-col gap-1">
+        <motion.div
+          initial={reduceMotion ? undefined : "hidden"}
+          animate={reduceMotion ? undefined : "show"}
+          variants={reduceMotion ? undefined : container}
+          className="divide-y divide-white/[0.05] px-2 pb-2"
+        >
           {queue.map((song, idx) => (
-            <li key={song.id} className="flex justify-between items-center p-3 rounded-2xl hover:bg-zinc-900/80 transition-all group">
-              <div className="flex items-center gap-4">
-                <span className="font-bold text-lg text-zinc-700 group-hover:text-emerald-500 transition-colors w-6 text-center">{idx + 1}</span>
-                
-                {/* Kapak Görseli Thumbnail */}
-                <div className="w-14 h-14 rounded-xl bg-zinc-900 border border-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/10 transition-shadow">
-                  {song.coverUrl ? (
-                    <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />
-                  ) : (
-                    <svg className="w-6 h-6 text-zinc-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  <span className="font-bold text-gray-200 text-lg group-hover:text-white transition-colors">{song.title}</span>
-                  <span className="text-sm text-zinc-500 font-medium">{song.artist}</span>
-                </div>
+            <motion.div
+              layout
+              variants={reduceMotion ? undefined : rise}
+              key={song.id}
+              className="group flex items-center gap-3 rounded-xl px-4 py-3 transition-colors duration-300 hover:bg-zinc-800/50"
+            >
+              <div className="flex w-6 shrink-0 flex-col items-center">
+                <span className="font-mono text-xs text-zinc-600">{idx + 1}</span>
+                <TrendBadge value={0} />
               </div>
               
-              <div className="flex items-center gap-6 pr-2">
-                <div className="text-sm font-semibold text-zinc-600">
-                  {Math.floor(song.durationSec / 60)}:{(song.durationSec % 60).toString().padStart(2, "0")}
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-black text-zinc-500 w-8 text-right">{song.votesCount}</span>
-                  <button 
-                    onClick={() => handleVote(song.id)}
-                    className="p-2.5 rounded-full bg-zinc-900/50 hover:bg-emerald-500 text-zinc-500 hover:text-black transition-all focus:outline-none shadow-sm hover:shadow-emerald-500/50"
-                    title="Oy Ver"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" />
-                    </svg>
-                  </button>
-                </div>
+              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-emerald-500/25 via-zinc-800 to-black">
+                {song.coverUrl && <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />}
               </div>
-            </li>
+              
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">{song.title}</p>
+                <p className="truncate text-xs text-zinc-500">{song.artist}</p>
+              </div>
+              
+              <span className="shrink-0 font-mono text-xs tabular-nums text-zinc-600">
+                {Math.floor(song.durationSec / 60)}:{(song.durationSec % 60).toString().padStart(2, "0")}
+              </span>
+              
+              <button
+                onClick={() => handleVote(song.id)}
+                className="flex shrink-0 flex-col items-center rounded-lg px-2.5 py-1.5 transition-all duration-300 text-zinc-500 hover:bg-emerald-500/10 hover:text-emerald-500 hover:shadow-[0_0_16px_0_rgba(16,185,129,0.25)]"
+                aria-label="Oy ver"
+              >
+                <ChevronUp className="h-4 w-4" />
+                <span className="font-mono text-[10px] tabular-nums">{song.votesCount}</span>
+              </button>
+            </motion.div>
           ))}
-        </ul>
+        </motion.div>
       )}
     </div>
   );

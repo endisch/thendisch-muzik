@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { CATEGORIES, GENRES } from "@/lib/constants";
+import { motion, AnimatePresence } from "framer-motion";
+import { Music2, X, UploadCloud, Image as ImageIcon } from "lucide-react";
 
 export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () => void }) {
   const [title, setTitle] = useState("");
@@ -13,15 +15,13 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   const [lyricsLrc, setLyricsLrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
     setFile(selected);
-
-    // Extract duration
     const url = URL.createObjectURL(selected);
     const audio = new Audio(url);
     audio.addEventListener("loadedmetadata", () => {
@@ -47,20 +47,12 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
     );
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleUploadSuccess = () => {
-    setIsOpen(false);
-    onUploadSuccess();
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !durationSec || !title || !artist) {
-      setError("Lütfen gerekli tüm alanları (dosya dahil) doldurun.");
+      setError("Lütfen gerekli tüm alanları doldurun.");
       return;
     }
-
     setLoading(true);
     setError("");
 
@@ -82,7 +74,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         });
         if (!coverUrlRes.ok) throw new Error("Kapak Upload URL alınamadı");
         const coverData = await coverUrlRes.json();
-        
         const coverUploadRes = await fetch(coverData.uploadUrl, {
           method: "PUT",
           headers: { "Content-Type": coverFile.type },
@@ -103,17 +94,11 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title,
-          artist,
-          fileKey: key,
-          coverKey,
-          durationSec,
-          categories: selectedCategories,
-          genres: selectedGenres,
+          title, artist, fileKey: key, coverKey, durationSec,
+          categories: selectedCategories, genres: selectedGenres,
           lyricsLrc: lyricsLrc || undefined,
         }),
       });
-
       if (!songRes.ok) {
         const d = await songRes.json();
         throw new Error(d.error || "Şarkı kaydedilemedi");
@@ -127,7 +112,8 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       setSelectedCategories([]);
       setSelectedGenres([]);
       setLyricsLrc("");
-      handleUploadSuccess();
+      setIsOpen(false);
+      onUploadSuccess();
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -136,129 +122,98 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   };
 
   return (
-    <div className="bg-zinc-900 border border-white/5 rounded-2xl overflow-hidden shadow-2xl transition-all">
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 bg-zinc-900/50 hover:bg-zinc-800/50 transition-colors focus:outline-none"
+    <div className="rounded-2xl border border-white/[0.06] bg-zinc-900/40 backdrop-blur-3xl transition-all">
+      <button
+        onClick={() => setIsOpen((o) => !o)}
+        className="flex w-full items-center justify-between px-6 py-5 text-left focus:outline-none"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>
-          </div>
-          <span className="text-xl font-bold text-white">Yeni Şarkı Yükle</span>
-        </div>
-        <svg className={`w-6 h-6 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+        <span className="flex items-center gap-2 font-bold text-white text-lg">
+          <Music2 className="h-5 w-5 text-emerald-500" />
+          Yeni Şarkı Yükle
+        </span>
+        <motion.span animate={{ rotate: isOpen ? 90 : 0 }} transition={{ duration: 0.25 }}>
+          <X className={`h-5 w-5 ${isOpen ? 'text-white' : 'text-zinc-500'}`} />
+        </motion.span>
       </button>
 
-      {isOpen && (
-        <div className="p-6 border-t border-white/5">
-          {error && <div className="text-red-400 bg-red-400/10 p-3 rounded-lg mb-4 text-sm font-medium">{error}</div>}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block mb-2 text-sm font-semibold text-gray-300">Başlık</label>
-                <input 
-                  type="text" 
-                  value={title} 
-                  onChange={(e) => setTitle(e.target.value)} 
-                  className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-white outline-none" 
-                  required 
-                />
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="space-y-5 px-6 pb-6">
+              {error && <div className="text-red-400 bg-red-400/10 p-3 rounded-lg text-sm font-medium">{error}</div>}
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Adı</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Örn. Gece Yarısı Sinyali"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Sanatçı</label>
+                  <input
+                    type="text"
+                    value={artist}
+                    onChange={(e) => setArtist(e.target.value)}
+                    placeholder="Örn. CEMİLECEM"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
+                    required
+                  />
+                </div>
               </div>
-              <div className="flex-1">
-                <label className="block mb-2 text-sm font-semibold text-gray-300">Sanatçı</label>
-                <input 
-                  type="text" 
-                  value={artist} 
-                  onChange={(e) => setArtist(e.target.value)} 
-                  className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-white outline-none" 
-                  required 
-                />
-              </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block mb-2 text-sm font-semibold text-gray-300">Ses Dosyası (.mp3)</label>
-                <input 
-                  type="file" 
-                  accept="audio/*" 
-                  onChange={handleFileChange} 
-                  className="w-full bg-black border border-white/10 p-3 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-emerald-500/20 file:text-emerald-400 hover:file:bg-emerald-500/30 text-gray-400 transition-all" 
-                  required 
-                />
-                {durationSec && <span className="text-xs text-emerald-500 mt-2 block font-medium">Süre: {Math.round(durationSec)} sn</span>}
-              </div>
-              <div className="flex-1">
-                <label className="block mb-2 text-sm font-semibold text-gray-300">Kapak Görseli</label>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleCoverChange} 
-                  className="w-full bg-black border border-white/10 p-3 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-zinc-800 file:text-gray-300 hover:file:bg-zinc-700 text-gray-400 transition-all" 
-                />
-                <span className="text-xs text-gray-500 mt-2 block">İsteğe bağlı (Kare)</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div>
-                <label className="block mb-2 text-sm font-semibold text-gray-300">Kategoriler</label>
-                <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 border border-white/10 rounded-xl bg-black no-scrollbar">
-                  {CATEGORIES.map(cat => (
-                    <label key={cat} className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-full cursor-pointer transition-colors ${selectedCategories.includes(cat) ? 'bg-emerald-500 text-black font-bold' : 'bg-zinc-800 text-gray-400 hover:bg-zinc-700'}`}>
-                      <input 
-                        type="checkbox" 
-                        checked={selectedCategories.includes(cat)} 
-                        onChange={() => handleCategoryToggle(cat)} 
-                        className="hidden"
-                      />
-                      {cat}
-                    </label>
-                  ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Ses Dosyası (.mp3)</label>
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-4 text-center transition-colors hover:border-emerald-500/30">
+                    <UploadCloud className="h-5 w-5 text-emerald-500/70" />
+                    <span className="text-xs text-zinc-400">{file ? file.name : "Ses dosyasını seç"}</span>
+                    {durationSec && <span className="text-[10px] text-emerald-500 font-mono">{Math.floor(durationSec)} sn</span>}
+                    <input type="file" accept="audio/*" onChange={handleFileChange} className="hidden" required />
+                  </label>
+                </div>
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kapak Görseli</label>
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-4 text-center transition-colors hover:border-zinc-500/30">
+                    <ImageIcon className="h-5 w-5 text-zinc-500/70" />
+                    <span className="text-xs text-zinc-400">{coverFile ? coverFile.name : "Opsiyonel görsel seç"}</span>
+                    <input type="file" accept="image/*" onChange={handleCoverChange} className="hidden" />
+                  </label>
                 </div>
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-semibold text-gray-300">Türler</label>
-                <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-3 border border-white/10 rounded-xl bg-black no-scrollbar">
-                  {GENRES.map(gen => (
-                    <label key={gen} className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-full cursor-pointer transition-colors ${selectedGenres.includes(gen) ? 'bg-emerald-500 text-black font-bold' : 'bg-zinc-800 text-gray-400 hover:bg-zinc-700'}`}>
-                      <input 
-                        type="checkbox" 
-                        checked={selectedGenres.includes(gen)} 
-                        onChange={() => handleGenreToggle(gen)}
-                        className="hidden" 
-                      />
-                      {gen}
-                    </label>
-                  ))}
-                </div>
+                <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Sözleri (LRC - Opsiyonel)</label>
+                <textarea
+                  value={lyricsLrc}
+                  onChange={(e) => setLyricsLrc(e.target.value)}
+                  placeholder="[00:12.50] İlk satır..."
+                  className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)] h-20 resize-none font-mono"
+                />
               </div>
+
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="w-full rounded-xl bg-emerald-500 py-3.5 text-sm font-black text-black transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_30px_2px_rgba(16,185,129,0.35)] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
+              >
+                {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
+              </button>
             </div>
-
-            <div>
-              <label className="block mb-2 text-sm font-semibold text-gray-300">Şarkı Sözleri (LRC - Opsiyonel)</label>
-              <textarea 
-                value={lyricsLrc} 
-                onChange={(e) => setLyricsLrc(e.target.value)} 
-                className="w-full bg-black border border-white/10 p-4 rounded-xl h-24 font-mono text-sm text-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all outline-none resize-none no-scrollbar"
-                placeholder="[00:12.50] İlk satır..."
-              />
-            </div>
-
-            <button 
-              type="submit" 
-              disabled={loading} 
-              className="w-full bg-emerald-500 text-black font-black py-4 px-6 rounded-xl hover:bg-emerald-400 disabled:opacity-50 disabled:hover:bg-emerald-500 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] mt-2"
-            >
-              {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
-            </button>
-
-          </form>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
