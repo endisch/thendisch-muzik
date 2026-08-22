@@ -25,13 +25,13 @@ export async function advanceQueueIfNeeded() {
     if (currentSong) {
       await prisma.song.update({
         where: { id: currentSong.id },
-        data: { status: "PLAYED", queuePos: null },
+        data: { status: "PLAYED" },
       });
     }
 
     const next = await prisma.song.findFirst({
       where: { status: "QUEUED" },
-      orderBy: { queuePos: "asc" },
+      orderBy: [{ votesCount: "desc" }, { createdAt: "asc" }],
     });
 
     if (!next) {

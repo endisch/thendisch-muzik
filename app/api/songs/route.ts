@@ -20,7 +20,7 @@ const SongSchema = z.object({
 export async function GET() {
   const queue = await prisma.song.findMany({
     where: { status: "QUEUED" },
-    orderBy: { queuePos: "asc" },
+    orderBy: [{ votesCount: "desc" }, { createdAt: "asc" }],
     select: {
       id: true,
       title: true,
@@ -28,6 +28,7 @@ export async function GET() {
       categories: true,
       genres: true,
       durationSec: true,
+      votesCount: true,
     },
   });
   return NextResponse.json({ queue });
@@ -50,12 +51,6 @@ export async function POST(req: Request) {
 
   const body = SongSchema.parse(await req.json());
 
-  const lastInQueue = await prisma.song.findFirst({
-    where: { status: "QUEUED" },
-    orderBy: { queuePos: "desc" },
-  });
-  const nextPos = (lastInQueue?.queuePos ?? 0) + 1;
-
   const [song] = await prisma.$transaction([
     prisma.song.create({
       data: {
@@ -68,7 +63,6 @@ export async function POST(req: Request) {
         lyricsLrc: body.lyricsLrc,
         uploadedBy: user.id,
         status: "QUEUED",
-        queuePos: nextPos,
       },
     }),
     prisma.user.update({

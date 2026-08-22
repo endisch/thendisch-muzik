@@ -14,6 +14,7 @@
     "@aws-sdk/client-s3": "^3.620.0",
     "@aws-sdk/s3-request-presigner": "^3.620.0",
     "@prisma/client": "^5.18.0",
+    "bcrypt": "^6.0.0",
     "next": "14.2.35",
     "next-auth": "^4.24.7",
     "prisma": "^5.18.0",
@@ -22,6 +23,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^20.14.15",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

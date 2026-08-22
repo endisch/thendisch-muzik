@@ -1,6 +1,8 @@
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { prisma } from "./prisma";
+import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -8,21 +10,58 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-  ],
-  callbacks: {
-    async signIn({ user, account }) {
-      if (!account || !user.email) return false;
-      // İlk giriş: kullanıcıyı 3 yükleme hakkıyla oluştur. Sonraki girişlerde dokunma.
-      await prisma.user.upsert({
-        where: { googleId: account.providerAccountId },
-        update: {},
-        create: {
-          googleId: account.providerAccountId,
+    CredentialsProvider({
+      name: "Giriş Yap",
+      credentials: {
+        email: { label: "E-posta", type: "email", placeholder: "ornek@mail.com" },
+        password: { label: "Şifre", type: "password" }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("E-posta ve şifre zorunludur.");
+        }
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
+        if (!user || !user.password) {
+          throw new Error("Hesap bulunamadı veya bu e-posta Google ile kayıtlı.");
+        }
+        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+        if (!isPasswordValid) {
+          throw new Error("Hatalı şifre.");
+        }
+        return {
+          id: user.id,
           email: user.email,
           name: user.name,
-          image: user.image,
-        },
-      });
+          image: user.image
+        };
+      }
+    })
+  ],
+  session: { strategy: "jwt" },
+  pages: {
+    signIn: "/login",
+  },
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        if (!user.email) return false;
+        await prisma.user.upsert({
+          where: { email: user.email }, // Google ID yerine email ile de kontrol edebiliriz
+          update: {
+            googleId: account.providerAccountId,
+            name: user.name,
+            image: user.image,
+          },
+          create: {
+            googleId: account.providerAccountId,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          },
+        });
+      }
       return true;
     },
     async session({ session, token }) {

@@ -9,36 +9,52 @@ datasource db {
 
 model User {
   id            String   @id @default(cuid())
-  googleId      String   @unique
+  googleId      String?  @unique
   email         String   @unique
+  password      String?  // Yeni: Şifreli giriş için eklendi
   name          String?
   image         String?
-  uploadCredits Int      @default(3)     // her girişte 3 hakla başlar
-  songsListened Int      @default(0)     // 10'a ulaşınca +1 hak kazanılır
+  uploadCredits Int      @default(3)
+  songsListened Int      @default(0)
   createdAt     DateTime @default(now())
 
   songs        Song[]
   playHistory  PlayHistory[]
+  votes        Vote[]    // Yeni: Kullanıcının verdiği oylar
 }
 
 model Song {
   id          String   @id @default(cuid())
   title       String
   artist      String
-  fileUrl     String   // R2 üzerindeki dosya adresi
-  lyricsLrc   String?  @db.Text // LRC formatında zaman damgalı sözler
+  fileUrl     String
+  lyricsLrc   String?  @db.Text
   durationSec Int
-  categories  String[] // ör: ["Türk", "Latin", "Afro"]
-  genres      String[] // ör: ["Pop", "Elektronik", "Halk Müziği"]
+  categories  String[]
+  genres      String[]
   status      SongStatus @default(QUEUED)
   uploadedBy  String
   uploader    User     @relation(fields: [uploadedBy], references: [id])
-  queuePos    Int?     // sıradaki konumu (null = zaten çalındı)
+  votesCount  Int      @default(0) // Yeni: Şarkının aldığı toplam oy
   createdAt   DateTime @default(now())
 
   playHistory PlayHistory[]
+  votes       Vote[]       // Yeni: Bu şarkıya verilen oylar
 
-  @@index([status, queuePos])
+  @@index([status, votesCount])
+}
+
+// Yeni: Her kullanıcının bir şarkıya sadece 1 oy verebilmesini sağlayan tablo
+model Vote {
+  id        String   @id @default(cuid())
+  userId    String
+  songId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  song      Song     @relation(fields: [songId], references: [id])
+
+  @@unique([userId, songId])
 }
 
 enum SongStatus {
@@ -47,7 +63,6 @@ enum SongStatus {
   PLAYED
 }
 
-// Sistemde her zaman TEK satır olur: şu an ne çalıyor, ne zaman başladı
 model NowPlaying {
   id        Int      @id @default(1)
   songId    String?
@@ -60,7 +75,7 @@ model PlayHistory {
   user         User     @relation(fields: [userId], references: [id])
   songId       String
   song         Song     @relation(fields: [songId], references: [id])
-  completed    Boolean  @default(false) // %80+ dinlendiyse true
+  completed    Boolean  @default(false)
   listenedAt   DateTime @default(now())
 
   @@index([userId])

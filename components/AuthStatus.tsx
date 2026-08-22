@@ -29,10 +29,10 @@ export default function AuthStatus({ session }: { session: any }) {
     <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg mb-6 border border-yellow-200 dark:border-yellow-800">
       <p className="mb-2 font-semibold">Şarkı yüklemek için giriş yapmalısın.</p>
       <button 
-        onClick={() => signIn("google")} 
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        onClick={() => signIn()} 
+        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-bold transition-colors"
       >
-        Google ile Giriş Yap
+        Giriş Yap / Kayıt Ol
       </button>
     </div>
   );
