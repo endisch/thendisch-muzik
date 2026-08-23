@@ -5,8 +5,33 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+// Global cache for tracking active IPs (lives in memory on the Railway Node.js process)
+const globalAny: any = global;
+if (!globalAny.activeUsers) {
+  globalAny.activeUsers = new Map<string, number>();
+}
+const activeUsers: Map<string, number> = globalAny.activeUsers;
+
+export async function GET(req: Request) {
   try {
+    // 1. Online kullanıcı sayısını IP bazlı (veya session bazlı) takip et
+    const ip = req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "anonymous";
+    if (ip) {
+      activeUsers.set(ip, Date.now());
+    }
+
+    const now = Date.now();
+    let onlineCount = 0;
+    for (const [key, lastSeen] of activeUsers.entries()) {
+      // 15 saniyeden uzun süredir ping atmayanları online listesinden çıkar (Polling 2-3 saniyede bir yapılıyor)
+      if (now - lastSeen > 15000) {
+        activeUsers.delete(key);
+      } else {
+        onlineCount++;
+      }
+    }
+
+    // 2. Mesajları çek
     const messages = await prisma.message.findMany({
       take: 50,
       orderBy: { createdAt: "desc" },
@@ -23,7 +48,10 @@ export async function GET() {
       }
     });
 
-    return NextResponse.json(messages.reverse());
+    return NextResponse.json({
+      messages: messages.reverse(),
+      onlineCount: Math.max(1, onlineCount) // Kendisi varsa en az 1
+    });
   } catch (error) {
     return NextResponse.json({ error: "Sunucu hatası" }, { status: 500 });
   }

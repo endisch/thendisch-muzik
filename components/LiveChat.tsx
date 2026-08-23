@@ -36,6 +36,7 @@ export default function LiveChat() {
   const { data: session } = useSession();
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [onlineCount, setOnlineCount] = useState<number>(1);
   const [input, setInput] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
   
@@ -50,11 +51,15 @@ export default function LiveChat() {
       const res = await fetch("/api/chat");
       if (res.ok) {
         const data = await res.json();
+        const fetchedMessages = Array.isArray(data) ? data : data.messages;
+        if (data.onlineCount !== undefined) {
+          setOnlineCount(data.onlineCount);
+        }
         setMessages((prev) => {
-          if (prev.length === data.length && prev[prev.length - 1]?.id === data[data.length - 1]?.id) {
+          if (prev.length === fetchedMessages.length && prev[prev.length - 1]?.id === fetchedMessages[fetchedMessages.length - 1]?.id) {
             return prev;
           }
-          return data;
+          return fetchedMessages;
         });
       }
     } catch (e) {}
@@ -298,12 +303,15 @@ export default function LiveChat() {
         <div>
           <h2 className="text-lg font-black text-white tracking-tight flex items-center gap-2">
             VIP <span className="text-[#D4AF37]">Lounge</span>
-            <span className="relative flex h-2 w-2 ml-1">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D4AF37] opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#D4AF37]" />
-            </span>
           </h2>
           <p className="text-[10px] uppercase tracking-widest text-zinc-500 mt-1">Canlı Sohbet</p>
+        </div>
+        <div className="flex items-center gap-2 bg-black/40 border border-white/5 px-3 py-1.5 rounded-full">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+          <span className="text-xs font-bold text-zinc-300">{onlineCount} Online</span>
         </div>
         <MessageSquare className="w-5 h-5 text-[#D4AF37]/50" />
       </div>
