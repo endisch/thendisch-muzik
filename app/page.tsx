@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Music2, Vote, Trophy, Radio, ChevronRight } from "lucide-react";
+import { Play, Music, Trophy, Disc3, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-/* ---------- İnce grain dokusu — düz siyahın steril durmasını engeller ---------- */
 function Grain() {
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-50 opacity-[0.035] mix-blend-overlay"
+      className="pointer-events-none fixed inset-0 z-[1] opacity-[0.03] mix-blend-overlay"
       style={{
         backgroundImage:
           "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
@@ -17,245 +17,168 @@ function Grain() {
   );
 }
 
-const queue = [
-  { title: "Gece Yarısı Sinyali", artist: "CEMİLECEM", votes: 812 },
-  { title: "Kırık Ayna", artist: "Sazband Live", votes: 641 },
-  { title: "Toz Bulutu", artist: "Thendisch", votes: 573 },
-];
-
-function NowPlayingPanel() {
-  const [progress, setProgress] = useState(34);
-  const [listeners, setListeners] = useState(342);
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setProgress((p) => (p >= 100 ? 0 : p + 0.6));
-      setListeners((l) => l + Math.floor(Math.random() * 3) - 1);
-    }, 400);
-    return () => clearInterval(t);
-  }, []);
-
-  return (
-    <div className="relative w-full max-w-sm rounded-2xl border border-white/[0.06] bg-zinc-900/40 p-5 backdrop-blur-2xl">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-1.5 w-1.5">
-            {!reduceMotion && (
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D4AF37] opacity-75" />
-            )}
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
-            Şu An Çalıyor
-          </span>
-        </div>
-        <span className="font-mono text-[10px] tracking-widest text-zinc-600">
-          {listeners.toLocaleString("tr-TR")} dinleyici
-        </span>
-      </div>
-
-      <div className="mt-4 flex items-center gap-4">
-        <div className="h-16 w-16 shrink-0 rounded-lg bg-gradient-to-br from-[#D4AF37]/25 via-zinc-800 to-black" />
-        <div className="min-w-0">
-          <p className="truncate text-base font-bold tracking-tight text-white">
-            Gece Yarısı Sinyali
-          </p>
-          <p className="truncate text-sm text-zinc-500">CEMİLECEM</p>
-        </div>
-      </div>
-
-      <div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.06]">
-        <div
-          className="h-full rounded-full bg-[#D4AF37] transition-[width] duration-300 ease-linear"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-
-      <div className="mt-5 border-t border-white/[0.06] pt-4">
-        <p className="mb-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-600">
-          Sırada
-        </p>
-        <div className="space-y-2.5">
-          {queue.map((s) => (
-            <div key={s.title} className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="truncate text-sm text-zinc-300">{s.title}</p>
-                <p className="truncate text-xs text-zinc-600">{s.artist}</p>
-              </div>
-              <span className="shrink-0 font-mono text-xs tabular-nums text-[#D4AF37]/80">
-                {s.votes}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const features = [
-  {
-    icon: Music2,
-    title: "Senin Müziğin",
-    desc: "Şarkını yükle, ortak kuyruğa katıl. Herkesin sırası aynı akışta çalar.",
-    span: "sm:col-span-2",
-  },
-  {
-    icon: Vote,
-    title: "Gerçek Zamanlı Oylama",
-    desc: "Sıradaki şarkıyı topluluk belirler.",
-    span: "",
-  },
-  {
-    icon: Trophy,
-    title: "Global Liste",
-    desc: "Aylık Top 10, 20 ve 50 — en çok dinlenen parçalar.",
-    span: "",
-  },
-];
-
-/* ---------- Animasyon varyantları — sahneli, kademeli giriş ---------- */
 const container: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.05 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.3 },
   },
 };
 
-const rise: Variants = {
-  hidden: { opacity: 0, y: 18 },
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const slideIn: Variants = {
+  hidden: { opacity: 0, x: -30 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
 export default function LandingPage() {
   const reduceMotion = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <div className="min-h-screen bg-[#0B0C10]" />;
 
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased">
+    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
       <Grain />
 
-      {/* NAV */}
-      <motion.nav
-        initial={reduceMotion ? undefined : { opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-7"
-      >
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#D4AF37]">
-            <Radio className="h-3.5 w-3.5 text-black" strokeWidth={2.5} />
-          </div>
-          <span className="font-black tracking-tight">THENDISCH</span>
-        </div>
-        <a
-          href="/muzik"
-          className="group flex items-center gap-1 text-sm font-medium text-zinc-400 transition-colors hover:text-white"
+      {/* Abstract Glowing Orbs */}
+      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#D4AF37]/5 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full bg-[#D4AF37]/3 blur-[180px] pointer-events-none" />
+
+      {/* Navigation */}
+      <nav className="relative z-10 flex items-center justify-between px-8 py-8 md:px-16">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col"
         >
-          Giriş Yap
-          <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </a>
-      </motion.nav>
+          <span className="font-black text-2xl tracking-tighter leading-none">THENDISCH</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#D4AF37] leading-none mt-1">Acoustics</span>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <Link href="/muzik" className="group flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-zinc-500 hover:text-[#D4AF37] transition-colors">
+            VIP Giriş
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
+      </nav>
 
-      {/* HERO */}
-      <section className="relative overflow-hidden px-6 pb-28 pt-10 sm:pt-16">
-        <div className="pointer-events-none absolute -right-40 -top-20 h-[520px] w-[520px] rounded-full bg-[#D4AF37]/10 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-40 -left-32 h-[400px] w-[400px] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
-
+      {/* Hero Section */}
+      <section className="relative z-10 flex flex-col items-center justify-center min-h-[75vh] px-6 text-center">
         <motion.div
           variants={reduceMotion ? undefined : container}
-          initial={reduceMotion ? undefined : "hidden"}
-          animate={reduceMotion ? undefined : "show"}
-          className="relative z-10 mx-auto grid max-w-6xl items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]"
+          initial="hidden"
+          animate="show"
+          className="max-w-5xl mx-auto flex flex-col items-center"
         >
-          <div>
-            <motion.div
-              variants={reduceMotion ? undefined : rise}
-              className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-zinc-900/50 px-3.5 py-1.5"
-            >
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
-                7/24 canlı ortak yayın
-              </span>
-            </motion.div>
+          <motion.div variants={fadeUp} className="mb-8 overflow-hidden rounded-full border border-white/[0.05] bg-white/[0.02] backdrop-blur-md px-6 py-2">
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#D4AF37]">
+              Lüks, Kalite ve Kesintisiz Müzik
+            </span>
+          </motion.div>
 
-            <motion.h1
-              variants={reduceMotion ? undefined : rise}
-              className="text-balance font-black tracking-tight text-white [font-size:clamp(2.75rem,6vw,5rem)] leading-[1.03]"
-            >
-              Avant-Garde <span className="text-[#D4AF37]">Acoustics\.</span>
-            </motion.h1>
-
-            <motion.p
-              variants={reduceMotion ? undefined : rise}
-              className="mt-6 max-w-lg text-balance text-lg text-zinc-400"
-            >
-              Thendisch Müzik, dinleyicilerin yönettiği 7/24 canlı ortak radyo
-              deneyimidir. Şarkını yükle, oylamaya katıl, radyoyu sen yönet.
-            </motion.p>
-
-            <motion.div
-              variants={reduceMotion ? undefined : rise}
-              className="mt-10 flex flex-col gap-4 sm:flex-row"
-            >
-              <a
-                href="/muzik"
-                className="inline-flex items-center justify-center rounded-full bg-[#D4AF37] px-9 py-4 text-base font-bold text-black transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_40px_4px_rgba(16,185,129,0.4)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]"
-              >
-                Radyoya Bağlan
-              </a>
-              <a
-                href="/top/10"
-                className="inline-flex items-center justify-center rounded-full border border-white/10 px-9 py-4 text-base font-semibold text-white transition-all duration-300 hover:border-white/25 hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/40"
-              >
-                Ayın En İyileri
-              </a>
-            </motion.div>
-          </div>
-
-          <motion.div
-            variants={reduceMotion ? undefined : rise}
-            className="flex justify-center lg:justify-end"
+          <motion.h1 
+            variants={fadeUp}
+            className="text-balance font-black tracking-tighter text-white [font-size:clamp(3.5rem,8vw,8rem)] leading-[0.9]"
           >
-            <NowPlayingPanel />
+            Sıradanlığı <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#8A6D1C]">
+              Reddet.
+            </span>
+          </motion.h1>
+
+          <motion.p 
+            variants={fadeUp}
+            className="mt-8 max-w-2xl text-balance text-lg md:text-xl text-zinc-400 font-light leading-relaxed"
+          >
+            Dünyanın ilk sanat galerisi formatındaki canlı müzik kulübü. Kendi müziklerini yükle, topluluğun seçtiği ritimlere yön ver ve VIP Lounge'da elit dinleyicilerle anı yaşa.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className="mt-14 flex flex-col sm:flex-row items-center gap-6">
+            <Link 
+              href="/muzik"
+              className="group relative flex items-center gap-4 rounded-full bg-[#D4AF37] px-8 py-4 text-black transition-all duration-500 hover:scale-[1.02] hover:bg-[#F3E5AB] hover:shadow-[0_0_50px_rgba(212,175,55,0.4)]"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black/10">
+                <Play className="h-4 w-4 translate-x-[1px]" fill="currentColor" />
+              </div>
+              <span className="font-bold uppercase tracking-wider text-sm">Deneyimi Başlat</span>
+            </Link>
+            
+            <Link 
+              href="/top/10"
+              className="group flex items-center gap-3 rounded-full border border-white/10 px-8 py-4 text-white transition-all duration-500 hover:border-[#D4AF37]/50 hover:bg-white/[0.02]"
+            >
+              <Trophy className="h-4 w-4 text-zinc-500 group-hover:text-[#D4AF37] transition-colors" />
+              <span className="font-medium uppercase tracking-wider text-sm">Zirvedekiler</span>
+            </Link>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* FEATURES — bento grid, scroll'da beliriyor */}
-      <section className="relative px-6 pb-32">
-        <motion.div
-          initial={reduceMotion ? undefined : "hidden"}
-          whileInView={reduceMotion ? undefined : "show"}
-          viewport={{ once: true, margin: "-80px" }}
-          variants={reduceMotion ? undefined : container}
-          className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2"
-        >
-          {features.map(({ icon: Icon, title, desc, span }) => (
-            <motion.div
-              key={title}
-              variants={reduceMotion ? undefined : rise}
-              className={`group rounded-2xl border border-white/[0.06] bg-zinc-900/40 p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#D4AF37]/20 hover:bg-zinc-900/70 ${span}`}
-            >
-              <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-xl bg-[#D4AF37]/10 text-[#D4AF37] transition-colors duration-300 group-hover:bg-[#D4AF37]/15">
-                <Icon className="h-5 w-5" strokeWidth={2} />
-              </div>
-              <h3 className="mb-2 text-lg font-bold tracking-tight text-white">
-                {title}
-              </h3>
-              <p className="text-sm leading-relaxed text-zinc-500">{desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
+      {/* Decorative Minimalist Features */}
+      <section className="relative z-10 border-t border-white/[0.05] bg-gradient-to-b from-[#121318]/50 to-[#0B0C10]">
+        <div className="mx-auto max-w-7xl px-8 py-24 md:py-32">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
+            {[
+              {
+                icon: Disc3,
+                title: "Kusursuz Akustik",
+                desc: "Her parça, en ince detayına kadar dinleyicilerin onayından geçer."
+              },
+              {
+                icon: Music,
+                title: "Senin Sahnen",
+                desc: "Doğrulanmış sanatçı ol, eserlerini milyonların beğenebileceği bir vitrine taşı."
+              },
+              {
+                icon: Trophy,
+                title: "Koleksiyon",
+                desc: "Her ayın en elit 10 parçası arşivlenir ve Thendisch efsaneleri arasına girer."
+              }
+            ].map((f, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, delay: i * 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col gap-4 border-l border-white/[0.05] pl-6 hover:border-[#D4AF37]/30 transition-colors duration-500"
+              >
+                <f.icon className="h-6 w-6 text-[#D4AF37]" strokeWidth={1.5} />
+                <h3 className="text-xl font-bold tracking-tight text-white">{f.title}</h3>
+                <p className="text-zinc-500 font-light leading-relaxed">{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-white/[0.06] px-6 py-10">
-        <p className="text-center text-sm text-zinc-600">
-          Thendisch Müzik © 2026. Tüm hakları saklıdır.
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-white/[0.05] py-8 text-center">
+        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-600">
+          © 2026 Thendisch Acoustics.
         </p>
       </footer>
     </main>

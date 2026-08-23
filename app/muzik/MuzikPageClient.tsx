@@ -11,7 +11,7 @@ import { Session } from "next-auth";
 function Grain() {
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[1] opacity-[0.02] mix-blend-overlay"
+      className="pointer-events-none fixed inset-0 z-[1] opacity-[0.03] mix-blend-overlay"
       style={{
         backgroundImage:
           "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
@@ -74,7 +74,7 @@ function ChartsStrip() {
           key={c.label}
           href={c.href}
           variants={reduceMotion ? undefined : rise}
-          className="group relative flex min-w-[300px] flex-1 items-center justify-between overflow-hidden rounded-none border-b border-t border-white/[0.03] bg-gradient-to-r from-transparent via-[#121318]/50 to-transparent px-8 py-8 transition-all duration-500 hover:border-[#D4AF37]/30 hover:bg-[#121318]"
+          className="group relative flex min-w-[300px] flex-1 items-center justify-between overflow-hidden rounded-3xl border border-white/[0.03] bg-white/[0.01] backdrop-blur-md px-8 py-8 transition-all duration-500 hover:border-[#D4AF37]/30 hover:bg-white/[0.03]"
         >
           <div className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[#D4AF37] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="relative z-10 flex flex-col gap-1">
@@ -108,7 +108,7 @@ export default function MuzikPageClient({ session }: { session: Session | null }
       <nav className="relative z-40 border-b border-white/[0.02] bg-[#0B0C10]/80 backdrop-blur-3xl">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-8 py-6">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-none border border-[#D4AF37]/30 bg-[#121318] transition-transform duration-500 group-hover:scale-95 group-hover:bg-[#D4AF37]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-none border border-[#D4AF37]/30 bg-black transition-transform duration-500 group-hover:scale-95 group-hover:bg-[#D4AF37]">
               <Radio className="h-4 w-4 text-[#D4AF37] group-hover:text-black transition-colors" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
@@ -122,16 +122,17 @@ export default function MuzikPageClient({ session }: { session: Session | null }
         </div>
       </nav>
 
-      <div className="relative z-10">
-        <ChartsStrip />
+      <div className="relative z-10 flex flex-col items-center">
+        <div className="w-full">
+          <ChartsStrip />
+        </div>
 
-        <div className="mx-auto grid max-w-[1400px] gap-12 px-8 py-16 xl:grid-cols-12 items-start">
-          <div className="xl:col-span-7 2xl:col-span-8 flex justify-center">
-            <div className="w-full max-w-2xl xl:max-w-none">
-              <RadioPlayer />
-            </div>
+        <div className="w-full max-w-[1400px] px-8 pt-8 pb-24 grid lg:grid-cols-[1fr_400px] gap-12 items-start">
+          <div className="w-full flex justify-center">
+            <RadioPlayer />
           </div>
-          <div className="flex flex-col gap-8 xl:col-span-5 2xl:col-span-4 mt-12 xl:mt-0">
+          
+          <div className="w-full">
             <MusicClientView session={session} />
           </div>
         </div>
