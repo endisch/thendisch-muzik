@@ -33,15 +33,6 @@ const fadeUp: Variants = {
   },
 };
 
-const slideIn: Variants = {
-  hidden: { opacity: 0, x: -30 },
-  show: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 export default function LandingPage() {
   const reduceMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
@@ -53,7 +44,7 @@ export default function LandingPage() {
   if (!mounted) return <div className="min-h-screen bg-[#0B0C10]" />;
 
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
+    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
       <Grain />
 
       {/* Abstract Glowing Orbs */}
@@ -85,7 +76,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 flex flex-col items-center justify-center min-h-[75vh] px-6 text-center">
+      <section className="relative z-10 flex flex-col items-center justify-center min-h-[75vh] px-6 text-center pb-20">
         <motion.div
           variants={reduceMotion ? undefined : container}
           initial="hidden"
@@ -116,22 +107,21 @@ export default function LandingPage() {
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-14 flex flex-col sm:flex-row items-center gap-6">
+            {/* Elegant, sophisticated Play button without background blob */}
             <Link 
               href="/muzik"
-              className="group relative flex items-center gap-4 rounded-full bg-[#D4AF37] px-8 py-4 text-black transition-all duration-500 hover:scale-[1.02] hover:bg-[#F3E5AB] hover:shadow-[0_0_50px_rgba(212,175,55,0.4)]"
+              className="group flex items-center gap-3 border border-[#D4AF37]/50 rounded-full px-10 py-4 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black/10">
-                <Play className="h-4 w-4 translate-x-[1px]" fill="currentColor" />
-              </div>
-              <span className="font-bold uppercase tracking-wider text-sm">Deneyimi Başlat</span>
+              <span className="font-bold uppercase tracking-widest text-sm">Deneyimi Başlat</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             
             <Link 
               href="/top/10"
-              className="group flex items-center gap-3 rounded-full border border-white/10 px-8 py-4 text-white transition-all duration-500 hover:border-[#D4AF37]/50 hover:bg-white/[0.02]"
+              className="group flex items-center gap-3 rounded-full border border-white/10 px-10 py-4 text-white transition-all duration-500 hover:border-white/30 hover:bg-white/[0.02]"
             >
-              <Trophy className="h-4 w-4 text-zinc-500 group-hover:text-[#D4AF37] transition-colors" />
-              <span className="font-medium uppercase tracking-wider text-sm">Zirvedekiler</span>
+              <Trophy className="h-4 w-4 text-zinc-500 group-hover:text-white transition-colors" />
+              <span className="font-medium uppercase tracking-widest text-sm text-zinc-300 group-hover:text-white transition-colors">Zirvedekiler</span>
             </Link>
           </motion.div>
         </motion.div>

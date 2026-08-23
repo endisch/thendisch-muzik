@@ -1,5 +1,43 @@
-@tailwind base; @tailwind components; @tailwind utilities; @layer base {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
   body {
-    @apply bg-black text-gray-100 min-h-screen selection:bg-emerald-500/30;
+    @apply bg-[#0B0C10] text-gray-100 min-h-screen selection:bg-[#D4AF37]/30 selection:text-[#D4AF37];
   }
-} .lyrics .active { color: #10b981; font-weight: bold; text-shadow: 0 0 15px rgba(16, 185, 129, 0.6); }
+}
+
+.lyrics .active {
+  color: #D4AF37;
+  font-weight: bold;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0C10;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.5); /* Gold hover */
+}
+
+/* Hide scrollbar completely if needed */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
