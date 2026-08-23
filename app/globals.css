@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#0B0C10] text-gray-100 min-h-screen selection:bg-[#D4AF37]/30 selection:text-[#D4AF37];
+    @apply bg-[#0B0C10] text-gray-100 selection:bg-[#D4AF37]/30 selection:text-[#D4AF37];
   }
 }
 

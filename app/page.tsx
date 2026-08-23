@@ -44,7 +44,7 @@ export default function LandingPage() {
   if (!mounted) return <div className="min-h-screen bg-[#0B0C10]" />;
 
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
+    <main className="relative bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
       <Grain />
 
       {/* Abstract Glowing Orbs */}
