@@ -3,6 +3,7 @@
 import RadioPlayer from "@/components/RadioPlayer";
 import MusicClientView from "./MusicClientView";
 import AuthStatus from "@/components/AuthStatus";
+import LiveChat from "@/components/LiveChat";
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Radio, ChevronRight } from "lucide-react";
@@ -67,14 +68,14 @@ function ChartsStrip() {
       whileInView={reduceMotion ? undefined : "show"}
       viewport={{ once: true, margin: "-40px" }}
       variants={reduceMotion ? undefined : container}
-      className="mx-auto flex max-w-[1400px] gap-6 overflow-x-auto px-8 pb-4 pt-12 no-scrollbar"
+      className="mx-auto flex max-w-[1500px] gap-6 overflow-x-auto px-8 pb-4 pt-12 no-scrollbar"
     >
       {charts.map((c) => (
         <motion.a
           key={c.label}
           href={c.href}
           variants={reduceMotion ? undefined : rise}
-          className="group relative flex min-w-[300px] flex-1 items-center justify-between overflow-hidden rounded-3xl border border-white/[0.03] bg-white/[0.01] backdrop-blur-md px-8 py-8 transition-all duration-500 hover:border-[#D4AF37]/30 hover:bg-white/[0.03]"
+          className="group relative flex min-w-[280px] flex-1 items-center justify-between overflow-hidden rounded-3xl border border-white/[0.03] bg-white/[0.01] backdrop-blur-md px-8 py-8 transition-all duration-500 hover:border-[#D4AF37]/30 hover:bg-white/[0.03]"
         >
           <div className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[#D4AF37] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="relative z-10 flex flex-col gap-1">
@@ -106,7 +107,7 @@ export default function MuzikPageClient({ session }: { session: Session | null }
 
       {/* Navbar */}
       <nav className="relative z-40 border-b border-white/[0.02] bg-[#0B0C10]/80 backdrop-blur-3xl">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-8 py-6">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-8 py-6">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-none border border-[#D4AF37]/30 bg-black transition-transform duration-500 group-hover:scale-95 group-hover:bg-[#D4AF37]">
               <Radio className="h-4 w-4 text-[#D4AF37] group-hover:text-black transition-colors" strokeWidth={1.5} />
@@ -127,14 +128,26 @@ export default function MuzikPageClient({ session }: { session: Session | null }
           <ChartsStrip />
         </div>
 
-        <div className="w-full max-w-[1400px] px-8 pt-8 pb-24 grid lg:grid-cols-[1fr_400px] gap-12 items-start">
+        {/* 3 Column Layout for large screens: LiveChat - Player - Queue */}
+        <div className="w-full max-w-[1500px] px-8 pt-8 pb-24 grid lg:grid-cols-[1fr_400px] xl:grid-cols-[380px_1fr_380px] gap-8 items-start">
+          
+          <div className="w-full hidden xl:block">
+            <LiveChat />
+          </div>
+
           <div className="w-full flex justify-center">
             <RadioPlayer />
           </div>
           
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-8">
             <MusicClientView session={session} />
+            
+            {/* Show LiveChat below queue on smaller than XL screens */}
+            <div className="xl:hidden">
+              <LiveChat />
+            </div>
           </div>
+
         </div>
       </div>
     </main>

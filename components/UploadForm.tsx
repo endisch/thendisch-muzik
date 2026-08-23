@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { UploadCloud, ImageIcon } from "lucide-react";
+import { UploadCloud, ImageIcon, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const CATEGORIES = ["Akustik", "Alternatif", "Arabesk", "Elektronik", "Hip-Hop / Rap", "Pop", "Rock", "R&B", "Klasik", "Caz / Blues"];
@@ -20,6 +20,9 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [coverFile, setCoverFile] = useState<File | null>(null);
+
+  const [isCatOpen, setIsCatOpen] = useState(false);
+  const [isGenOpen, setIsGenOpen] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -64,7 +67,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
     setLoading(true);
     setError("");
     try {
-      // 1. Get audio upload URL
       const res = await fetch("/api/upload-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -74,7 +76,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       if (data.error) throw new Error(data.error);
       const { uploadUrl, key } = data;
 
-      // 2. Upload audio to R2
       try {
         const uploadRes = await fetch(uploadUrl, {
           method: "PUT",
@@ -83,10 +84,9 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         });
         if (!uploadRes.ok) throw new Error("Dosya yüklenemedi (R2 CORS veya izin hatası).");
       } catch (uploadError: any) {
-        throw new Error("R2 Sunucusuna yükleme başarısız. Lütfen CORS ayarlarını kontrol edin. Detay: " + uploadError.message);
+        throw new Error("R2 Sunucusuna yükleme başarısız. Detay: " + uploadError.message);
       }
 
-      // 3. Upload cover if exists
       let coverKey = null;
       if (coverFile) {
         const cRes = await fetch("/api/upload-url", {
@@ -111,7 +111,6 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         }
       }
 
-      // 4. Save to database
       const songRes = await fetch("/api/songs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -146,7 +145,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   };
 
   return (
-    <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl p-6 sm:p-8">
+    <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl p-6 sm:p-8 relative z-20">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
           <span className="w-8 h-8 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center">
@@ -169,7 +168,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
+            className="overflow-visible"
           >
             <div className="space-y-6 pt-6">
               {error && <div className="text-red-400 bg-red-400/10 p-4 rounded-xl text-sm font-medium border border-red-500/20">{error}</div>}
@@ -219,39 +218,73 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative">
+                {/* Kategori Dropdown */}
+                <div className="relative">
                   <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kategoriler</label>
-                  <div className="flex flex-wrap gap-2 max-h-36 overflow-y-auto p-4 border border-white/[0.08] rounded-xl bg-black/40 no-scrollbar">
-                    {CATEGORIES.map(cat => (
-                      <label key={cat} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedCategories.includes(cat) ? 'bg-[#D4AF37]/20 text-[#F3E5AB] font-bold border-[#D4AF37]/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
-                        <input 
-                          type="checkbox" 
-                          checked={selectedCategories.includes(cat)} 
-                          onChange={() => handleCategoryToggle(cat)} 
-                          className="hidden"
-                        />
-                        {cat}
-                      </label>
-                    ))}
+                  <div 
+                    onClick={() => setIsCatOpen(!isCatOpen)}
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all flex items-center justify-between"
+                  >
+                    <span className="truncate">{selectedCategories.length > 0 ? selectedCategories.join(", ") : "Kategori Seçin..."}</span>
+                    <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isCatOpen ? "rotate-180" : ""}`} />
                   </div>
+                  <AnimatePresence>
+                    {isCatOpen && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute top-full left-0 w-full mt-2 bg-[#1A1C23] border border-white/[0.1] rounded-xl shadow-2xl overflow-hidden z-50 max-h-48 overflow-y-auto no-scrollbar"
+                      >
+                        {CATEGORIES.map(cat => (
+                          <label key={cat} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.03] cursor-pointer border-b border-white/[0.02] last:border-0">
+                            <input 
+                              type="checkbox" 
+                              checked={selectedCategories.includes(cat)} 
+                              onChange={() => handleCategoryToggle(cat)} 
+                              className="w-4 h-4 rounded border-zinc-700 text-[#D4AF37] focus:ring-[#D4AF37] bg-black/50 accent-[#D4AF37]"
+                            />
+                            <span className={`text-sm ${selectedCategories.includes(cat) ? 'text-[#D4AF37] font-bold' : 'text-zinc-300'}`}>{cat}</span>
+                          </label>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
-                <div>
+                {/* Tür Dropdown */}
+                <div className="relative">
                   <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Türler</label>
-                  <div className="flex flex-wrap gap-2 max-h-36 overflow-y-auto p-4 border border-white/[0.08] rounded-xl bg-black/40 no-scrollbar">
-                    {GENRES.map(gen => (
-                      <label key={gen} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedGenres.includes(gen) ? 'bg-[#D4AF37]/20 text-[#F3E5AB] font-bold border-[#D4AF37]/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
-                        <input 
-                          type="checkbox" 
-                          checked={selectedGenres.includes(gen)} 
-                          onChange={() => handleGenreToggle(gen)}
-                          className="hidden" 
-                        />
-                        {gen}
-                      </label>
-                    ))}
+                  <div 
+                    onClick={() => setIsGenOpen(!isGenOpen)}
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all flex items-center justify-between"
+                  >
+                    <span className="truncate">{selectedGenres.length > 0 ? selectedGenres.join(", ") : "Tür Seçin..."}</span>
+                    <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isGenOpen ? "rotate-180" : ""}`} />
                   </div>
+                  <AnimatePresence>
+                    {isGenOpen && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute top-full left-0 w-full mt-2 bg-[#1A1C23] border border-white/[0.1] rounded-xl shadow-2xl overflow-hidden z-50 max-h-48 overflow-y-auto no-scrollbar"
+                      >
+                        {GENRES.map(gen => (
+                          <label key={gen} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.03] cursor-pointer border-b border-white/[0.02] last:border-0">
+                            <input 
+                              type="checkbox" 
+                              checked={selectedGenres.includes(gen)} 
+                              onChange={() => handleGenreToggle(gen)}
+                              className="w-4 h-4 rounded border-zinc-700 text-[#D4AF37] focus:ring-[#D4AF37] bg-black/50 accent-[#D4AF37]" 
+                            />
+                            <span className={`text-sm ${selectedGenres.includes(gen) ? 'text-[#D4AF37] font-bold' : 'text-zinc-300'}`}>{gen}</span>
+                          </label>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 

@@ -32,7 +32,6 @@ export default function RootLayout({
       <body className="font-sans bg-[#0B0C10] text-gray-100 min-h-screen selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
         <Providers>
           {children}
-          <LiveChat />
         </Providers>
       </body>
     </html>
