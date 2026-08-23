@@ -98,7 +98,7 @@ function ChartsStrip() {
 
 export default function MuzikPageClient({ session }: { session: Session | null }) {
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-hidden pb-32">
+    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden pb-32">
       <Grain />
       
       {/* Avant-Garde Background Glows */}
