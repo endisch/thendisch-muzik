@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Send, MessageSquare, CheckCircle2, ShieldAlert } from "lucide-react";
+import { Send, MessageSquare, CheckCircle2, ShieldAlert, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 type ChatMessage = {
@@ -27,7 +27,6 @@ export default function LiveChat() {
       const res = await fetch("/api/chat");
       if (res.ok) {
         const data = await res.json();
-        // Sadece mesaj sayısı değiştiyse güncelleyelim (gereksiz render/scroll olmasın)
         setMessages((prev) => {
           if (prev.length === data.length && prev[prev.length - 1]?.id === data[data.length - 1]?.id) {
             return prev;
@@ -47,7 +46,7 @@ export default function LiveChat() {
   }, []);
 
   useEffect(() => {
-    // Sayfanın genelini zorla aşağı çekmek yerine sadece sohbet kutusunun içini aşağı kaydırıyoruz
+    // Scroll to bottom logically
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
@@ -88,6 +87,21 @@ export default function LiveChat() {
     }
   };
 
+  const deleteMessage = async (id: string) => {
+    // Optimistic delete
+    setMessages((prev) => prev.filter(msg => msg.id !== id));
+    
+    try {
+      await fetch(`/api/chat?id=${id}`, {
+        method: "DELETE"
+      });
+    } catch (e) {
+      console.error("Failed to delete message");
+    }
+  };
+
+  const isAdmin = (session?.user as any)?.role === "ADMIN";
+
   return (
     <div className="flex flex-col h-[700px] w-full bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl overflow-hidden shadow-2xl relative z-20">
       <div className="p-5 border-b border-white/[0.05] bg-gradient-to-b from-[#1A1C23] to-transparent flex items-center justify-between">
@@ -112,7 +126,7 @@ export default function LiveChat() {
             const isMyMsg = session?.user?.name === msg.user.name;
 
             return (
-              <div key={msg.id || idx} className={`flex gap-3 ${isMyMsg ? 'flex-row-reverse' : ''}`}>
+              <div key={msg.id || idx} className={`flex gap-3 group ${isMyMsg ? 'flex-row-reverse' : ''}`}>
                 <div className="w-8 h-8 rounded-full bg-zinc-800 shrink-0 border border-white/5 overflow-hidden flex items-center justify-center">
                   {msg.user.image ? (
                     <img src={msg.user.image} alt="Avatar" className="w-full h-full object-cover" />
@@ -126,9 +140,35 @@ export default function LiveChat() {
                     {msg.user.isVerifiedArtist && <span title="Doğrulanmış Sanatçı"><CheckCircle2 className="w-3 h-3 text-[#D4AF37]" /></span>}
                     {msg.user.role === "ADMIN" && <span title="Yönetici"><ShieldAlert className="w-3 h-3 text-red-500" /></span>}
                   </div>
-                  <div className={`px-4 py-2.5 rounded-2xl text-sm ${isMyMsg ? 'bg-[#D4AF37] text-black rounded-tr-sm font-medium' : 'bg-white/[0.04] text-zinc-300 rounded-tl-sm border border-white/[0.02]'}`}>
-                    {msg.text}
+                  
+                  <div className="flex items-center gap-2">
+                    {/* If Admin and not my message, show trash icon on hover */}
+                    {isAdmin && !isMyMsg && (
+                      <button 
+                        onClick={() => deleteMessage(msg.id)}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                        title="Mesajı Sil"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                    
+                    <div className={`px-4 py-2.5 rounded-2xl text-sm ${isMyMsg ? 'bg-[#D4AF37] text-black rounded-tr-sm font-medium' : 'bg-white/[0.04] text-zinc-300 rounded-tl-sm border border-white/[0.02]'}`}>
+                      {msg.text}
+                    </div>
+
+                    {/* If Admin and IS my message, show trash icon on the left (since flex-row-reverse reverses layout) */}
+                    {isAdmin && isMyMsg && (
+                      <button 
+                        onClick={() => deleteMessage(msg.id)}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                        title="Mesajı Sil"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
+
                 </div>
               </div>
             );
