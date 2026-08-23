@@ -51,13 +51,15 @@ function Vinyl({ playing, coverUrl }: { playing: boolean; coverUrl?: string }) {
 function LyricsView({ activeIndex, lines, rawLyrics }: { activeIndex: number; lines: LrcLine[]; rawLyrics?: string | null }) {
   if (lines.length === 0) {
     if (rawLyrics && rawLyrics.trim().length > 0) {
-      // LRC formatında değil ama düz metin (veya SRT) olarak sözler var
+      // Olası herhangi bir köşeli parantezli zaman etiketini temizle (örn. [00:15:20] veya [00:15.22])
+      const cleanedLyrics = rawLyrics.replace(/\[[^\]]*\]/g, "");
+      
       return (
         <div className="relative mt-8 h-48 overflow-y-auto no-scrollbar [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
           <div className="flex flex-col items-center py-12 px-4 gap-4">
-            {rawLyrics.split("\n").map((line, i) => (
+            {cleanedLyrics.split("\n").map((line, i) => (
               <p key={i} className="text-center font-serif text-lg text-zinc-400 w-full max-w-md">
-                {line}
+                {line.trim()}
               </p>
             ))}
           </div>
