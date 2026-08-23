@@ -13,6 +13,7 @@ type PublicUser = {
   spotifyUrl: string | null;
   youtubeUrl: string | null;
   createdAt: Date;
+  songsListened: number;
   songs: { id: string; title: string; artist: string; coverUrl: string | null }[];
 };
 
@@ -80,9 +81,16 @@ export default function UserClient({ user }: { user: PublicUser }) {
               )}
             </div>
             
-            <div className="flex items-center justify-center md:justify-start gap-2 text-zinc-500 text-sm font-medium" suppressHydrationWarning>
-              <Calendar className="w-4 h-4" /> 
-              {new Date(user.createdAt).toLocaleDateString("tr-TR")} tarihinden beri üye
+            <div className="flex items-center justify-center md:justify-start gap-4 text-zinc-500 text-sm font-medium">
+              <div className="flex items-center gap-1.5" suppressHydrationWarning>
+                <Calendar className="w-4 h-4" /> 
+                {new Date(user.createdAt).toLocaleDateString("tr-TR")}
+              </div>
+              <div className="w-1 h-1 rounded-full bg-zinc-700" />
+              <div className="flex items-center gap-1.5">
+                <Music className="w-4 h-4" />
+                {user.songsListened} şarkı dinledi
+              </div>
             </div>
           </div>
         </div>

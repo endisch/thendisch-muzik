@@ -20,6 +20,7 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
       spotifyUrl: true,
       youtubeUrl: true,
       createdAt: true,
+      songsListened: true,
       songs: {
         where: { status: { not: "PLAYED" } }, // Veya istersen tǬmǬnǬ gster
         orderBy: { createdAt: "desc" },

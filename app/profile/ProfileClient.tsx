@@ -18,6 +18,7 @@ type UserData = {
   spotifyUrl: string | null;
   youtubeUrl: string | null;
   createdAt: Date;
+  songsListened: number;
 };
 
 export default function ProfileClient({ user }: { user: UserData }) {
@@ -207,16 +208,26 @@ export default function ProfileClient({ user }: { user: UserData }) {
               )}
             </div>
             
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-              <div className="bg-black/50 border border-white/5 rounded-2xl px-6 py-4">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Şarkı Yükleme Kredisi</p>
-                <p className="text-3xl font-black text-[#D4AF37]">{user.uploadCredits}</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                <div className="bg-black/50 border border-white/5 rounded-2xl px-6 py-4">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] mb-1">Şarkı Hakkı</p>
+                  <p className="text-3xl font-black text-white">{user.uploadCredits}</p>
+                </div>
+                <div className="bg-black/50 border border-white/5 rounded-2xl px-6 py-4">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Statü</p>
+                  <p className="text-lg font-bold text-white">
+                    {user.isVerifiedArtist ? "VIP Sanatçı" : user.role === "ADMIN" ? "Yönetici" : "Dinleyici"}
+                  </p>
+                </div>
+                <div className="bg-black/50 border border-white/5 rounded-2xl px-6 py-4">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Dinlediği Şarkı</p>
+                  <p className="text-lg font-bold text-white">{user.songsListened}</p>
+                </div>
+                <div className="bg-black/50 border border-white/5 rounded-2xl px-6 py-4">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Üyelik Tarihi</p>
+                  <p className="text-lg font-bold text-white" suppressHydrationWarning>{new Date(user.createdAt).toLocaleDateString("tr-TR")}</p>
+                </div>
               </div>
-              <div className="bg-black/50 border border-white/5 rounded-2xl px-6 py-4">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Üyelik Tarihi</p>
-                <p className="text-lg font-bold text-white" suppressHydrationWarning>{new Date(user.createdAt).toLocaleDateString("tr-TR")}</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

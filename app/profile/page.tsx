@@ -30,7 +30,8 @@ export default async function ProfilePage() {
       instagramUrl: true,
       spotifyUrl: true,
       youtubeUrl: true,
-      createdAt: true
+      createdAt: true,
+      songsListened: true
     }
   });
 
