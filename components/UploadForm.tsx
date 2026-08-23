@@ -59,21 +59,31 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
 
     try {
       // get audio s3 url
-      const ext = file.name.split('.').pop() || 'mp3';
-      const uRes = await fetch(`/api/upload-url?ext=${ext}&type=audio`);
-      const { url, key } = await uRes.json();
-      await fetch(url, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
+      const uRes = await fetch("/api/upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: file.name, contentType: file.type })
+      });
+      
+      const uData = await uRes.json();
+      if (!uRes.ok) throw new Error(uData.error || "Şarkı yükleme bağlantısı oluşturulamadı.");
+      
+      const { uploadUrl, key } = uData;
+      await fetch(uploadUrl, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
 
-      let coverUrl = null;
+      let cKey = undefined;
       if (coverFile) {
-        const coverExt = coverFile.name.split('.').pop() || 'jpg';
-        const coverURes = await fetch(`/api/upload-url?ext=${coverExt}&type=image`);
-        const { url: cUrl, key: cKey } = await coverURes.json();
-        await fetch(cUrl, { method: "PUT", body: coverFile, headers: { "Content-Type": coverFile.type } });
-        coverUrl = `https://thendisch-songs.s3.eu-central-1.amazonaws.com/${cKey}`;
+        const coverURes = await fetch("/api/upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename: coverFile.name, contentType: coverFile.type })
+        });
+        const coverData = await coverURes.json();
+        if (!coverURes.ok) throw new Error(coverData.error || "Kapak yükleme bağlantısı oluşturulamadı.");
+        
+        cKey = coverData.key;
+        await fetch(coverData.uploadUrl, { method: "PUT", body: coverFile, headers: { "Content-Type": coverFile.type } });
       }
-
-      const songUrl = `https://thendisch-songs.s3.eu-central-1.amazonaws.com/${key}`;
 
       const res = await fetch("/api/songs", {
         method: "POST",
@@ -81,16 +91,18 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         body: JSON.stringify({
           title,
           artist,
-          url: songUrl,
-          durationSec: durationSec ? Math.floor(durationSec) : 0,
+          fileKey: key,
+          durationSec: durationSec ? Math.max(1, Math.floor(durationSec)) : 1, // Must be positive for Zod
           categories: selectedCategories,
           genres: selectedGenres,
           lyricsLrc,
-          coverUrl,
+          coverKey: cKey,
           youtubeUrl
         })
       });
 
+      const data = await res.json();
+      
       if (res.ok) {
         setIsOpen(false);
         setFile(null);
@@ -102,9 +114,11 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         setLyricsLrc("");
         setYoutubeUrl("");
         onUploadSuccess();
+      } else {
+        throw new Error(data.error || "Şarkı kaydedilemedi.");
       }
-    } catch (e) {
-      alert("Hata oluştu");
+    } catch (e: any) {
+      alert(e.message || "Hata oluştu");
     } finally {
       setLoading(false);
     }
