@@ -22,20 +22,46 @@ export default async function TopPage({ params }: { params: { limit: string } })
   let topSongs = [];
 
   if (limitNum === 50) {
-    // 50 = ARŞİV: Bugüne kadar en çok oy alan VEYA çalınmış 50 şarkı (All-time top)
-    const songsData = await prisma.song.findMany({
-      orderBy: { votesCount: 'desc' },
+    // 50 = ARŞİV: Bugüne kadar en çok oy alan (Tüm Zamanlar)
+    const topVotes = await prisma.vote.groupBy({
+      by: ['songId'],
+      _count: { songId: true },
+      orderBy: { _count: { songId: 'desc' } },
       take: 50
     });
-    
-    topSongs = await Promise.all(songsData.map(async (song) => ({
-      id: song.id,
-      title: song.title,
-      artist: song.artist,
-      monthlyVotes: song.votesCount, // Arşivde toplam oy olarak gösteriyoruz
-      coverUrl: song.coverUrl ? await getPlaybackUrl(song.coverUrl) : null,
-      playbackUrl: await getPlaybackUrl(song.fileUrl),
-    })));
+
+    const songIds = topVotes.map(v => v.songId);
+    if (songIds.length > 0) {
+      const songsData = await prisma.song.findMany({
+        where: { id: { in: songIds } }
+      });
+
+      topSongs = await Promise.all(topVotes.map(async (vote) => {
+        const song = songsData.find(s => s.id === vote.songId)!;
+        return {
+          id: song.id,
+          title: song.title,
+          artist: song.artist,
+          monthlyVotes: vote._count.songId,
+          coverUrl: song.coverUrl ? await getPlaybackUrl(song.coverUrl) : null,
+          playbackUrl: await getPlaybackUrl(song.fileUrl),
+        };
+      }));
+    } else {
+      // Eğer hiç oy yoksa, en son eklenen 50 şarkıyı göster
+      const songsData = await prisma.song.findMany({
+        orderBy: { createdAt: 'desc' },
+        take: 50
+      });
+      topSongs = await Promise.all(songsData.map(async (song) => ({
+        id: song.id,
+        title: song.title,
+        artist: song.artist,
+        monthlyVotes: 0,
+        coverUrl: song.coverUrl ? await getPlaybackUrl(song.coverUrl) : null,
+        playbackUrl: await getPlaybackUrl(song.fileUrl),
+      })));
+    }
   } else {
     // 10 ve 20: BU AYIN en iyileri
     const now = new Date();

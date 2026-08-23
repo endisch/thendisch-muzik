@@ -31,6 +31,10 @@ export async function POST(request: Request) {
     if (!song)
       return NextResponse.json({ error: "Song not found" }, { status: 404 });
 
+    if (song.uploadedBy === user.id) {
+      return NextResponse.json({ error: "Kendi yüklediğiniz şarkıya oy veremezsiniz." }, { status: 403 });
+    }
+
     // Eğer şarkı arşivdeyse (PLAYED), oy aldığında tekrar sıraya (QUEUED) girer!
     const newStatus = song.status === "PLAYED" ? "QUEUED" : song.status;
 

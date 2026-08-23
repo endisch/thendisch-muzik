@@ -36,16 +36,18 @@ export async function advanceQueueIfNeeded() {
       orderBy: [{ votesCount: "desc" }, { createdAt: "asc" }],
     });
 
-    // 2. Eğer kuyrukta şarkı yoksa, Auto-DJ devreye girsin ve çalınmışlardan (PLAYED) rastgele seçsin
+    // 2. Eğer kuyrukta şarkı yoksa, tüm çalınmış şarkıları (PLAYED) başa sarıp tekrar sıraya (QUEUED) al!
     if (!next) {
-      const playedCount = await prisma.song.count({ where: { status: "PLAYED" } });
-      if (playedCount > 0) {
-        const randomSkip = Math.floor(Math.random() * playedCount);
-        next = await prisma.song.findFirst({
-          where: { status: "PLAYED" },
-          skip: randomSkip,
-        });
-      }
+      await prisma.song.updateMany({
+        where: { status: "PLAYED" },
+        data: { status: "QUEUED", votesCount: 0 }
+      });
+
+      // Şarkıları tekrar QUEUED yaptıktan sonra yeniden sorgula
+      next = await prisma.song.findFirst({
+        where: { status: "QUEUED" },
+        orderBy: [{ votesCount: "desc" }, { createdAt: "asc" }],
+      });
     }
 
     // Hala next yoksa (sistemde hiç şarkı yoksa) radyoyu durdur
