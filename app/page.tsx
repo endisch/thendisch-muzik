@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Play, Music, Trophy, Disc3, ArrowRight } from "lucide-react";
+import { Music, Trophy, Disc3, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

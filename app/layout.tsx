@@ -15,7 +15,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-import LiveChat from "@/components/LiveChat";
+
 
 export const metadata: Metadata = {
   title: "Thendisch Acoustics",
