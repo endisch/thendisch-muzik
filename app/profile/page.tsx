@@ -22,6 +22,7 @@ export default async function ProfilePage() {
       name: true,
       email: true,
       image: true,
+      bio: true,
       uploadCredits: true,
       role: true,
       isVerifiedArtist: true,

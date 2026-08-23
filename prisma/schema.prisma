@@ -20,6 +20,7 @@ model User {
   password          String?
   name              String?
   image             String?
+  bio               String?   @db.Text
   uploadCredits     Int       @default(0) // Default 0 for normal users
   songsListened     Int       @default(0)
   

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Send, MessageSquare, CheckCircle2, ShieldAlert, Trash2, Shield, Clock, Music, X } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type ChatMessage = {
   id: string;
@@ -33,6 +34,7 @@ type ModSummary = {
 
 export default function LiveChat() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -317,6 +319,7 @@ export default function LiveChat() {
               <div key={msg.id || idx} className={`flex gap-3 group ${isMyMsg ? 'flex-row-reverse' : ''}`}>
                 <div 
                   className="w-8 h-8 rounded-full bg-zinc-800 shrink-0 border border-white/5 overflow-hidden flex items-center justify-center cursor-pointer hover:border-[#D4AF37] transition-colors"
+                  onClick={() => router.push(`/user/${msg.user.id}`)}
                   onContextMenu={(e) => handleContextMenu(e, msg.user.id, msg.user.name || "Anonim")}
                 >
                   {msg.user.image ? (
@@ -328,6 +331,7 @@ export default function LiveChat() {
                 <div className={`flex flex-col max-w-[75%] ${isMyMsg ? 'items-end' : 'items-start'}`}>
                   <div 
                     className="flex items-center gap-1.5 mb-1 cursor-pointer"
+                    onClick={() => router.push(`/user/${msg.user.id}`)}
                     onContextMenu={(e) => handleContextMenu(e, msg.user.id, msg.user.name || "Anonim")}
                   >
                     <span className="text-[10px] text-zinc-500 font-medium hover:text-white transition-colors">{msg.user.name}</span>
