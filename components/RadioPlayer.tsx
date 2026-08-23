@@ -221,27 +221,27 @@ export default function RadioPlayer() {
               </p>
             </div>
 
-            <div className="mt-10 flex items-center justify-center gap-8">
+            <div className="mt-10 relative flex items-center justify-center w-full max-w-sm mx-auto h-16">
               
-              {/* Ses Kontrolü (Hover ile slider çıkar) */}
-              <div className="group relative flex items-center justify-center w-8">
-                <button onClick={toggleMute} className="text-zinc-500 hover:text-[#D4AF37] transition-colors p-2">
+              {/* Sol: Ses Kontrolü (Daima görünür, Mobil uyumlu) */}
+              <div className="absolute left-0 flex items-center gap-3">
+                <button onClick={toggleMute} className="text-zinc-500 hover:text-[#D4AF37] transition-colors" aria-label="Sesi Kapat/Aç">
                   {volume === 0 ? <VolumeX className="h-5 w-5" /> : volume < 0.5 ? <Volume1 className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                 </button>
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all bg-[#1A1C23] border border-white/10 p-3 rounded-2xl shadow-xl">
-                  <input 
-                    type="range" 
-                    min="0" max="1" step="0.01" 
-                    value={volume}
-                    onChange={handleVolumeChange}
-                    className="w-24 h-1 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-[#D4AF37]"
-                  />
-                </div>
+                <input 
+                  type="range" 
+                  min="0" max="1" step="0.01" 
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="w-16 sm:w-24 h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-[#D4AF37] hover:bg-white/20 transition-all [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D4AF37] [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+                  aria-label="Ses Seviyesi"
+                />
               </div>
 
+              {/* Orta: Play/Pause Butonu */}
               <button
                 onClick={togglePlay}
-                className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#D4AF37]/50 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] active:scale-95 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#D4AF37]/50 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] active:scale-95 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] z-10"
                 aria-label={isPlayingLocally ? "Duraklat" : "Oynat"}
               >
                 {isPlayingLocally ? (
@@ -251,7 +251,8 @@ export default function RadioPlayer() {
                 )}
               </button>
               
-              <div className="font-mono text-[10px] tabular-nums text-zinc-500 w-8 text-right flex items-center justify-center">
+              {/* Sağ: İlerleme Yüzdesi */}
+              <div className="absolute right-0 font-mono text-sm tabular-nums text-zinc-500 font-medium">
                 {progress}%
               </div>
             </div>
