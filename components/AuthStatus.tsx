@@ -31,7 +31,7 @@ export default function AuthStatus({ session }: { session: any }) {
               {user.name?.charAt(0).toUpperCase()}
             </div>
           )}
-          <div className="flex flex-col pr-2">
+          <Link href="/profile" className="flex flex-col pr-2 hover:opacity-80 transition-opacity">
             <div className="flex items-center gap-1.5">
               <p className="font-bold text-white text-sm leading-none">{user.name}</p>
               {isArtist && <span title="Doğrulanmış Sanatçı"><CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37]" /></span>}
@@ -40,7 +40,7 @@ export default function AuthStatus({ session }: { session: any }) {
             <p className="text-[10px] text-zinc-500 font-mono mt-1 leading-none uppercase tracking-widest">
               {isArtist ? "Sanatçı" : isAdmin ? "Admin" : `Kredi: ${user.uploadCredits}`}
             </p>
-          </div>
+          </Link>
           
           {isAdmin && (
             <Link href="/admin" className="p-1.5 hover:bg-zinc-800 rounded-lg transition-colors text-zinc-400 hover:text-white" title="Yönetici Paneli">

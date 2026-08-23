@@ -70,7 +70,8 @@ export const authOptions: NextAuthOptions = {
             image: user.image,
             role: isSuperAdmin ? "ADMIN" : "USER",
             isVerifiedArtist: isSuperAdmin ? true : false,
-            emailVerified: true // Google accounts are implicitly verified
+            emailVerified: true, // Google accounts are implicitly verified
+            uploadCredits: 3, // İlk kayıtta 3 hediye
           },
         });
       }
