@@ -3,6 +3,7 @@ import { prisma } from "./prisma";
 // NowPlaying tablosunda her zaman tek satır (id=1) bulunur.
 // Bu fonksiyon: mevcut şarkının süresi dolmuş mu diye bakar,
 // dolduysa PLAYED olarak işaretler ve kuyruktaki bir sonrakini başlatır.
+// Kuyruk boşsa, "Auto-DJ" devreye girer ve arşivden rastgele bir şarkı çalar!
 export async function advanceQueueIfNeeded() {
   let np = await prisma.nowPlaying.findUnique({
     where: { id: 1 }
@@ -29,11 +30,25 @@ export async function advanceQueueIfNeeded() {
       });
     }
 
-    const next = await prisma.song.findFirst({
+    // 1. Önce kullanıcıların yüklediği veya oy vererek sıraya soktuğu (QUEUED) şarkılara bak
+    let next = await prisma.song.findFirst({
       where: { status: "QUEUED" },
       orderBy: [{ votesCount: "desc" }, { createdAt: "asc" }],
     });
 
+    // 2. Eğer kuyrukta şarkı yoksa, Auto-DJ devreye girsin ve çalınmışlardan (PLAYED) rastgele seçsin
+    if (!next) {
+      const playedCount = await prisma.song.count({ where: { status: "PLAYED" } });
+      if (playedCount > 0) {
+        const randomSkip = Math.floor(Math.random() * playedCount);
+        next = await prisma.song.findFirst({
+          where: { status: "PLAYED" },
+          skip: randomSkip,
+        });
+      }
+    }
+
+    // Hala next yoksa (sistemde hiç şarkı yoksa) radyoyu durdur
     if (!next) {
       await prisma.nowPlaying.update({
         where: { id: 1 },
@@ -42,6 +57,7 @@ export async function advanceQueueIfNeeded() {
       return null;
     }
 
+    // Sıradaki şarkıyı çal
     await prisma.song.update({
       where: { id: next.id },
       data: { status: "PLAYING" },
