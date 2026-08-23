@@ -36,6 +36,17 @@ model User {
   songs             Song[]
   playHistory       PlayHistory[]
   votes             Vote[]
+  messages          Message[] // Canlı sohbet mesajları
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  text      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 model Song {

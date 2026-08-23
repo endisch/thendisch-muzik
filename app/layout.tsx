@@ -15,9 +15,11 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+import LiveChat from "@/components/LiveChat";
+
 export const metadata: Metadata = {
-  title: "Thendisch Müzik — Ortak Ritmi Hisset",
-  description: "Dinleyicilerin yönettiği 7/24 canlı ortak radyo deneyimi. Şarkını yükle, oylamaya katıl, radyoyu sen yönet.",
+  title: "Thendisch Müzik — Avant-Garde",
+  description: "Lüks, kalite ve kesintisiz müzik deneyimi. Canlı VIP Lounge sohbeti.",
 };
 
 export default function RootLayout({
@@ -27,8 +29,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans bg-black text-gray-100 min-h-screen selection:bg-emerald-500/30">
-        <Providers>{children}</Providers>
+      <body className="font-sans bg-[#0B0C10] text-gray-100 min-h-screen selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
+        <Providers>
+          {children}
+          <LiveChat />
+        </Providers>
       </body>
     </html>
   );

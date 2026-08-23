@@ -32,10 +32,10 @@ export default function MusicClientView({ session }: { session: any }) {
   return (
     <>
       {user && (user.role === "ARTIST" && user.isVerifiedArtist) && (
-        <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-2xl flex items-center gap-3">
-          <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+        <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/20 p-4 rounded-2xl flex items-center gap-3">
+          <CheckCircle2 className="w-6 h-6 text-[#D4AF37] shrink-0" />
           <div>
-            <h4 className="text-emerald-500 font-bold text-sm tracking-wide uppercase">Doğrulanmış Sanatçı</h4>
+            <h4 className="text-[#D4AF37] font-bold text-sm tracking-wide uppercase">Doğrulanmış Sanatçı</h4>
             <p className="text-zinc-400 text-xs mt-0.5">Müziklerinizi doğrudan topluluğa ulaştırabilirsiniz. (Günlük 1 hak)</p>
           </div>
         </div>

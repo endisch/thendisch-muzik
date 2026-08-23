@@ -42,11 +42,11 @@ function NowPlayingPanel() {
         <div className="flex items-center gap-2">
           <span className="relative flex h-1.5 w-1.5">
             {!reduceMotion && (
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D4AF37] opacity-75" />
             )}
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-500">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37]">
             Şu An Çalıyor
           </span>
         </div>
@@ -56,7 +56,7 @@ function NowPlayingPanel() {
       </div>
 
       <div className="mt-4 flex items-center gap-4">
-        <div className="h-16 w-16 shrink-0 rounded-lg bg-gradient-to-br from-emerald-500/25 via-zinc-800 to-black" />
+        <div className="h-16 w-16 shrink-0 rounded-lg bg-gradient-to-br from-[#D4AF37]/25 via-zinc-800 to-black" />
         <div className="min-w-0">
           <p className="truncate text-base font-bold tracking-tight text-white">
             Gece Yarısı Sinyali
@@ -67,7 +67,7 @@ function NowPlayingPanel() {
 
       <div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.06]">
         <div
-          className="h-full rounded-full bg-emerald-500 transition-[width] duration-300 ease-linear"
+          className="h-full rounded-full bg-[#D4AF37] transition-[width] duration-300 ease-linear"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -83,7 +83,7 @@ function NowPlayingPanel() {
                 <p className="truncate text-sm text-zinc-300">{s.title}</p>
                 <p className="truncate text-xs text-zinc-600">{s.artist}</p>
               </div>
-              <span className="shrink-0 font-mono text-xs tabular-nums text-emerald-500/80">
+              <span className="shrink-0 font-mono text-xs tabular-nums text-[#D4AF37]/80">
                 {s.votes}
               </span>
             </div>
@@ -136,7 +136,7 @@ export default function LandingPage() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <main className="relative min-h-screen bg-black text-white antialiased">
+    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased">
       <Grain />
 
       {/* NAV */}
@@ -147,7 +147,7 @@ export default function LandingPage() {
         className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-7"
       >
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#D4AF37]">
             <Radio className="h-3.5 w-3.5 text-black" strokeWidth={2.5} />
           </div>
           <span className="font-black tracking-tight">THENDISCH</span>
@@ -163,8 +163,8 @@ export default function LandingPage() {
 
       {/* HERO */}
       <section className="relative overflow-hidden px-6 pb-28 pt-10 sm:pt-16">
-        <div className="pointer-events-none absolute -right-40 -top-20 h-[520px] w-[520px] rounded-full bg-emerald-500/10 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-40 -left-32 h-[400px] w-[400px] rounded-full bg-emerald-500/5 blur-[120px]" />
+        <div className="pointer-events-none absolute -right-40 -top-20 h-[520px] w-[520px] rounded-full bg-[#D4AF37]/10 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-40 -left-32 h-[400px] w-[400px] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
 
         <motion.div
           variants={reduceMotion ? undefined : container}
@@ -186,7 +186,7 @@ export default function LandingPage() {
               variants={reduceMotion ? undefined : rise}
               className="text-balance font-black tracking-tight text-white [font-size:clamp(2.75rem,6vw,5rem)] leading-[1.03]"
             >
-              Ortak Ritmi <span className="text-emerald-500">Hisset.</span>
+              Avant-Garde <span className="text-[#D4AF37]">Acoustics\.</span>
             </motion.h1>
 
             <motion.p
@@ -203,7 +203,7 @@ export default function LandingPage() {
             >
               <a
                 href="/muzik"
-                className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-9 py-4 text-base font-bold text-black transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_40px_4px_rgba(16,185,129,0.4)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
+                className="inline-flex items-center justify-center rounded-full bg-[#D4AF37] px-9 py-4 text-base font-bold text-black transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_40px_4px_rgba(16,185,129,0.4)] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]"
               >
                 Radyoya Bağlan
               </a>
@@ -238,9 +238,9 @@ export default function LandingPage() {
             <motion.div
               key={title}
               variants={reduceMotion ? undefined : rise}
-              className={`group rounded-2xl border border-white/[0.06] bg-zinc-900/40 p-8 backdrop-blur-xl transition-all duration-300 hover:border-emerald-500/20 hover:bg-zinc-900/70 ${span}`}
+              className={`group rounded-2xl border border-white/[0.06] bg-zinc-900/40 p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#D4AF37]/20 hover:bg-zinc-900/70 ${span}`}
             >
-              <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 transition-colors duration-300 group-hover:bg-emerald-500/15">
+              <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-xl bg-[#D4AF37]/10 text-[#D4AF37] transition-colors duration-300 group-hover:bg-[#D4AF37]/15">
                 <Icon className="h-5 w-5" strokeWidth={2} />
               </div>
               <h3 className="mb-2 text-lg font-bold tracking-tight text-white">

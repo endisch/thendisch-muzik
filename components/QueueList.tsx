@@ -33,7 +33,7 @@ function TrendBadge({ value }: { value: number }) {
   return (
     <span
       className={`flex items-center gap-0.5 font-mono text-[10px] tabular-nums ${
-        up ? "text-emerald-500" : "text-zinc-500"
+        up ? "text-[#D4AF37]" : "text-zinc-500"
       }`}
     >
       {up ? <ArrowUp className="h-2.5 w-2.5" /> : <ArrowDown className="h-2.5 w-2.5" />}
@@ -89,7 +89,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
     <div className="rounded-2xl border border-white/[0.06] bg-zinc-900/40 backdrop-blur-3xl">
       <div className="flex items-center justify-between px-6 pt-6 mb-4">
         <h3 className="font-bold text-white text-lg">Sırada</h3>
-        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-emerald-500">
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#D4AF37]">
           {queue.length} şarkı
         </span>
       </div>
@@ -117,7 +117,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 <TrendBadge value={0} />
               </div>
               
-              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-emerald-500/25 via-zinc-800 to-black">
+              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-[#D4AF37]/25 via-zinc-800 to-black">
                 {song.coverUrl && <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />}
               </div>
               
@@ -132,7 +132,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
               
               <button
                 onClick={() => handleVote(song.id)}
-                className="flex shrink-0 flex-col items-center rounded-lg px-2.5 py-1.5 transition-all duration-300 text-zinc-500 hover:bg-emerald-500/10 hover:text-emerald-500 hover:shadow-[0_0_16px_0_rgba(16,185,129,0.25)]"
+                className="flex shrink-0 flex-col items-center rounded-lg px-2.5 py-1.5 transition-all duration-300 text-zinc-500 hover:bg-[#D4AF37]/10 hover:text-[#D4AF37] hover:shadow-[0_0_16px_0_rgba(16,185,129,0.25)]"
                 aria-label="Oy ver"
               >
                 <ChevronUp className="h-4 w-4" />

@@ -15,14 +15,14 @@ export default function AuthStatus({ session }: { session: any }) {
         {user.image ? (
           <img src={user.image} alt="Avatar" className="w-8 h-8 rounded-full border border-white/10" />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center font-bold text-xs border border-emerald-500/30">
+          <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] flex items-center justify-center font-bold text-xs border border-[#D4AF37]/30">
             {user.name?.charAt(0).toUpperCase()}
           </div>
         )}
         <div className="flex flex-col pr-2">
           <div className="flex items-center gap-1.5">
             <p className="font-bold text-white text-sm leading-none">{user.name}</p>
-            {isArtist && <span title="Doğrulanmış Sanatçı"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /></span>}
+            {isArtist && <span title="Doğrulanmış Sanatçı"><CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37]" /></span>}
             {isAdmin && <span title="Yönetici"><ShieldAlert className="w-3.5 h-3.5 text-red-500" /></span>}
           </div>
           <p className="text-[10px] text-zinc-500 font-mono mt-1 leading-none uppercase tracking-widest">
@@ -50,7 +50,7 @@ export default function AuthStatus({ session }: { session: any }) {
   return (
     <button 
       onClick={() => signIn()} 
-      className="bg-emerald-500 hover:bg-emerald-400 text-black px-5 py-2.5 rounded-xl font-black transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] text-sm tracking-wide"
+      className="bg-[#D4AF37] hover:bg-[#F3E5AB] text-black px-5 py-2.5 rounded-xl font-black transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] text-sm tracking-wide"
     >
       Giriş Yap
     </button>

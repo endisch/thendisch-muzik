@@ -11,7 +11,7 @@ import { Session } from "next-auth";
 function Grain() {
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-50 opacity-[0.035] mix-blend-overlay"
+      className="pointer-events-none fixed inset-0 z-[1] opacity-[0.02] mix-blend-overlay"
       style={{
         backgroundImage:
           "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
@@ -21,18 +21,18 @@ function Grain() {
 }
 
 const charts = [
-  { label: "TOP 10", sub: "Bu ayın zirvesi", href: "/top/10", spark: [4, 7, 5, 9, 8, 12, 15] },
-  { label: "TOP 20", sub: "Yükselen parçalar", href: "/top/20", spark: [8, 6, 9, 7, 11, 9, 13] },
-  { label: "TOP 50", sub: "Tüm liste", href: "/top/50", spark: [6, 8, 7, 10, 9, 11, 10] },
+  { label: "VIP 10", sub: "Zirvenin Sesi", href: "/top/10", spark: [4, 7, 5, 9, 8, 12, 15] },
+  { label: "TREND", sub: "Yeni Keşifler", href: "/top/20", spark: [8, 6, 9, 7, 11, 9, 13] },
+  { label: "ARCHIVE", sub: "Tüm Koleksiyon", href: "/top/50", spark: [6, 8, 7, 10, 9, 11, 10] },
 ];
 
 const container: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
 };
 const rise: Variants = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
 };
 
 function Sparkline({ data }: { data: number[] }) {
@@ -46,12 +46,12 @@ function Sparkline({ data }: { data: number[] }) {
     })
     .join(" ");
   return (
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-8 w-16 opacity-80">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-10 w-20 opacity-40 mix-blend-screen">
       <polyline
         points={points}
         fill="none"
-        stroke="#10b981"
-        strokeWidth="6"
+        stroke="#D4AF37"
+        strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -67,27 +67,27 @@ function ChartsStrip() {
       whileInView={reduceMotion ? undefined : "show"}
       viewport={{ once: true, margin: "-40px" }}
       variants={reduceMotion ? undefined : container}
-      className="mx-auto flex max-w-7xl gap-4 overflow-x-auto px-6 pb-2 pt-8 no-scrollbar"
+      className="mx-auto flex max-w-[1400px] gap-6 overflow-x-auto px-8 pb-4 pt-12 no-scrollbar"
     >
       {charts.map((c) => (
         <motion.a
           key={c.label}
           href={c.href}
           variants={reduceMotion ? undefined : rise}
-          className="group relative flex min-w-[240px] flex-1 items-center justify-between overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/50 px-6 py-5 backdrop-blur-3xl transition-all duration-300 hover:border-emerald-500/25"
+          className="group relative flex min-w-[300px] flex-1 items-center justify-between overflow-hidden rounded-none border-b border-t border-white/[0.03] bg-gradient-to-r from-transparent via-[#121318]/50 to-transparent px-8 py-8 transition-all duration-500 hover:border-[#D4AF37]/30 hover:bg-[#121318]"
         >
-          <div className="pointer-events-none absolute -right-6 -top-10 h-28 w-28 rounded-full bg-emerald-500/10 blur-3xl transition-opacity duration-300 group-hover:opacity-80" />
-          <div className="relative z-10">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[#D4AF37] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="relative z-10 flex flex-col gap-1">
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#D4AF37]">
               {c.sub}
             </p>
-            <p className="mt-1 text-2xl font-black tracking-tight text-white">
+            <p className="text-3xl font-black tracking-tighter text-white">
               {c.label}
             </p>
           </div>
-          <div className="relative z-10 flex items-center gap-2">
+          <div className="relative z-10 flex items-center gap-4">
             <Sparkline data={c.spark} />
-            <ChevronRight className="h-5 w-5 text-zinc-600 transition-all duration-300 group-hover:translate-x-1 group-hover:text-emerald-500" />
+            <ChevronRight className="h-6 w-6 text-zinc-600 transition-all duration-500 group-hover:translate-x-2 group-hover:text-[#D4AF37]" strokeWidth={1} />
           </div>
         </motion.a>
       ))}
@@ -97,34 +97,43 @@ function ChartsStrip() {
 
 export default function MuzikPageClient({ session }: { session: Session | null }) {
   return (
-    <main className="relative min-h-screen bg-black text-white antialiased">
+    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-hidden pb-32">
       <Grain />
       
+      {/* Avant-Garde Background Glows */}
+      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px] pointer-events-none z-0"></div>
+      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none z-0"></div>
+
       {/* Navbar */}
-      <nav className="sticky top-0 z-40 border-b border-white/[0.06] bg-black/70 backdrop-blur-2xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500 transition-transform group-hover:scale-105">
-              <Radio className="h-3.5 w-3.5 text-black" strokeWidth={2.5} />
+      <nav className="relative z-40 border-b border-white/[0.02] bg-[#0B0C10]/80 backdrop-blur-3xl">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-8 py-6">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-10 w-10 items-center justify-center rounded-none border border-[#D4AF37]/30 bg-[#121318] transition-transform duration-500 group-hover:scale-95 group-hover:bg-[#D4AF37]">
+              <Radio className="h-4 w-4 text-[#D4AF37] group-hover:text-black transition-colors" strokeWidth={1.5} />
             </div>
-            <span className="font-black tracking-tight group-hover:text-emerald-400 transition-colors">THENDISCH MÜZİK</span>
+            <div className="flex flex-col">
+              <span className="font-black text-xl tracking-tighter text-white leading-none">THENDISCH</span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#D4AF37] leading-none mt-1">Acoustics</span>
+            </div>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <AuthStatus session={session} />
           </div>
         </div>
       </nav>
 
-      <ChartsStrip />
+      <div className="relative z-10">
+        <ChartsStrip />
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-6 py-10 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <div className="lg:sticky lg:top-24">
-            <RadioPlayer />
+        <div className="mx-auto grid max-w-[1400px] gap-12 px-8 py-16 xl:grid-cols-12 items-start">
+          <div className="xl:col-span-7 2xl:col-span-8 flex justify-center">
+            <div className="w-full max-w-2xl xl:max-w-none">
+              <RadioPlayer />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-5 lg:col-span-5">
-          <MusicClientView session={session} />
+          <div className="flex flex-col gap-8 xl:col-span-5 2xl:col-span-4 mt-12 xl:mt-0">
+            <MusicClientView session={session} />
+          </div>
         </div>
       </div>
     </main>

@@ -131,7 +131,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
         className="flex w-full items-center justify-between px-6 py-5 text-left focus:outline-none"
       >
         <span className="flex items-center gap-2 font-bold text-white text-lg">
-          <Music2 className="h-5 w-5 text-emerald-500" />
+          <Music2 className="h-5 w-5 text-[#D4AF37]" />
           Yeni Şarkı Yükle
         </span>
         <motion.span animate={{ rotate: isOpen ? 90 : 0 }} transition={{ duration: 0.25 }}>
@@ -159,7 +159,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Örn. Gece Yarısı Sinyali"
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
                     required
                   />
                 </div>
@@ -170,7 +170,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={artist}
                     onChange={(e) => setArtist(e.target.value)}
                     placeholder="Örn. CEMİLECEM"
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
                     required
                   />
                 </div>
@@ -179,10 +179,10 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Ses Dosyası (.mp3)</label>
-                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-4 text-center transition-colors hover:border-emerald-500/30">
-                    <UploadCloud className="h-5 w-5 text-emerald-500/70" />
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-4 text-center transition-colors hover:border-[#D4AF37]/30">
+                    <UploadCloud className="h-5 w-5 text-[#D4AF37]/70" />
                     <span className="text-xs text-zinc-400">{file ? file.name : "Ses dosyasını seç"}</span>
-                    {durationSec && <span className="text-[10px] text-emerald-500 font-mono">{Math.floor(durationSec)} sn</span>}
+                    {durationSec && <span className="text-[10px] text-[#D4AF37] font-mono">{Math.floor(durationSec)} sn</span>}
                     <input type="file" accept="audio/*" onChange={handleFileChange} className="hidden" required />
                   </label>
                 </div>
@@ -201,7 +201,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                   <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kategoriler</label>
                   <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-3 border border-white/[0.08] rounded-xl bg-black/40 no-scrollbar">
                     {CATEGORIES.map(cat => (
-                      <label key={cat} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedCategories.includes(cat) ? 'bg-emerald-500/20 text-emerald-400 font-bold border-emerald-500/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
+                      <label key={cat} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedCategories.includes(cat) ? 'bg-[#D4AF37]/20 text-[#F3E5AB] font-bold border-[#D4AF37]/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
                         <input 
                           type="checkbox" 
                           checked={selectedCategories.includes(cat)} 
@@ -218,7 +218,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                   <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Türler</label>
                   <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-3 border border-white/[0.08] rounded-xl bg-black/40 no-scrollbar">
                     {GENRES.map(gen => (
-                      <label key={gen} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedGenres.includes(gen) ? 'bg-emerald-500/20 text-emerald-400 font-bold border-emerald-500/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
+                      <label key={gen} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedGenres.includes(gen) ? 'bg-[#D4AF37]/20 text-[#F3E5AB] font-bold border-[#D4AF37]/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
                         <input 
                           type="checkbox" 
                           checked={selectedGenres.includes(gen)} 
@@ -239,7 +239,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={lyricsLrc}
                     onChange={(e) => setLyricsLrc(e.target.value)}
                     placeholder="[00:12.50] İlk satır..."
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)] h-20 resize-none font-mono"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)] h-20 resize-none font-mono"
                   />
                 </div>
                 <div>
@@ -249,7 +249,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={youtubeUrl}
                     onChange={(e) => setYoutubeUrl(e.target.value)}
                     placeholder="https://youtube.com/watch?v=..."
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
                   />
                 </div>
               </div>
@@ -257,7 +257,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full rounded-xl bg-emerald-500 py-3.5 text-sm font-black text-black transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_30px_2px_rgba(16,185,129,0.35)] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
+                className="w-full rounded-xl bg-[#D4AF37] py-3.5 text-sm font-black text-black transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_30px_2px_rgba(16,185,129,0.35)] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
               >
                 {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
               </button>
