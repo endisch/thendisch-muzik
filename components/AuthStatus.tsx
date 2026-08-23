@@ -1,39 +1,58 @@
 "use client";
 
 import { signIn, signOut } from "next-auth/react";
+import { CheckCircle2, LogOut, ShieldAlert } from "lucide-react";
+import Link from "next/link";
 
 export default function AuthStatus({ session }: { session: any }) {
   if (session) {
+    const { user } = session;
+    const isArtist = user.role === "ARTIST" && user.isVerifiedArtist;
+    const isAdmin = user.role === "ADMIN";
+
     return (
-      <div className="flex items-center gap-4 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6">
-        {session.user.image && (
-          <img src={session.user.image} alt="Avatar" className="w-10 h-10 rounded-full" />
+      <div className="flex items-center gap-3 bg-zinc-900/50 backdrop-blur-md border border-white/[0.06] py-2 px-3 rounded-2xl">
+        {user.image ? (
+          <img src={user.image} alt="Avatar" className="w-8 h-8 rounded-full border border-white/10" />
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center font-bold text-xs border border-emerald-500/30">
+            {user.name?.charAt(0).toUpperCase()}
+          </div>
         )}
-        <div className="flex-1">
-          <p className="font-semibold">{session.user.name}</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Kalan Yükleme Hakkı: <span className="font-bold text-blue-600">{session.user.uploadCredits}</span>
+        <div className="flex flex-col pr-2">
+          <div className="flex items-center gap-1.5">
+            <p className="font-bold text-white text-sm leading-none">{user.name}</p>
+            {isArtist && <span title="Doğrulanmış Sanatçı"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /></span>}
+            {isAdmin && <span title="Yönetici"><ShieldAlert className="w-3.5 h-3.5 text-red-500" /></span>}
+          </div>
+          <p className="text-[10px] text-zinc-500 font-mono mt-1 leading-none uppercase tracking-widest">
+            {isArtist ? "Sanatçı" : isAdmin ? "Admin" : `Kredi: ${user.uploadCredits}`}
           </p>
         </div>
+        
+        {isAdmin && (
+          <Link href="/admin" className="p-1.5 hover:bg-zinc-800 rounded-lg transition-colors text-zinc-400 hover:text-white" title="Yönetici Paneli">
+            <ShieldAlert className="w-4 h-4" />
+          </Link>
+        )}
+
         <button 
           onClick={() => signOut()} 
-          className="text-sm text-red-500 hover:underline"
+          className="p-1.5 hover:bg-red-500/10 rounded-lg transition-colors text-zinc-500 hover:text-red-500"
+          title="Çıkış Yap"
         >
-          Çıkış Yap
+          <LogOut className="w-4 h-4" />
         </button>
       </div>
     );
   }
 
   return (
-    <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg mb-6 border border-yellow-200 dark:border-yellow-800">
-      <p className="mb-2 font-semibold">Şarkı yüklemek için giriş yapmalısın.</p>
-      <button 
-        onClick={() => signIn()} 
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-bold transition-colors"
-      >
-        Giriş Yap / Kayıt Ol
-      </button>
-    </div>
+    <button 
+      onClick={() => signIn()} 
+      className="bg-emerald-500 hover:bg-emerald-400 text-black px-5 py-2.5 rounded-xl font-black transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] text-sm tracking-wide"
+    >
+      Giriş Yap
+    </button>
   );
 }

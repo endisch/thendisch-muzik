@@ -13,6 +13,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [lyricsLrc, setLyricsLrc] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -97,6 +98,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
           title, artist, fileKey: key, coverKey, durationSec,
           categories: selectedCategories, genres: selectedGenres,
           lyricsLrc: lyricsLrc || undefined,
+          youtubeUrl: youtubeUrl || undefined,
         }),
       });
       if (!songRes.ok) {
@@ -112,6 +114,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       setSelectedCategories([]);
       setSelectedGenres([]);
       setLyricsLrc("");
+      setYoutubeUrl("");
       setIsOpen(false);
       onUploadSuccess();
     } catch (err: any) {
@@ -193,14 +196,62 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                 </div>
               </div>
 
-              <div>
-                <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Sözleri (LRC - Opsiyonel)</label>
-                <textarea
-                  value={lyricsLrc}
-                  onChange={(e) => setLyricsLrc(e.target.value)}
-                  placeholder="[00:12.50] İlk satır..."
-                  className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)] h-20 resize-none font-mono"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kategoriler</label>
+                  <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-3 border border-white/[0.08] rounded-xl bg-black/40 no-scrollbar">
+                    {CATEGORIES.map(cat => (
+                      <label key={cat} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedCategories.includes(cat) ? 'bg-emerald-500/20 text-emerald-400 font-bold border-emerald-500/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
+                        <input 
+                          type="checkbox" 
+                          checked={selectedCategories.includes(cat)} 
+                          onChange={() => handleCategoryToggle(cat)} 
+                          className="hidden"
+                        />
+                        {cat}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Türler</label>
+                  <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-3 border border-white/[0.08] rounded-xl bg-black/40 no-scrollbar">
+                    {GENRES.map(gen => (
+                      <label key={gen} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-colors border border-white/5 ${selectedGenres.includes(gen) ? 'bg-emerald-500/20 text-emerald-400 font-bold border-emerald-500/50' : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'}`}>
+                        <input 
+                          type="checkbox" 
+                          checked={selectedGenres.includes(gen)} 
+                          onChange={() => handleGenreToggle(gen)}
+                          className="hidden" 
+                        />
+                        {gen}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Sözleri (LRC - Opsiyonel)</label>
+                  <textarea
+                    value={lyricsLrc}
+                    onChange={(e) => setLyricsLrc(e.target.value)}
+                    placeholder="[00:12.50] İlk satır..."
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)] h-20 resize-none font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">YouTube Klip Linki (Opsiyonel)</label>
+                  <input
+                    type="url"
+                    value={youtubeUrl}
+                    onChange={(e) => setYoutubeUrl(e.target.value)}
+                    placeholder="https://youtube.com/watch?v=..."
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-emerald-500/40 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]"
+                  />
+                </div>
               </div>
 
               <button

@@ -7,20 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id            String   @id @default(cuid())
-  googleId      String?  @unique
-  email         String   @unique
-  password      String?  // Yeni: Şifreli giriş için eklendi
-  name          String?
-  image         String?
-  uploadCredits Int      @default(3)
-  songsListened Int      @default(0)
-  createdAt     DateTime @default(now())
+enum Role {
+  USER
+  ARTIST
+  ADMIN
+}
 
-  songs        Song[]
-  playHistory  PlayHistory[]
-  votes        Vote[]    // Yeni: Kullanıcının verdiği oylar
+model User {
+  id                String    @id @default(cuid())
+  googleId          String?   @unique
+  email             String    @unique
+  password          String?
+  name              String?
+  image             String?
+  uploadCredits     Int       @default(0) // Default 0 for normal users
+  songsListened     Int       @default(0)
+  createdAt         DateTime  @default(now())
+  
+  // Sanatçı & Admin özellikleri
+  role              Role      @default(USER)
+  instagramUrl      String?
+  spotifyUrl        String?
+  youtubeUrl        String?
+  artistApplication Boolean   @default(false)
+  isVerifiedArtist  Boolean   @default(false)
+  lastUploadDate    DateTime? // Günlük yükleme limiti kontrolü için
+
+  songs             Song[]
+  playHistory       PlayHistory[]
+  votes             Vote[]
 }
 
 model Song {
@@ -28,7 +43,8 @@ model Song {
   title       String
   artist      String
   fileUrl     String
-  coverUrl    String?  // Yeni: Kapak fotoğrafı R2 adresi
+  coverUrl    String?
+  youtubeUrl  String?  // Yeni eklendi
   lyricsLrc   String?  @db.Text
   durationSec Int
   categories  String[]
@@ -36,11 +52,11 @@ model Song {
   status      SongStatus @default(QUEUED)
   uploadedBy  String
   uploader    User     @relation(fields: [uploadedBy], references: [id])
-  votesCount  Int      @default(0) // Yeni: Şarkının aldığı toplam oy
+  votesCount  Int      @default(0)
   createdAt   DateTime @default(now())
 
   playHistory PlayHistory[]
-  votes       Vote[]       // Yeni: Bu şarkıya verilen oylar
+  votes       Vote[]
 
   @@index([status, votesCount])
 }

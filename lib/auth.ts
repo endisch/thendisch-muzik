@@ -47,18 +47,24 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         if (!user.email) return false;
+        
+        const isSuperAdmin = user.email === "thendisch@gmail.com";
+        
         await prisma.user.upsert({
-          where: { email: user.email }, // Google ID yerine email ile de kontrol edebiliriz
+          where: { email: user.email },
           update: {
             googleId: account.providerAccountId,
             name: user.name,
             image: user.image,
+            ...(isSuperAdmin && { role: "ADMIN", isVerifiedArtist: true })
           },
           create: {
             googleId: account.providerAccountId,
             email: user.email,
             name: user.name,
             image: user.image,
+            role: isSuperAdmin ? "ADMIN" : "USER",
+            isVerifiedArtist: isSuperAdmin ? true : false,
           },
         });
       }
@@ -73,6 +79,9 @@ export const authOptions: NextAuthOptions = {
           (session.user as any).id = dbUser.id;
           (session.user as any).uploadCredits = dbUser.uploadCredits;
           (session.user as any).songsListened = dbUser.songsListened;
+          (session.user as any).role = dbUser.role;
+          (session.user as any).isVerifiedArtist = dbUser.isVerifiedArtist;
+          (session.user as any).artistApplication = dbUser.artistApplication;
         }
       }
       return session;
