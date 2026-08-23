@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { UploadCloud, ImageIcon, ChevronDown } from "lucide-react";
@@ -10,6 +10,7 @@ const GENRES = ["Türkçe Pop", "Türk Sanat Müziği", "Türk Halk Müziği", "
 export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [durationSec, setDurationSec] = useState<number | null>(null);
@@ -18,16 +19,15 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   const [lyricsLrc, setLyricsLrc] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [coverFile, setCoverFile] = useState<File | null>(null);
 
   const [isCatOpen, setIsCatOpen] = useState(false);
   const [isGenOpen, setIsGenOpen] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) {
+    if (e.target.files && e.target.files[0]) {
+      const f = e.target.files[0];
       setFile(f);
+      
       const audio = new Audio(URL.createObjectURL(f));
       audio.onloadedmetadata = () => {
         setDurationSec(audio.duration);
@@ -36,8 +36,9 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   };
 
   const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) setCoverFile(f);
+    if (e.target.files && e.target.files[0]) {
+      setCoverFile(e.target.files[0]);
+    }
   };
 
   const handleCategoryToggle = (cat: string) => {
@@ -53,166 +54,132 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
   };
 
   const handleSubmit = async () => {
-    if (!file || !title || !artist || !durationSec) {
-      setError("LÃ¼tfen ÅŸarkÄ± adÄ±, sanatÃ§Ä± ve ses dosyasÄ±nÄ± eksiksiz girin.");
-      return;
-    }
-    
-    // Max duration ~10 minutes
-    if (durationSec > 600) {
-      setError("ÅarkÄ± Ã§ok uzun. (Maksimum 10 dakika)");
-      return;
-    }
-
+    if (!file || !title || !artist) return alert("Dosya, isim ve sanatçı zorunlu!");
     setLoading(true);
-    setError("");
+
     try {
-      const res = await fetch("/api/upload-url", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: file.name, contentType: file.type || "audio/mpeg" }),
-      });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      const { uploadUrl, key } = data;
+      // get audio s3 url
+      const ext = file.name.split('.').pop() || 'mp3';
+      const uRes = await fetch(`/api/upload-url?ext=${ext}&type=audio`);
+      const { url, key } = await uRes.json();
+      await fetch(url, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
 
-      try {
-        const uploadRes = await fetch(uploadUrl, {
-          method: "PUT",
-          headers: { "Content-Type": file.type || "audio/mpeg" },
-          body: file,
-        });
-        if (!uploadRes.ok) throw new Error("Dosya yÃ¼klenemedi (R2 CORS veya izin hatasÄ±).");
-      } catch (uploadError: any) {
-        throw new Error("R2 Sunucusuna yÃ¼kleme baÅŸarÄ±sÄ±z. Detay: " + uploadError.message);
-      }
-
-      let coverKey = null;
+      let coverUrl = null;
       if (coverFile) {
-        const cRes = await fetch("/api/upload-url", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename: coverFile.name, contentType: coverFile.type }),
-        });
-        const cData = await cRes.json();
-        if (cData.error) throw new Error(cData.error);
-        const coverUploadUrl = cData.uploadUrl;
-        coverKey = cData.key;
-
-        try {
-          const cUploadRes = await fetch(coverUploadUrl, {
-            method: "PUT",
-            headers: { "Content-Type": coverFile.type },
-            body: coverFile,
-          });
-          if (!cUploadRes.ok) throw new Error("Kapak gÃ¶rseli yÃ¼klenemedi.");
-        } catch (uploadError: any) {
-          throw new Error("Kapak gÃ¶rseli yÃ¼klenemedi. Detay: " + uploadError.message);
-        }
+        const coverExt = coverFile.name.split('.').pop() || 'jpg';
+        const coverURes = await fetch(`/api/upload-url?ext=${coverExt}&type=image`);
+        const { url: cUrl, key: cKey } = await coverURes.json();
+        await fetch(cUrl, { method: "PUT", body: coverFile, headers: { "Content-Type": coverFile.type } });
+        coverUrl = `https://thendisch-songs.s3.eu-central-1.amazonaws.com/${cKey}`;
       }
 
-      const songRes = await fetch("/api/songs", {
+      const songUrl = `https://thendisch-songs.s3.eu-central-1.amazonaws.com/${key}`;
+
+      const res = await fetch("/api/songs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title, artist, fileKey: key, coverKey, durationSec,
-          categories: selectedCategories, genres: selectedGenres,
-          lyricsLrc: lyricsLrc || undefined,
-          youtubeUrl: youtubeUrl || undefined,
-        }),
+          title,
+          artist,
+          url: songUrl,
+          durationSec: durationSec ? Math.floor(durationSec) : 0,
+          categories: selectedCategories,
+          genres: selectedGenres,
+          lyricsLrc,
+          coverUrl,
+          youtubeUrl
+        })
       });
-      const d = await songRes.json();
-      if (!songRes.ok) {
-        throw new Error(d.error || "ÅarkÄ± kaydedilemedi");
-      }
 
-      setFile(null);
-      setCoverFile(null);
-      setTitle("");
-      setArtist("");
-      setDurationSec(null);
-      setSelectedCategories([]);
-      setSelectedGenres([]);
-      setLyricsLrc("");
-      setYoutubeUrl("");
-      setIsOpen(false);
-      onUploadSuccess();
-    } catch (err: any) {
-      setError(err.message || "Bir hata oluÅŸtu");
+      if (res.ok) {
+        setIsOpen(false);
+        setFile(null);
+        setCoverFile(null);
+        setTitle("");
+        setArtist("");
+        setSelectedCategories([]);
+        setSelectedGenres([]);
+        setLyricsLrc("");
+        setYoutubeUrl("");
+        onUploadSuccess();
+      }
+    } catch (e) {
+      alert("Hata oluştu");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl p-6 sm:p-8 relative z-20">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-          <span className="w-8 h-8 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center">
-            <UploadCloud className="w-4 h-4 text-[#D4AF37]" />
-          </span>
-          Yeni ÅarkÄ± YÃ¼kle
-        </h3>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-sm font-bold text-[#D4AF37] bg-[#D4AF37]/10 px-4 py-2 rounded-full hover:bg-[#D4AF37]/20 transition-colors"
-        >
-          {isOpen ? "Kapat" : "BaÅŸla"}
-        </button>
-      </div>
+    <div className="w-full">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="group relative flex items-center justify-between w-full rounded-2xl bg-gradient-to-r from-zinc-900/80 to-black/80 border border-white/[0.05] p-5 shadow-2xl transition-all hover:border-[#D4AF37]/50"
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#D4AF37]/10 text-[#D4AF37] transition-transform group-hover:scale-110">
+            <UploadCloud className="h-5 w-5" />
+          </div>
+          <div className="text-left">
+            <h3 className="text-sm font-black uppercase tracking-widest text-white">Yeni Şarkı Yükle</h3>
+            <p className="text-xs text-zinc-500 font-medium mt-0.5">MP3 / WAV formatında eserini ekle</p>
+          </div>
+        </div>
+        <div className={`rounded-full border border-white/10 p-2 text-zinc-500 transition-transform ${isOpen ? "rotate-180 bg-white/5" : "group-hover:bg-[#D4AF37] group-hover:text-black group-hover:border-[#D4AF37]"}`}>
+          <ChevronDown className="h-4 w-4" />
+        </div>
+      </button>
 
-      <AnimatePresence initial={false}>
+      <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <motion.div 
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-visible"
+            className="overflow-visible mt-4 relative z-50"
           >
-            <div className="space-y-6 pt-6">
-              {error && <div className="text-red-400 bg-red-400/10 p-4 rounded-xl text-sm font-medium border border-red-500/20">{error}</div>}
+            <div className="rounded-3xl border border-white/[0.05] bg-gradient-to-b from-zinc-900/60 to-[#050505]/80 p-6 sm:p-8 shadow-2xl backdrop-blur-xl flex flex-col gap-6 relative">
               
+              <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-widest">Kapat</button>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">ÅarkÄ± AdÄ±</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Adı</label>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ã–rn. Gece YarÄ±sÄ± Sinyali"
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)]"
-                    required
+                    placeholder="Örn. Gece Yarısı Sinyali"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)]"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">SanatÃ§Ä±</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Sanatçı</label>
                   <input
                     type="text"
                     value={artist}
                     onChange={(e) => setArtist(e.target.value)}
-                    placeholder="Ã–rn. Thendisch"
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)]"
-                    required
+                    placeholder="Örn. Thendisch"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Ses DosyasÄ± (.mp3 / .wav)</label>
-                  <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-[#D4AF37]/30 hover:bg-[#D4AF37]/5">
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Ses Dosyası (.mp3 / .wav)</label>
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-[#D4AF37]/40 hover:bg-[#D4AF37]/5">
                     <UploadCloud className="h-6 w-6 text-[#D4AF37]/70" />
-                    <span className="text-xs text-zinc-400 font-medium">{file ? file.name : "Ses dosyasÄ±nÄ± seÃ§"}</span>
+                    <span className="text-xs text-zinc-400 font-medium">{file ? file.name : "Ses dosyasını seç"}</span>
                     {durationSec && <span className="text-[10px] text-[#D4AF37] font-mono font-bold bg-[#D4AF37]/10 px-2 py-1 rounded-md">{Math.floor(durationSec)} sn</span>}
                     <input type="file" accept="audio/*" onChange={handleFileChange} className="hidden" required />
                   </label>
                 </div>
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kapak GÃ¶rseli</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kapak Görseli</label>
                   <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-zinc-500/30 hover:bg-white/[0.02]">
                     <ImageIcon className="h-6 w-6 text-zinc-500/70" />
-                    <span className="text-xs text-zinc-400 font-medium">{coverFile ? coverFile.name : "Opsiyonel gÃ¶rsel seÃ§"}</span>
+                    <span className="text-xs text-zinc-400 font-medium">{coverFile ? coverFile.name : "Opsiyonel görsel seç"}</span>
                     <input type="file" accept="image/*" onChange={handleCoverChange} className="hidden" />
                   </label>
                 </div>
@@ -226,7 +193,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     onClick={() => setIsCatOpen(!isCatOpen)}
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all flex items-center justify-between"
                   >
-                    <span className="truncate">{selectedCategories.length > 0 ? selectedCategories.join(", ") : "Kategori SeÃ§in..."}</span>
+                    <span className="truncate">{selectedCategories.length > 0 ? selectedCategories.join(", ") : "Kategori Seçin..."}</span>
                     <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isCatOpen ? "rotate-180" : ""}`} />
                   </div>
                   <AnimatePresence>
@@ -253,14 +220,14 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                   </AnimatePresence>
                 </div>
 
-                {/* TÃ¼r Dropdown */}
+                {/* Tür Dropdown */}
                 <div className="relative">
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">TÃ¼rler</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Türler</label>
                   <div 
                     onClick={() => setIsGenOpen(!isGenOpen)}
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all flex items-center justify-between"
                   >
-                    <span className="truncate">{selectedGenres.length > 0 ? selectedGenres.join(", ") : "TÃ¼r SeÃ§in..."}</span>
+                    <span className="truncate">{selectedGenres.length > 0 ? selectedGenres.join(", ") : "Tür Seçin..."}</span>
                     <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isGenOpen ? "rotate-180" : ""}`} />
                   </div>
                   <AnimatePresence>
@@ -290,11 +257,11 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">ÅarkÄ± SÃ¶zleri (LRC - Opsiyonel)</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Sözleri (LRC - Opsiyonel)</label>
                   <textarea
                     value={lyricsLrc}
                     onChange={(e) => setLyricsLrc(e.target.value)}
-                    placeholder="[00:12.50] Ä°lk satÄ±r..."
+                    placeholder="[00:12.50] İlk satır..."
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)] h-24 resize-none font-mono"
                   />
                 </div>
@@ -315,7 +282,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                 disabled={loading}
                 className="w-full rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] py-4 text-sm font-black text-black transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(212,175,55,0.3)] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none uppercase tracking-wider mt-4"
               >
-                {loading ? "YÃ¼kleniyor..." : "YÃ¼kle ve KuyruÄŸa Ekle"}
+                {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
               </button>
             </div>
           </motion.div>
