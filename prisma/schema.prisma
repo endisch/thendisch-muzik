@@ -22,6 +22,12 @@ model User {
   image             String?
   uploadCredits     Int       @default(0) // Default 0 for normal users
   songsListened     Int       @default(0)
+  
+  // DoYrulama (Verification) Alanlar
+  emailVerified           Boolean   @default(true) // Mevcut kullanıcılar mağdur olmasın diye default true. Yeni kayıtlarda false yapılacak.
+  verificationCode        String?
+  verificationCodeExpires DateTime?
+
   createdAt         DateTime  @default(now())
   
   // Sanatçı & Admin özellikleri

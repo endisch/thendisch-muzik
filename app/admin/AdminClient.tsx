@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X, Music } from "lucide-react";
+import { Check, X, Music, Search, Shield, User, RefreshCw, Minus, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type ArtistApp = {
@@ -14,12 +14,30 @@ type ArtistApp = {
   createdAt: Date;
 };
 
+type UserData = {
+  id: string;
+  email: string;
+  name: string | null;
+  image: string | null;
+  role: string;
+  isVerifiedArtist: boolean;
+  uploadCredits: number;
+  createdAt: Date;
+};
+
 export default function AdminClient({ initialArtists }: { initialArtists: ArtistApp[] }) {
   const [artists, setArtists] = useState<ArtistApp[]>(initialArtists);
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"ARTISTS" | "USERS">("ARTISTS");
+  
+  // User Search State
+  const [searchEmail, setSearchEmail] = useState("");
+  const [searchResults, setSearchResults] = useState<UserData[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  
   const router = useRouter();
 
-  const handleAction = async (userId: string, action: "VERIFY" | "REJECT") => {
+  const handleArtistAction = async (userId: string, action: "VERIFY" | "REJECT") => {
     setLoadingId(userId);
     try {
       const res = await fetch("/api/admin/verify", {
@@ -32,97 +50,217 @@ export default function AdminClient({ initialArtists }: { initialArtists: Artist
         setArtists(artists.filter(a => a.id !== userId));
         router.refresh();
       } else {
-        const d = await res.json();
-        alert(d.error || "Bir hata oluştu");
+        alert("İşlem başarısız oldu.");
       }
-    } catch (error) {
-      alert("Bir hata oluştu");
+    } catch (e) {
+      alert("Bir hata oluştu.");
     } finally {
       setLoadingId(null);
     }
   };
 
-  if (artists.length === 0) {
-    return (
-      <div className="bg-zinc-900/40 border border-white/5 rounded-3xl p-12 text-center flex flex-col items-center justify-center">
-        <Check className="w-16 h-16 text-emerald-500/50 mb-4" />
-        <h3 className="text-xl font-bold text-white mb-2">Bekleyen Başvuru Yok</h3>
-        <p className="text-zinc-500">Tüm sanatçı başvurularını incelediniz. Harika iş!</p>
-      </div>
-    );
-  }
+  const handleSearchUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchEmail.trim()) return;
+    
+    setIsSearching(true);
+    try {
+      const res = await fetch(`/api/admin/users?email=${encodeURIComponent(searchEmail)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setSearchResults(data.users || []);
+      }
+    } catch (error) {
+      alert("Arama sırasında hata oluştu.");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleUpdateUser = async (userId: string, data: any) => {
+    try {
+      const res = await fetch(`/api/admin/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setSearchResults(prev => prev.map(u => u.id === userId ? { ...u, ...result.user } : u));
+      } else {
+        alert("Güncelleme başarısız.");
+      }
+    } catch (e) {
+      alert("Güncelleme sırasında hata.");
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-xl font-bold text-white flex items-center gap-3">
-        Bekleyen Sanatçı Başvuruları
-        <span className="bg-emerald-500/20 text-emerald-500 text-xs px-2.5 py-1 rounded-full font-mono">{artists.length}</span>
-      </h3>
+    <div className="flex flex-col gap-8">
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {artists.map((artist) => (
-          <div key={artist.id} className="bg-zinc-900/40 border border-white/5 rounded-2xl p-6 relative overflow-hidden group hover:border-emerald-500/20 transition-all">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity" />
-            
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h4 className="font-bold text-lg text-white">{artist.name || "İsimsiz"}</h4>
-                <p className="text-xs text-zinc-500 font-mono">{artist.email}</p>
-              </div>
-              <span className="text-[10px] text-zinc-600 font-mono bg-black/50 px-2 py-1 rounded-lg">
-                {new Date(artist.createdAt).toLocaleDateString("tr-TR")}
-              </span>
-            </div>
-
-            <div className="space-y-3 mb-6">
-              {artist.instagramUrl && (
-                <a href={artist.instagramUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors bg-black/40 p-2.5 rounded-xl border border-white/[0.03] hover:border-white/10">
-                  <svg className="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                  </svg>
-                  <span className="truncate">{artist.instagramUrl.replace("https://", "")}</span>
-                </a>
-              )}
-              {artist.spotifyUrl && (
-                <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors bg-black/40 p-2.5 rounded-xl border border-white/[0.03] hover:border-white/10">
-                  <Music className="w-4 h-4 text-emerald-500" />
-                  <span className="truncate">{artist.spotifyUrl.replace("https://", "")}</span>
-                </a>
-              )}
-              {artist.youtubeUrl && (
-                <a href={artist.youtubeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors bg-black/40 p-2.5 rounded-xl border border-white/[0.03] hover:border-white/10">
-                  <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-                    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
-                  </svg>
-                  <span className="truncate">{artist.youtubeUrl.replace("https://", "")}</span>
-                </a>
-              )}
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={() => handleAction(artist.id, "REJECT")}
-                disabled={loadingId === artist.id}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20 transition-colors text-sm disabled:opacity-50"
-              >
-                <X className="w-4 h-4" />
-                Reddet
-              </button>
-              <button 
-                onClick={() => handleAction(artist.id, "VERIFY")}
-                disabled={loadingId === artist.id}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500 text-black font-black hover:bg-emerald-400 transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] text-sm disabled:opacity-50"
-              >
-                <Check className="w-4 h-4" />
-                Doğrula
-              </button>
-            </div>
-          </div>
-        ))}
+      {/* Tabs */}
+      <div className="flex gap-4 border-b border-white/10 pb-4">
+        <button 
+          onClick={() => setActiveTab("ARTISTS")}
+          className={`px-6 py-3 rounded-full text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "ARTISTS" ? "bg-[#D4AF37] text-black" : "bg-black/50 text-zinc-400 hover:text-white border border-white/10"}`}
+        >
+          Sanatçı Başvuruları
+        </button>
+        <button 
+          onClick={() => setActiveTab("USERS")}
+          className={`px-6 py-3 rounded-full text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "USERS" ? "bg-[#D4AF37] text-black" : "bg-black/50 text-zinc-400 hover:text-white border border-white/10"}`}
+        >
+          Kullanıcı Yönetimi
+        </button>
       </div>
+
+      {activeTab === "ARTISTS" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {artists.length === 0 ? (
+            <div className="col-span-full py-12 text-center bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl">
+              <Music className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">Bekleyen Başvuru Yok</h3>
+              <p className="text-zinc-500">Tüm sanatçı başvuruları değerlendirildi.</p>
+            </div>
+          ) : (
+            artists.map(artist => (
+              <div key={artist.id} className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-[2rem] p-6 shadow-2xl relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
+                
+                <div className="absolute top-0 right-0 p-4">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse" />
+                </div>
+
+                <h3 className="text-xl font-black text-white mb-1">{artist.name}</h3>
+                <p className="text-sm text-zinc-400 font-mono mb-6 truncate">{artist.email}</p>
+                
+                <div className="space-y-3 mb-8">
+                  {artist.instagramUrl && (
+                    <a href={artist.instagramUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-xl text-zinc-300 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-all truncate">
+                      Instagram Profili
+                    </a>
+                  )}
+                  {artist.spotifyUrl && (
+                    <a href={artist.spotifyUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-xl text-zinc-300 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-all truncate">
+                      Spotify Profili
+                    </a>
+                  )}
+                  {artist.youtubeUrl && (
+                    <a href={artist.youtubeUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-xl text-zinc-300 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-all truncate">
+                      YouTube Kanalı
+                    </a>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button 
+                    onClick={() => handleArtistAction(artist.id, "REJECT")}
+                    disabled={loadingId === artist.id}
+                    className="flex-1 flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-3 rounded-xl font-bold text-sm transition-all disabled:opacity-50"
+                  >
+                    <X className="w-4 h-4" />
+                    Reddet
+                  </button>
+                  <button 
+                    onClick={() => handleArtistAction(artist.id, "VERIFY")}
+                    disabled={loadingId === artist.id}
+                    className="flex-1 flex items-center justify-center gap-2 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/20 py-3 rounded-xl font-bold text-sm transition-all disabled:opacity-50"
+                  >
+                    <Check className="w-4 h-4" />
+                    Onayla
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {activeTab === "USERS" && (
+        <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-[2.5rem] p-8 shadow-2xl">
+          
+          <form onSubmit={handleSearchUser} className="relative mb-12">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D4AF37]" />
+            <input 
+              type="text" 
+              placeholder="Kullanıcı e-posta adresi ile ara..." 
+              value={searchEmail}
+              onChange={(e) => setSearchEmail(e.target.value)}
+              className="w-full bg-black/50 text-white pl-16 pr-6 py-5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 border border-white/5 text-lg"
+            />
+            <button type="submit" disabled={isSearching} className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#D4AF37] text-black px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-[#F3E5AB] transition-colors disabled:opacity-50">
+              {isSearching ? <RefreshCw className="w-5 h-5 animate-spin" /> : "Bul"}
+            </button>
+          </form>
+
+          {searchResults.length > 0 && (
+            <div className="flex flex-col gap-4">
+              {searchResults.map(user => (
+                <div key={user.id} className="bg-black/40 border border-white/5 rounded-3xl p-6 flex flex-col xl:flex-row xl:items-center justify-between gap-6 hover:border-[#D4AF37]/20 transition-all">
+                  
+                  {/* User Info */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-[#D4AF37] font-bold text-xl overflow-hidden shrink-0">
+                      {user.image ? <img src={user.image} alt="Avatar" className="w-full h-full object-cover" /> : user.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                        {user.name} 
+                        {user.role === "ADMIN" && <Shield className="w-4 h-4 text-red-500" />}
+                        {user.isVerifiedArtist && <Check className="w-4 h-4 text-[#D4AF37]" />}
+                      </h4>
+                      <p className="text-zinc-500 text-sm font-mono">{user.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Controls */}
+                  <div className="flex flex-wrap items-center gap-4">
+                    
+                    {/* Role Toggle */}
+                    <select 
+                      value={user.role} 
+                      onChange={(e) => handleUpdateUser(user.id, { role: e.target.value })}
+                      className="bg-black border border-white/10 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-[#D4AF37]"
+                    >
+                      <option value="USER">Üye (USER)</option>
+                      <option value="ARTIST">Sanatçı (ARTIST)</option>
+                      <option value="ADMIN">Yönetici (ADMIN)</option>
+                    </select>
+
+                    {/* Artist Toggle */}
+                    <button 
+                      onClick={() => handleUpdateUser(user.id, { isVerifiedArtist: !user.isVerifiedArtist })}
+                      className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-colors border ${user.isVerifiedArtist ? 'bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37]/30' : 'bg-black border-white/10 text-zinc-400 hover:text-white'}`}
+                    >
+                      {user.isVerifiedArtist ? "VIP Sanatçı (Aktif)" : "VIP Sanatçı Yap"}
+                    </button>
+
+                    {/* Credits Control */}
+                    <div className="flex items-center bg-black border border-white/10 rounded-xl overflow-hidden">
+                      <div className="px-4 py-2.5 text-zinc-400 text-sm font-mono border-r border-white/10 bg-white/5">
+                        Kredi: <strong className="text-white">{user.uploadCredits}</strong>
+                      </div>
+                      <button 
+                        onClick={() => handleUpdateUser(user.id, { uploadCredits: Math.max(0, user.uploadCredits - 1) })}
+                        className="p-2.5 hover:bg-white/10 text-zinc-400 hover:text-red-400 transition-colors"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleUpdateUser(user.id, { uploadCredits: user.uploadCredits + 1 })}
+                        className="p-2.5 hover:bg-white/10 text-zinc-400 hover:text-green-400 transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
     </div>
   );
 }

@@ -26,6 +26,11 @@ export const authOptions: NextAuthOptions = {
         if (!user || !user.password) {
           throw new Error("Hesap bulunamadı veya bu e-posta Google ile kayıtlı.");
         }
+
+        if (!user.emailVerified) {
+          throw new Error("E-posta adresiniz henüz doğrulanmamış. Lütfen e-postanıza gönderilen kodu girin.");
+        }
+
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
         if (!isPasswordValid) {
           throw new Error("Hatalı şifre.");
@@ -65,6 +70,7 @@ export const authOptions: NextAuthOptions = {
             image: user.image,
             role: isSuperAdmin ? "ADMIN" : "USER",
             isVerifiedArtist: isSuperAdmin ? true : false,
+            emailVerified: true // Google accounts are implicitly verified
           },
         });
       }

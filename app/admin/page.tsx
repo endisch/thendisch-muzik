@@ -3,6 +3,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import AdminClient from "./AdminClient";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -32,10 +34,26 @@ export default async function AdminPage() {
   });
 
   return (
-    <main className="min-h-screen bg-black text-white p-6 sm:p-12">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl font-black mb-2 tracking-tight text-white">Yönetici <span className="text-emerald-500">Paneli</span></h1>
-        <p className="text-zinc-400 font-medium mb-12">Sanatçı başvurularını ve platformu yönetin.</p>
+    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37] pb-32">
+      {/* Avant-Garde Background Glows */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-12">
+        <div className="mb-12">
+          <Link href="/muzik" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm font-medium mb-8">
+            <ArrowLeft className="w-4 h-4" />
+            Radyoya Dön
+          </Link>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-2">
+            Yönetim <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#8A6D1C]">Paneli</span>
+          </h1>
+          <p className="text-zinc-400 font-light max-w-xl">
+            Sistemi ve sanatçı başvurularını lüks ve güvenli bir şekilde yönetin.
+          </p>
+        </div>
         
         <AdminClient initialArtists={pendingArtists} />
       </div>
