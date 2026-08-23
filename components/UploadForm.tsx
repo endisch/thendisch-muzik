@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { UploadCloud, ImageIcon, ChevronDown } from "lucide-react";
@@ -54,13 +54,13 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
 
   const handleSubmit = async () => {
     if (!file || !title || !artist || !durationSec) {
-      setError("Lütfen şarkı adı, sanatçı ve ses dosyasını eksiksiz girin.");
+      setError("LÃ¼tfen ÅŸarkÄ± adÄ±, sanatÃ§Ä± ve ses dosyasÄ±nÄ± eksiksiz girin.");
       return;
     }
     
     // Max duration ~10 minutes
     if (durationSec > 600) {
-      setError("Şarkı çok uzun. (Maksimum 10 dakika)");
+      setError("ÅarkÄ± Ã§ok uzun. (Maksimum 10 dakika)");
       return;
     }
 
@@ -82,9 +82,9 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
           headers: { "Content-Type": file.type || "audio/mpeg" },
           body: file,
         });
-        if (!uploadRes.ok) throw new Error("Dosya yüklenemedi (R2 CORS veya izin hatası).");
+        if (!uploadRes.ok) throw new Error("Dosya yÃ¼klenemedi (R2 CORS veya izin hatasÄ±).");
       } catch (uploadError: any) {
-        throw new Error("R2 Sunucusuna yükleme başarısız. Detay: " + uploadError.message);
+        throw new Error("R2 Sunucusuna yÃ¼kleme baÅŸarÄ±sÄ±z. Detay: " + uploadError.message);
       }
 
       let coverKey = null;
@@ -105,9 +105,9 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
             headers: { "Content-Type": coverFile.type },
             body: coverFile,
           });
-          if (!cUploadRes.ok) throw new Error("Kapak görseli yüklenemedi.");
+          if (!cUploadRes.ok) throw new Error("Kapak gÃ¶rseli yÃ¼klenemedi.");
         } catch (uploadError: any) {
-          throw new Error("Kapak görseli yüklenemedi. Detay: " + uploadError.message);
+          throw new Error("Kapak gÃ¶rseli yÃ¼klenemedi. Detay: " + uploadError.message);
         }
       }
 
@@ -123,7 +123,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       });
       const d = await songRes.json();
       if (!songRes.ok) {
-        throw new Error(d.error || "Şarkı kaydedilemedi");
+        throw new Error(d.error || "ÅarkÄ± kaydedilemedi");
       }
 
       setFile(null);
@@ -138,7 +138,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
       setIsOpen(false);
       onUploadSuccess();
     } catch (err: any) {
-      setError(err.message || "Bir hata oluştu");
+      setError(err.message || "Bir hata oluÅŸtu");
     } finally {
       setLoading(false);
     }
@@ -151,13 +151,13 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
           <span className="w-8 h-8 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center">
             <UploadCloud className="w-4 h-4 text-[#D4AF37]" />
           </span>
-          Yeni Şarkı Yükle
+          Yeni ÅarkÄ± YÃ¼kle
         </h3>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="text-sm font-bold text-[#D4AF37] bg-[#D4AF37]/10 px-4 py-2 rounded-full hover:bg-[#D4AF37]/20 transition-colors"
         >
-          {isOpen ? "Kapat" : "Başla"}
+          {isOpen ? "Kapat" : "BaÅŸla"}
         </button>
       </div>
 
@@ -175,23 +175,23 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Adı</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">ÅarkÄ± AdÄ±</label>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Örn. Gece Yarısı Sinyali"
+                    placeholder="Ã–rn. Gece YarÄ±sÄ± Sinyali"
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)]"
                     required
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Sanatçı</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">SanatÃ§Ä±</label>
                   <input
                     type="text"
                     value={artist}
                     onChange={(e) => setArtist(e.target.value)}
-                    placeholder="Örn. Thendisch"
+                    placeholder="Ã–rn. Thendisch"
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)]"
                     required
                   />
@@ -200,19 +200,19 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Ses Dosyası (.mp3 / .wav)</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Ses DosyasÄ± (.mp3 / .wav)</label>
                   <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-[#D4AF37]/30 hover:bg-[#D4AF37]/5">
                     <UploadCloud className="h-6 w-6 text-[#D4AF37]/70" />
-                    <span className="text-xs text-zinc-400 font-medium">{file ? file.name : "Ses dosyasını seç"}</span>
+                    <span className="text-xs text-zinc-400 font-medium">{file ? file.name : "Ses dosyasÄ±nÄ± seÃ§"}</span>
                     {durationSec && <span className="text-[10px] text-[#D4AF37] font-mono font-bold bg-[#D4AF37]/10 px-2 py-1 rounded-md">{Math.floor(durationSec)} sn</span>}
                     <input type="file" accept="audio/*" onChange={handleFileChange} className="hidden" required />
                   </label>
                 </div>
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kapak Görseli</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kapak GÃ¶rseli</label>
                   <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-zinc-500/30 hover:bg-white/[0.02]">
                     <ImageIcon className="h-6 w-6 text-zinc-500/70" />
-                    <span className="text-xs text-zinc-400 font-medium">{coverFile ? coverFile.name : "Opsiyonel görsel seç"}</span>
+                    <span className="text-xs text-zinc-400 font-medium">{coverFile ? coverFile.name : "Opsiyonel gÃ¶rsel seÃ§"}</span>
                     <input type="file" accept="image/*" onChange={handleCoverChange} className="hidden" />
                   </label>
                 </div>
@@ -226,7 +226,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     onClick={() => setIsCatOpen(!isCatOpen)}
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all flex items-center justify-between"
                   >
-                    <span className="truncate">{selectedCategories.length > 0 ? selectedCategories.join(", ") : "Kategori Seçin..."}</span>
+                    <span className="truncate">{selectedCategories.length > 0 ? selectedCategories.join(", ") : "Kategori SeÃ§in..."}</span>
                     <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isCatOpen ? "rotate-180" : ""}`} />
                   </div>
                   <AnimatePresence>
@@ -253,14 +253,14 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                   </AnimatePresence>
                 </div>
 
-                {/* Tür Dropdown */}
+                {/* TÃ¼r Dropdown */}
                 <div className="relative">
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Türler</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">TÃ¼rler</label>
                   <div 
                     onClick={() => setIsGenOpen(!isGenOpen)}
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#D4AF37]/40 transition-all flex items-center justify-between"
                   >
-                    <span className="truncate">{selectedGenres.length > 0 ? selectedGenres.join(", ") : "Tür Seçin..."}</span>
+                    <span className="truncate">{selectedGenres.length > 0 ? selectedGenres.join(", ") : "TÃ¼r SeÃ§in..."}</span>
                     <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isGenOpen ? "rotate-180" : ""}`} />
                   </div>
                   <AnimatePresence>
@@ -290,11 +290,11 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Şarkı Sözleri (LRC - Opsiyonel)</label>
+                  <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">ÅarkÄ± SÃ¶zleri (LRC - Opsiyonel)</label>
                   <textarea
                     value={lyricsLrc}
                     onChange={(e) => setLyricsLrc(e.target.value)}
-                    placeholder="[00:12.50] İlk satır..."
+                    placeholder="[00:12.50] Ä°lk satÄ±r..."
                     className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#D4AF37]/40 focus:shadow-[0_0_0_3px_rgba(212,175,55,0.1)] h-24 resize-none font-mono"
                   />
                 </div>
@@ -315,7 +315,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                 disabled={loading}
                 className="w-full rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] py-4 text-sm font-black text-black transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(212,175,55,0.3)] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none uppercase tracking-wider mt-4"
               >
-                {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
+                {loading ? "YÃ¼kleniyor..." : "YÃ¼kle ve KuyruÄŸa Ekle"}
               </button>
             </div>
           </motion.div>
