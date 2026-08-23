@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Play, Pause, Disc3, Volume2 } from "lucide-react";
+import { Play, Pause, Disc3, Volume2, VolumeX, Volume1 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { parseLrc, LrcLine, currentLineIndex } from "@/lib/lrc";
 
@@ -28,42 +28,43 @@ function Vinyl({ playing, coverUrl }: { playing: boolean; coverUrl?: string }) {
       <div className="absolute inset-24 rounded-full border border-white/[0.03] pointer-events-none" />
       
       {/* Yansıma */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/[0.05] via-transparent to-black/80 pointer-events-none" />
+      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-transparent via-white/[0.02] to-transparent pointer-events-none" />
       
-      {/* Ortadaki Label (Kapak) */}
-      <div 
-        className="relative flex h-24 w-24 sm:h-32 sm:w-32 items-center justify-center rounded-full border-4 border-black bg-zinc-900 shadow-inner overflow-hidden z-10"
-        style={{ animation: playing ? "spin 4s linear infinite" : "none" }}
+      {/* Merkez Etiket */}
+      <motion.div
+        animate={{ rotate: playing ? 360 : 0 }}
+        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        className="relative flex h-24 w-24 sm:h-32 sm:w-32 items-center justify-center rounded-full bg-[#1A1C23] border-4 border-[#0B0C10] shadow-inner overflow-hidden"
       >
         {coverUrl ? (
           <img src={coverUrl} alt="Cover" className="w-full h-full object-cover opacity-80" />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#D4AF37]/20 to-black" />
+          <Disc3 className="h-8 w-8 text-[#D4AF37]/50" />
         )}
-        {/* Plak Deliği */}
-        <div className="absolute h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-black border border-white/10 shadow-inner z-20" />
-      </div>
-
-      {/* Tonearm (İğne Kolu) */}
-      <div 
-        className="absolute -right-8 top-10 h-40 w-16 origin-top-right transition-transform duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] z-20"
-        style={{ transform: playing ? "rotate(22deg)" : "rotate(2deg)" }}
-      >
-        <div className="absolute -left-2 -top-2 h-5 w-5 rounded-full bg-zinc-800 border border-[#D4AF37]/30 shadow-lg" />
-        <div className="absolute -bottom-2 -left-1 h-4 w-3.5 rounded-sm bg-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
-      </div>
-      <style jsx>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+        <div className="absolute h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-[#050505] border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] z-10" />
+      </motion.div>
     </div>
   );
 }
 
-function LyricsView({ activeIndex, lines }: { activeIndex: number; lines: LrcLine[] }) {
+function LyricsView({ activeIndex, lines, rawLyrics }: { activeIndex: number; lines: LrcLine[]; rawLyrics?: string | null }) {
   if (lines.length === 0) {
+    if (rawLyrics && rawLyrics.trim().length > 0) {
+      // LRC formatında değil ama düz metin (veya SRT) olarak sözler var
+      return (
+        <div className="relative mt-8 h-48 overflow-y-auto no-scrollbar [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
+          <div className="flex flex-col items-center py-12 px-4 gap-4">
+            {rawLyrics.split("\n").map((line, i) => (
+              <p key={i} className="text-center font-serif text-lg text-zinc-400 w-full max-w-md">
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="relative mt-8 h-40 flex flex-col items-center justify-center text-zinc-600">
         <Disc3 className="w-6 h-6 mb-2 opacity-20" />
@@ -110,13 +111,14 @@ export default function RadioPlayer() {
   const reportedRef = useRef<string | null>(null);
   const [isPlayingLocally, setIsPlayingLocally] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [volume, setVolume] = useState(1);
 
   useEffect(() => {
     let cancelled = false;
     async function poll() {
       try {
-        const res = await fetch("/api/now-playing");
-        const data: NowPlaying = await res.json();
+        const res = await fetch("/api/now-playing", { cache: "no-store" });
+        const data = await res.json();
         if (cancelled) return;
 
         setNow((prev) => {
@@ -134,17 +136,14 @@ export default function RadioPlayer() {
           data.playing &&
           data.elapsedSec &&
           data.durationSec &&
-          data.elapsedSec / data.durationSec >= 0.8 &&
-          reportedRef.current !== data.songId
+          data.elapsedSec >= data.durationSec - 2
         ) {
-          reportedRef.current = data.songId!;
-          fetch("/api/play-history", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ songId: data.songId }),
-          }).catch(() => {});
+          if (reportedRef.current !== data.songId) {
+            reportedRef.current = data.songId;
+            fetch("/api/songs/finish", { method: "POST" }).catch(() => {});
+          }
         }
-      } catch(e) {}
+      } catch (e) {}
     }
 
     poll();
@@ -158,6 +157,10 @@ export default function RadioPlayer() {
   useEffect(() => {
     if (!audioRef.current) return;
     const el = audioRef.current;
+    
+    // Uygulanan Ses Seviyesi
+    el.volume = volume;
+
     const onTimeUpdate = () => {
       if (lines.length > 0) setActiveLine(currentLineIndex(lines, el.currentTime));
       if (el.duration) setProgress(Math.floor((el.currentTime / el.duration) * 100));
@@ -170,13 +173,23 @@ export default function RadioPlayer() {
       el.removeEventListener("play", () => setIsPlayingLocally(true));
       el.removeEventListener("pause", () => setIsPlayingLocally(false));
     };
-  }, [lines]);
+  }, [lines, volume]);
 
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlayingLocally) audioRef.current.pause();
       else audioRef.current.play();
     }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setVolume(val);
+  };
+
+  const toggleMute = () => {
+    if (volume > 0) setVolume(0);
+    else setVolume(1);
   };
 
   return (
@@ -187,63 +200,73 @@ export default function RadioPlayer() {
             <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${now?.playing ? 'animate-ping bg-[#D4AF37]' : 'bg-zinc-600'}`} />
             <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${now?.playing ? 'bg-[#D4AF37]' : 'bg-zinc-600'}`} />
           </span>
-          <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-500">
-            {now?.playing ? "On Air" : "Offline"}
-          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">CANLI YAYIN</span>
         </div>
 
-        <Vinyl playing={isPlayingLocally} coverUrl={now?.coverUrl} />
-
-        <div className="mt-12 text-center flex flex-col items-center min-h-[5rem]">
-          <AnimatePresence mode="wait">
-            <motion.div 
-              key={now?.songId || "empty"}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.5 }}
-              className="w-full px-4"
-            >
-              {now?.playing ? (
-                <>
-                  <h2 className="text-4xl sm:text-5xl font-black tracking-tighter text-white truncate w-full">{now.title}</h2>
-                  <p className="mt-3 text-sm sm:text-base font-mono uppercase tracking-[0.2em] text-[#D4AF37] truncate w-full">{now.artist}</p>
-                </>
-              ) : (
-                <p className="text-zinc-500 font-serif italic text-xl">Sessizlik...</p>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Transport Controls */}
-        <div className="mt-10 flex items-center justify-center gap-8">
-          <Volume2 className="h-4 w-4 text-zinc-600" />
-          <button
-            onClick={togglePlay}
-            className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#D4AF37]/50 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] active:scale-95 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
-            aria-label={isPlayingLocally ? "Duraklat" : "Oynat"}
-          >
-            {isPlayingLocally ? (
-              <Pause className="h-5 w-5" strokeWidth={2} />
-            ) : (
-              <Play className="h-5 w-5 translate-x-[2px]" strokeWidth={2} />
-            )}
-          </button>
-          <div className="font-mono text-[10px] tabular-nums text-zinc-600 w-8 text-right">
-            {progress}%
+        {!now?.playing ? (
+          <div className="flex h-64 flex-col items-center justify-center text-zinc-500">
+            <Disc3 className="mb-4 h-8 w-8 animate-spin opacity-20 duration-[3000ms]" />
+            <p className="font-mono text-xs uppercase tracking-widest">Kuyruk Boş</p>
           </div>
-        </div>
+        ) : (
+          <>
+            <Vinyl playing={isPlayingLocally} coverUrl={now.coverUrl} />
+            
+            <div className="mt-12 text-center">
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2 truncate">
+                {now.title}
+              </h2>
+              <p className="text-sm sm:text-base text-zinc-400 font-medium">
+                {now.artist}
+              </p>
+            </div>
 
-        <div className="mt-10 flex items-center gap-4 opacity-50">
-          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
-          <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-zinc-500">
-            Acoustics
-          </span>
-          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
-        </div>
+            <div className="mt-10 flex items-center justify-center gap-8">
+              
+              {/* Ses Kontrolü (Hover ile slider çıkar) */}
+              <div className="group relative flex items-center justify-center w-8">
+                <button onClick={toggleMute} className="text-zinc-500 hover:text-[#D4AF37] transition-colors p-2">
+                  {volume === 0 ? <VolumeX className="h-5 w-5" /> : volume < 0.5 ? <Volume1 className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                </button>
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all bg-[#1A1C23] border border-white/10 p-3 rounded-2xl shadow-xl">
+                  <input 
+                    type="range" 
+                    min="0" max="1" step="0.01" 
+                    value={volume}
+                    onChange={handleVolumeChange}
+                    className="w-24 h-1 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-[#D4AF37]"
+                  />
+                </div>
+              </div>
 
-        <LyricsView activeIndex={activeLine} lines={lines} />
+              <button
+                onClick={togglePlay}
+                className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#D4AF37]/50 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] active:scale-95 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                aria-label={isPlayingLocally ? "Duraklat" : "Oynat"}
+              >
+                {isPlayingLocally ? (
+                  <Pause className="h-5 w-5" strokeWidth={2} />
+                ) : (
+                  <Play className="h-5 w-5 translate-x-[2px]" strokeWidth={2} />
+                )}
+              </button>
+              
+              <div className="font-mono text-[10px] tabular-nums text-zinc-500 w-8 text-right flex items-center justify-center">
+                {progress}%
+              </div>
+            </div>
+
+            <div className="mt-10 flex items-center gap-4 opacity-50">
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
+              <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-zinc-500">
+                Acoustics
+              </span>
+              <span className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+            </div>
+
+            <LyricsView activeIndex={activeLine} lines={lines} rawLyrics={now.lyricsLrc} />
+          </>
+        )}
       </div>
       <audio ref={audioRef} />
     </div>
