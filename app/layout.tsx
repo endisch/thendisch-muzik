@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 import LiveChat from "@/components/LiveChat";
 
 export const metadata: Metadata = {
-  title: "Thendisch Müzik — Avant-Garde",
+  title: "Thendisch Acoustics",
   description: "Lüks, kalite ve kesintisiz müzik deneyimi. Canlı VIP Lounge sohbeti.",
 };
 
