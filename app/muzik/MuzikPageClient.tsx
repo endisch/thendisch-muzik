@@ -98,12 +98,14 @@ function ChartsStrip() {
 
 export default function MuzikPageClient({ session }: { session: Session | null }) {
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden pb-32">
+    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased pb-32">
       <Grain />
       
-      {/* Avant-Garde Background Glows */}
-      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px] pointer-events-none z-0"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none z-0"></div>
+      {/* Avant-Garde Background Glows wrapped in a fixed container so they don't break scroll */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]"></div>
+      </div>
 
       {/* Navbar */}
       <nav className="relative z-40 border-b border-white/[0.02] bg-[#0B0C10]/80 backdrop-blur-3xl">

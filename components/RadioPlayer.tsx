@@ -1,73 +1,52 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { parseLrc, currentLineIndex, LrcLine } from "@/lib/lrc";
-import { useReducedMotion, motion, AnimatePresence } from "framer-motion";
-import { Volume2, Play, Pause, Disc3 } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { Play, Pause, Disc3, Volume2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { parseLrc, LrcLine, currentLineIndex } from "@/lib/lrc";
 
 type NowPlaying = {
-  playing: boolean;
   songId?: string;
   title?: string;
   artist?: string;
-  coverUrl?: string | null;
-  lyricsLrc?: string | null;
-  durationSec?: number;
-  elapsedSec?: number;
+  coverUrl?: string;
   playbackUrl?: string;
+  lyricsLrc?: string | null;
+  playing: boolean;
+  elapsedSec?: number;
+  durationSec?: number;
 };
 
-function Vinyl({ playing, progress, coverUrl }: { playing: boolean; progress: number; coverUrl?: string | null }) {
-  const reduceMotion = useReducedMotion();
-  const r = 48;
-  const c = 2 * Math.PI * r;
-
+function Vinyl({ playing, coverUrl }: { playing: boolean; coverUrl?: string }) {
   return (
-    <div className="relative mx-auto flex h-72 w-72 lg:h-96 lg:w-96 items-center justify-center">
-      {/* Avant-Garde Glow */}
-      <div className="absolute inset-0 rounded-full bg-[#D4AF37]/5 blur-[80px]" />
-
-      <svg viewBox="0 0 100 100" className="absolute inset-0 -rotate-90 scale-105">
-        <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5" />
-        <circle
-          cx="50"
-          cy="50"
-          r={r}
-          fill="none"
-          stroke="#D4AF37"
-          strokeWidth="0.75"
-          strokeDasharray={c}
-          strokeDashoffset={c - (progress / 100) * c}
-          className="transition-[stroke-dashoffset] duration-500 ease-linear"
-        />
-      </svg>
-
-      <div
-        className="relative h-[90%] w-[90%] rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_40px_80px_-20px_rgba(0,0,0,0.9)] overflow-hidden"
-        style={{
-          background: "conic-gradient(from 0deg, #111, #080808 10%, #111 20%, #080808 30%, #111 40%, #080808 50%, #111 60%, #080808 70%, #111 80%, #080808 90%, #111)",
-          animation: playing && !reduceMotion ? "spin 12s linear infinite" : undefined,
-        }}
+    <div className="relative mx-auto mt-6 flex h-64 w-64 sm:h-80 sm:w-80 items-center justify-center rounded-full bg-[#050505] shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/[0.05]">
+      {/* Plak yivleri (grooves) */}
+      <div className="absolute inset-2 rounded-full border border-white/[0.03] pointer-events-none" />
+      <div className="absolute inset-6 rounded-full border border-white/[0.02] pointer-events-none" />
+      <div className="absolute inset-10 rounded-full border border-white/[0.04] pointer-events-none" />
+      <div className="absolute inset-16 rounded-full border border-white/[0.02] pointer-events-none" />
+      <div className="absolute inset-24 rounded-full border border-white/[0.03] pointer-events-none" />
+      
+      {/* Yansıma */}
+      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none" />
+      
+      {/* Ortadaki Label (Kapak) */}
+      <div 
+        className="relative flex h-24 w-24 sm:h-32 sm:w-32 items-center justify-center rounded-full border-4 border-black bg-zinc-900 shadow-inner overflow-hidden z-10"
+        style={{ animation: playing ? "spin 4s linear infinite" : "none" }}
       >
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-50 mix-blend-overlay">
-           <div className="w-full h-full rounded-full border-[30px] border-black/40"></div>
-        </div>
-
-        {coverUrl && (
-          <img src={coverUrl} alt="Cover" className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity grayscale contrast-125" />
+        {coverUrl ? (
+          <img src={coverUrl} alt="Cover" className="w-full h-full object-cover opacity-80" />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-[#D4AF37]/20 to-black" />
         )}
-
-        <div className="absolute inset-[38%] rounded-full bg-gradient-to-br from-[#D4AF37]/30 via-[#111] to-black shadow-inner z-10 overflow-hidden border border-[#D4AF37]/20">
-          {coverUrl && <img src={coverUrl} alt="Center Label" className="absolute inset-0 w-full h-full object-cover opacity-80" />}
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
-            <div className="h-4 w-4 rounded-full bg-[#080808] border border-[#D4AF37]/50 shadow-inner" />
-          </div>
-        </div>
+        {/* Plak Deliği */}
+        <div className="absolute h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-black border border-white/10 shadow-inner z-20" />
       </div>
 
-      {/* Tonearm */}
-      <div
-        className="absolute right-0 top-4 h-32 w-1.5 origin-top-right rounded-full bg-gradient-to-b from-zinc-700 to-zinc-900 shadow-2xl transition-transform duration-1000 ease-in-out lg:h-40 border border-white/10"
+      {/* Tonearm (İğne Kolu) */}
+      <div 
+        className="absolute -right-8 top-10 h-40 w-16 origin-top-right transition-transform duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] z-20"
         style={{ transform: playing ? "rotate(22deg)" : "rotate(2deg)" }}
       >
         <div className="absolute -left-2 -top-2 h-5 w-5 rounded-full bg-zinc-800 border border-[#D4AF37]/30 shadow-lg" />
@@ -213,7 +192,7 @@ export default function RadioPlayer() {
           </span>
         </div>
 
-        <Vinyl playing={isPlayingLocally} progress={progress} coverUrl={now?.coverUrl} />
+        <Vinyl playing={isPlayingLocally} coverUrl={now?.coverUrl} />
 
         <div className="mt-12 text-center flex flex-col items-center min-h-[5rem]">
           <AnimatePresence mode="wait">
@@ -242,13 +221,13 @@ export default function RadioPlayer() {
           <Volume2 className="h-4 w-4 text-zinc-600" />
           <button
             onClick={togglePlay}
-            className="flex h-16 w-16 items-center justify-center rounded-none bg-white text-black transition-all duration-500 hover:scale-95 hover:bg-[#D4AF37] active:scale-90"
+            className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#D4AF37]/50 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] active:scale-95 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
             aria-label={isPlayingLocally ? "Duraklat" : "Oynat"}
           >
             {isPlayingLocally ? (
-              <Pause className="h-5 w-5" fill="black" />
+              <Pause className="h-5 w-5" strokeWidth={2} />
             ) : (
-              <Play className="h-5 w-5 translate-x-0.5" fill="black" />
+              <Play className="h-5 w-5 translate-x-[2px]" strokeWidth={2} />
             )}
           </button>
           <div className="font-mono text-[10px] tabular-nums text-zinc-600 w-8 text-right">
