@@ -13,6 +13,7 @@ export async function GET() {
       include: {
         user: {
           select: {
+            id: true,
             name: true,
             image: true,
             role: true,
@@ -46,6 +47,17 @@ export async function POST(req: Request) {
   }
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { id: (session.user as any).id },
+      select: { chatTimeoutUntil: true }
+    });
+
+    if (user?.chatTimeoutUntil && user.chatTimeoutUntil > new Date()) {
+      return NextResponse.json({ 
+        error: "Sohbetten uzaklaştırıldınız. Ceza bitiş: " + user.chatTimeoutUntil.toLocaleString("tr-TR") 
+      }, { status: 403 });
+    }
+
     const message = await prisma.message.create({
       data: {
         text: text.trim(),
@@ -54,6 +66,7 @@ export async function POST(req: Request) {
       include: {
         user: {
           select: {
+            id: true,
             name: true,
             image: true,
             role: true,
@@ -72,7 +85,6 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const session = await getServerSession(authOptions);
   
-  // Sadece adminler mesaj silebilir
   if (!session?.user || (session.user as any).role !== "ADMIN") {
     return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
   }

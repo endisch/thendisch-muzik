@@ -28,6 +28,9 @@ model User {
   verificationCode        String?
   verificationCodeExpires DateTime?
 
+  // Moderasyon
+  chatTimeoutUntil        DateTime?
+
   createdAt         DateTime  @default(now())
   
   // Sanatçı & Admin özellikleri
