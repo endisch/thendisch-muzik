@@ -40,6 +40,7 @@ export async function POST(request: Request) {
         spotifyUrl: spotifyUrl || null,
         youtubeUrl: youtubeUrl || null,
         isVerifiedArtist: isVerifiedArtist,
+        uploadCredits: 3, // İlk kayıtta 3 hediye yükleme hakkı
       }
     });
 
