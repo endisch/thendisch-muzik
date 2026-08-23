@@ -20,14 +20,20 @@ export default function LiveChat() {
   const { data: session } = useSession();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const fetchMessages = async () => {
     try {
       const res = await fetch("/api/chat");
       if (res.ok) {
         const data = await res.json();
-        setMessages(data);
+        // Sadece mesaj sayısı değiştiyse güncelleyelim (gereksiz render/scroll olmasın)
+        setMessages((prev) => {
+          if (prev.length === data.length && prev[prev.length - 1]?.id === data[data.length - 1]?.id) {
+            return prev;
+          }
+          return data;
+        });
       }
     } catch (e) {
       // sessizce hata
@@ -41,7 +47,10 @@ export default function LiveChat() {
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Sayfanın genelini zorla aşağı çekmek yerine sadece sohbet kutusunun içini aşağı kaydırıyoruz
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages]);
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -95,7 +104,7 @@ export default function LiveChat() {
         <MessageSquare className="w-5 h-5 text-[#D4AF37]/50" />
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar scroll-smooth">
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-zinc-600 text-sm font-medium">Sohbet henüz başlamadı.</div>
         ) : (
@@ -125,7 +134,6 @@ export default function LiveChat() {
             );
           })
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       <div className="p-4 border-t border-white/[0.05] bg-[#0B0C10]">
