@@ -89,7 +89,7 @@ export default function LiveChat() {
   };
 
   return (
-    <div className="flex flex-col h-[500px] w-full bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl overflow-hidden shadow-2xl relative z-20">
+    <div className="flex flex-col h-[700px] w-full bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl overflow-hidden shadow-2xl relative z-20">
       <div className="p-5 border-b border-white/[0.05] bg-gradient-to-b from-[#1A1C23] to-transparent flex items-center justify-between">
         <div>
           <h2 className="text-lg font-black text-white tracking-tight flex items-center gap-2">

@@ -130,24 +130,18 @@ export default function MuzikPageClient({ session }: { session: Session | null }
           <ChartsStrip />
         </div>
 
-        {/* 3 Column Layout for large screens: LiveChat - Player - Queue */}
-        <div className="w-full max-w-[1500px] px-8 pt-8 pb-24 grid lg:grid-cols-[1fr_400px] xl:grid-cols-[380px_1fr_380px] gap-8 items-start">
+        {/* 2 Column Spacious Layout for large screens: LiveChat - (Player + Queue) */}
+        <div className="w-full max-w-[1600px] px-8 pt-8 pb-24 grid xl:grid-cols-[500px_1fr] gap-12 items-start">
           
-          <div className="w-full hidden xl:block">
+          {/* Left Column: LiveChat */}
+          <div className="w-full order-2 xl:order-1 mt-12 xl:mt-0">
             <LiveChat />
           </div>
 
-          <div className="w-full flex justify-center">
+          {/* Right Column: RadioPlayer and QueueList */}
+          <div className="w-full flex flex-col items-center order-1 xl:order-2">
             <RadioPlayer />
-          </div>
-          
-          <div className="w-full flex flex-col gap-8">
             <MusicClientView session={session} />
-            
-            {/* Show LiveChat below queue on smaller than XL screens */}
-            <div className="xl:hidden">
-              <LiveChat />
-            </div>
           </div>
 
         </div>
