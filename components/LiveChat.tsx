@@ -299,21 +299,20 @@ export default function LiveChat() {
       )}
 
 
-      <div className="p-5 border-b border-white/[0.05] bg-gradient-to-b from-[#1A1C23] to-transparent flex items-center justify-between">
+      <div className="relative p-5 border-b border-white/[0.05] bg-gradient-to-b from-[#1A1C23] to-transparent flex items-center justify-between">
         <div>
           <h2 className="text-lg font-black text-white tracking-tight flex items-center gap-2">
             VIP <span className="text-[#D4AF37]">Lounge</span>
           </h2>
           <p className="text-[10px] uppercase tracking-widest text-zinc-500 mt-1">Canlı Sohbet</p>
         </div>
-        <div className="flex items-center gap-2 bg-black/40 border border-white/5 px-3 py-1.5 rounded-full">
-          <span className="relative flex h-2 w-2">
+        <div className="absolute top-4 right-5 flex items-center gap-1.5">
+          <span className="relative flex h-1.5 w-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
           </span>
-          <span className="text-xs font-bold text-zinc-300">{onlineCount} Online</span>
+          <span className="text-[9px] uppercase tracking-wider font-bold text-zinc-500">{onlineCount} Aktif</span>
         </div>
-        <MessageSquare className="w-5 h-5 text-[#D4AF37]/50" />
       </div>
 
       <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar scroll-smooth">

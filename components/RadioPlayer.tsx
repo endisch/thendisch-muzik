@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Play, Pause, Disc3, Volume2, VolumeX, Volume1 } from "lucide-react";
+import { Play, Pause, Disc3, Volume2, VolumeX, Volume1, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { parseLrc, LrcLine, currentLineIndex } from "@/lib/lrc";
 
@@ -112,6 +112,29 @@ export default function RadioPlayer() {
   const [isPlayingLocally, setIsPlayingLocally] = useState(false);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(1);
+  const [isVoting, setIsVoting] = useState(false);
+
+  const handleVote = async (songId?: string) => {
+    if (!songId) return;
+    setIsVoting(true);
+    try {
+      const res = await fetch("/api/songs/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ songId }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        alert(error.error || "Oy verirken bir hata oluştu");
+      } else {
+        alert("Oyunuz başarıyla kaydedildi!");
+      }
+    } catch (error) {
+      alert("Oy verirken bir hata oluştu");
+    } finally {
+      setIsVoting(false);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -212,13 +235,22 @@ export default function RadioPlayer() {
           <>
             <Vinyl playing={isPlayingLocally} coverUrl={now.coverUrl} />
             
-            <div className="mt-12 text-center">
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2 truncate">
+            <div className="mt-12 text-center flex flex-col items-center">
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2 truncate max-w-full">
                 {now.title}
               </h2>
-              <p className="text-sm sm:text-base text-zinc-400 font-medium">
+              <p className="text-sm sm:text-base text-zinc-400 font-medium mb-4">
                 {now.artist}
               </p>
+              
+              <button 
+                onClick={() => handleVote(now.songId)}
+                disabled={isVoting}
+                className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-[#D4AF37]/20 border border-white/10 hover:border-[#D4AF37]/50 rounded-full text-zinc-300 hover:text-[#D4AF37] transition-all disabled:opacity-50"
+              >
+                <Trophy className="w-4 h-4" />
+                <span className="text-[10px] font-bold uppercase tracking-widest">{isVoting ? "Bekleyin..." : "Bu Şarkıya Oy Ver"}</span>
+              </button>
             </div>
 
             <div className="mt-10 relative flex items-center justify-center w-full max-w-sm mx-auto h-16">
