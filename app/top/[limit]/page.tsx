@@ -86,7 +86,6 @@ export default async function TopPage({ params }: { params: { limit: string } })
             src={`/images/top-${limitNum}.jpg`} 
             alt={`Top ${limitNum}`} 
             className="absolute inset-0 w-full h-full object-cover z-0 opacity-20 mix-blend-overlay grayscale"
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
           />
           
           <div className="relative z-20 text-center flex flex-col items-center">

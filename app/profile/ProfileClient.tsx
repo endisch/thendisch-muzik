@@ -214,7 +214,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
               </div>
               <div className="bg-black/50 border border-white/5 rounded-2xl px-6 py-4">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Üyelik Tarihi</p>
-                <p className="text-lg font-bold text-white">{new Date(user.createdAt).toLocaleDateString("tr-TR")}</p>
+                <p className="text-lg font-bold text-white" suppressHydrationWarning>{new Date(user.createdAt).toLocaleDateString("tr-TR")}</p>
               </div>
             </div>
           </div>

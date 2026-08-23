@@ -80,7 +80,7 @@ export default function UserClient({ user }: { user: PublicUser }) {
               )}
             </div>
             
-            <div className="flex items-center justify-center md:justify-start gap-2 text-zinc-500 text-sm font-medium">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-zinc-500 text-sm font-medium" suppressHydrationWarning>
               <Calendar className="w-4 h-4" /> 
               {new Date(user.createdAt).toLocaleDateString("tr-TR")} tarihinden beri üye
             </div>
