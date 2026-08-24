@@ -40,13 +40,12 @@ export async function sendVerificationEmail(to: string, code: string) {
       <body>
         <div class="container">
           <div class="header">
-            <h1 class="title">THENDISCH</h1>
-            <div class="subtitle">Acoustics</div>
+            <h1 class="title">THENDISCH STUDIO</h1>
           </div>
           <div class="content">
             <div class="greeting">Hoş Geldiniz,</div>
             <div class="message">
-              Thendisch'e kayıt olduğunuz için teşekkür ederiz. Müzik odamıza giriş yapabilmeniz ve ayrıcalıklardan yararlanabilmeniz için e-posta adresinizi doğrulamanız gerekmektedir. Aşağıdaki 6 haneli kodu kullanarak işleminizi tamamlayabilirsiniz.
+              Thendisch Studio'ya kayıt olduğunuz için teşekkür ederiz. Müzik odamıza giriş yapabilmeniz ve ayrıcalıklardan yararlanabilmeniz için e-posta adresinizi doğrulamanız gerekmektedir. Aşağıdaki 6 haneli kodu kullanarak işleminizi tamamlayabilirsiniz.
             </div>
             <div class="code-box">
               <p class="code">${code}</p>
@@ -56,7 +55,7 @@ export async function sendVerificationEmail(to: string, code: string) {
             </div>
           </div>
           <div class="footer">
-            &copy; ${new Date().getFullYear()} Thendisch. Tüm Hakları Saklıdır.
+            &copy; ${new Date().getFullYear()} Thendisch Studio. Tüm Hakları Saklıdır.
           </div>
         </div>
       </body>

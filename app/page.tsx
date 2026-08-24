@@ -60,7 +60,7 @@ export default function LandingPage() {
           className="flex flex-col"
         >
           <span className="font-black text-2xl tracking-tighter leading-none">THENDISCH</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#D4AF37] leading-none mt-1">Acoustics</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#D4AF37] leading-none mt-1">Studio</span>
         </motion.div>
         
         <motion.div
@@ -168,7 +168,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.05] py-8 text-center">
         <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-600">
-          © 2026 Thendisch Acoustics.
+          © 2026 Thendisch Studio.
         </p>
       </footer>
     </main>

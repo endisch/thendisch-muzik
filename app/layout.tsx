@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Thendisch Acoustics",
+  title: "Thendisch Studio",
   description: "Lüks, kalite ve kesintisiz müzik deneyimi. Canlı VIP Lounge sohbeti.",
 };
 
