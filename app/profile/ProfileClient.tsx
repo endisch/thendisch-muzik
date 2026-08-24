@@ -208,24 +208,24 @@ export default function ProfileClient({ user }: { user: UserData }) {
               )}
             </div>
             
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-[#D4AF37] mb-1.5 opacity-90 truncate">Şarkı Hakkı</p>
-                  <p className="text-3xl font-black text-white">{user.uploadCredits}</p>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
+                  <p className="text-[9px] uppercase tracking-[0.15em] text-[#D4AF37] mb-1.5 opacity-90">Şarkı Hakkı</p>
+                  <p className="text-2xl font-black text-white">{user.uploadCredits}</p>
                 </div>
-                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90 truncate">Statü</p>
-                  <p className="text-lg font-black text-white truncate">
+                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
+                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90">Statü</p>
+                  <p className="text-xl font-black text-white">
                     {user.isVerifiedArtist ? "VIP Sanatçı" : user.role === "ADMIN" ? "Yönetici" : "Dinleyici"}
                   </p>
                 </div>
-                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90 truncate">Dinlenen</p>
-                  <p className="text-3xl font-black text-white">{user.songsListened}</p>
+                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
+                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90">Dinlenen</p>
+                  <p className="text-2xl font-black text-white">{user.songsListened}</p>
                 </div>
-                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90 truncate">Katılım</p>
-                  <p className="text-lg font-black text-white truncate" suppressHydrationWarning>
+                <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
+                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90">Katılım</p>
+                  <p className="text-xl font-black text-white" suppressHydrationWarning>
                     {new Date(user.createdAt).toLocaleDateString("tr-TR")}
                   </p>
                 </div>
