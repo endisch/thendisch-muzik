@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Music2, CheckCircle2, ShieldAlert, Clock, ArrowRight, Edit3, X, Instagram, Youtube } from "lucide-react";
+import { Music2, CheckCircle2, ShieldAlert, Clock, ArrowRight, Edit3, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type UserData = {
@@ -192,7 +192,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-8">
               {user.instagramUrl && (
                 <a href={user.instagramUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-pink-500/20 text-zinc-300 hover:text-pink-400 border border-white/10 px-4 py-2 rounded-xl transition-all text-sm font-bold">
-                  <Instagram className="w-4 h-4" /> Instagram
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> Instagram
                 </a>
               )}
               {user.spotifyUrl && (
@@ -203,7 +203,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
               )}
               {user.youtubeUrl && (
                 <a href={user.youtubeUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-red-500/20 text-zinc-300 hover:text-red-500 border border-white/10 px-4 py-2 rounded-xl transition-all text-sm font-bold">
-                  <Youtube className="w-4 h-4" /> YouTube
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.13 1 12 1 12s0 3.87.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.87 23 12 23 12s0-3.87-.46-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg> YouTube
                 </a>
               )}
             </div>
