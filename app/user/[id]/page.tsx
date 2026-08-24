@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import UserClient from "./UserClient";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { getPlaybackUrl } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,6 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
       createdAt: true,
       songsListened: true,
       songs: {
-        where: { status: { not: "PLAYED" } }, // Veya istersen tǬmǬnǬ gster
         orderBy: { createdAt: "desc" },
         take: 20
       }
@@ -32,6 +32,18 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
   if (!user) {
     redirect("/muzik");
   }
+
+  // Cover ve File URL'lerini public/presigned URL'ye çevir
+  const userWithUrls = {
+    ...user,
+    songs: await Promise.all(
+      user.songs.map(async (song) => ({
+        ...song,
+        coverUrl: song.coverUrl ? await getPlaybackUrl(song.coverUrl) : null,
+        fileUrl: await getPlaybackUrl(song.fileUrl),
+      }))
+    ),
+  };
 
   return (
     <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37] pb-32">
@@ -47,7 +59,7 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
           </Link>
         </div>
         
-        <UserClient user={user} />
+        <UserClient user={userWithUrls} />
       </div>
     </main>
   );
