@@ -1,0 +1,16 @@
+{
+  "name": "Thendisch Studio",
+  "short_name": "Thendisch",
+  "description": "Premium Müzik Platformu ve Senkronize Canlı Radyo",
+  "start_url": "/muzik",
+  "display": "standalone",
+  "background_color": "#0B0C10",
+  "theme_color": "#0B0C10",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

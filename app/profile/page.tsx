@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import ProfileClient from "./ProfileClient";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { getPlaybackUrl } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -31,13 +32,29 @@ export default async function ProfilePage() {
       spotifyUrl: true,
       youtubeUrl: true,
       createdAt: true,
-      songsListened: true
+      songsListened: true,
+      songs: {
+        orderBy: { createdAt: "desc" },
+        take: 20
+      }
     }
   });
 
   if (!user) {
     redirect("/login");
   }
+
+  // Cover ve File URL'lerini public/presigned URL'ye çevir
+  const userWithUrls = {
+    ...user,
+    songs: await Promise.all(
+      user.songs.map(async (song) => ({
+        ...song,
+        coverUrl: song.coverUrl ? await getPlaybackUrl(song.coverUrl) : null,
+        fileUrl: await getPlaybackUrl(song.fileUrl),
+      }))
+    ),
+  };
 
   return (
     <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37] pb-32">
@@ -60,7 +77,7 @@ export default async function ProfilePage() {
           </p>
         </div>
         
-        <ProfileClient user={user} />
+        <ProfileClient user={userWithUrls as any} />
       </div>
     </main>
   );

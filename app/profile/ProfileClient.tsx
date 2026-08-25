@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Music2, CheckCircle2, ShieldAlert, Clock, ArrowRight, Edit3, X } from "lucide-react";
+import { Music2, CheckCircle2, ShieldAlert, Clock, ArrowRight, Edit3, X, Edit2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import SongEditModal from "./SongEditModal";
 
 type UserData = {
   id: string;
@@ -19,6 +20,7 @@ type UserData = {
   youtubeUrl: string | null;
   createdAt: Date;
   songsListened: number;
+  songs?: any[];
 };
 
 export default function ProfileClient({ user }: { user: UserData }) {
@@ -28,6 +30,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
   
   // Edit Profile States
   const [isEditing, setIsEditing] = useState(false);
+  const [editingSong, setEditingSong] = useState<any>(null);
   const [editName, setEditName] = useState(user.name || "");
   const [editImage, setEditImage] = useState(user.image || "");
   const [editBio, setEditBio] = useState(user.bio || "");
@@ -271,6 +274,49 @@ export default function ProfileClient({ user }: { user: UserData }) {
             </form>
           )}
         </div>
+      )}
+
+      {/* Yüklediği Şarkılar */}
+      {user.songs && user.songs.length > 0 && (
+        <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-[2.5rem] p-8 md:p-12 shadow-2xl mt-4">
+          <h3 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
+            <Music2 className="w-6 h-6 text-[#D4AF37]" />
+            Radyoya Yüklediğiniz Şarkılar
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {user.songs.map((song) => (
+              <div key={song.id} className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5 hover:border-[#D4AF37]/30 transition-colors group">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-14 h-14 rounded-xl bg-zinc-900 border border-white/10 overflow-hidden shrink-0">
+                    {song.coverUrl ? (
+                      <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Music2 className="w-6 h-6 text-[#D4AF37]/50" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="truncate">
+                    <p className="font-bold text-white truncate group-hover:text-[#D4AF37] transition-colors">{song.title}</p>
+                    <p className="text-xs text-zinc-400 truncate">{song.artist}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setEditingSong(song)}
+                  className="p-3 hover:bg-white/10 rounded-xl transition-colors text-zinc-500 hover:text-[#D4AF37] shrink-0"
+                  title="Düzenle"
+                >
+                  <Edit2 className="w-5 h-5" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {editingSong && (
+        <SongEditModal song={editingSong} onClose={() => setEditingSong(null)} />
       )}
     </div>
   );

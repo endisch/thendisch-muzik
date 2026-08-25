@@ -1,8 +1,8 @@
-"use client";
-
+"use client";  
 import { signIn, signOut } from "next-auth/react";
-import { CheckCircle2, LogOut, ShieldAlert, Plus } from "lucide-react";
+import { CheckCircle2, LogOut, ShieldAlert, Plus, Trophy } from "lucide-react";
 import Link from "next/link";
+import NotificationBell from "./NotificationBell";
 
 export default function AuthStatus({ session }: { session: any }) {
   if (session) {
@@ -12,6 +12,15 @@ export default function AuthStatus({ session }: { session: any }) {
 
     return (
       <div className="flex items-center gap-3">
+        {/* Liderlik Tablosu Button */}
+        <Link 
+          href="/liderler" 
+          className="flex items-center justify-center bg-zinc-900/50 backdrop-blur-md border border-white/[0.06] hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/10 transition-all p-2 rounded-2xl group"
+          title="Liderlik Tablosu"
+        >
+          <Trophy className="w-5 h-5 text-zinc-400 group-hover:text-[#D4AF37] transition-colors" strokeWidth={2} />
+        </Link>
+
         {/* Upload Button */}
         <Link 
           href="/yukle" 
@@ -21,6 +30,9 @@ export default function AuthStatus({ session }: { session: any }) {
           <Plus className="w-4 h-4 text-[#D4AF37] group-hover:scale-110 transition-transform" strokeWidth={2.5} />
           <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest hidden sm:inline-block">Yükle</span>
         </Link>
+        
+        {/* Bildirim Çanı */}
+        <NotificationBell />
 
         {/* User Profile Info */}
         <div className="flex items-center gap-3 bg-zinc-900/50 backdrop-blur-md border border-white/[0.06] py-2 px-3 rounded-2xl">

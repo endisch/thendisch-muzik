@@ -65,6 +65,14 @@ export async function advanceQueueIfNeeded() {
       data: { status: "PLAYING" },
     });
 
+    await prisma.notification.create({
+      data: {
+        userId: next.uploadedBy,
+        type: "SONG_PLAYING",
+        message: `📻 Yüklediğin "${next.title}" şu an radyoda çalıyor!`,
+      }
+    });
+
     const updated = await prisma.nowPlaying.update({
       where: { id: 1 },
       data: { songId: next.id, startedAt: new Date() },

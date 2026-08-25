@@ -33,6 +33,18 @@ export default async function AdminPage() {
     orderBy: { createdAt: "desc" }
   });
 
+  // Sistem İstatistikleri
+  const totalUsers = await prisma.user.count();
+  const totalSongs = await prisma.song.count();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const messagesToday = await prisma.message.count({
+    where: { createdAt: { gte: today } }
+  });
+  const totalListens = await prisma.playHistory.count();
+
+  const stats = { totalUsers, totalSongs, messagesToday, totalListens };
+
   return (
     <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37] pb-32">
       {/* Avant-Garde Background Glows */}
@@ -55,7 +67,7 @@ export default async function AdminPage() {
           </p>
         </div>
         
-        <AdminClient initialArtists={pendingArtists} />
+        <AdminClient initialArtists={pendingArtists} stats={stats} />
       </div>
     </main>
   );

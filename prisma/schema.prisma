@@ -47,6 +47,7 @@ model User {
   playHistory       PlayHistory[]
   votes             Vote[]
   messages          Message[] // Canlı sohbet mesajları
+  notifications     Notification[]
 }
 
 model Message {
@@ -118,3 +119,23 @@ model PlayHistory {
 
   @@index([userId])
 }
+
+
+enum NotificationType {
+  SONG_PLAYING
+  VOTE_RECEIVED
+  SYSTEM
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+

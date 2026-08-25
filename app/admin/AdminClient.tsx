@@ -25,7 +25,7 @@ type UserData = {
   createdAt: Date;
 };
 
-export default function AdminClient({ initialArtists }: { initialArtists: ArtistApp[] }) {
+export default function AdminClient({ initialArtists, stats }: { initialArtists: ArtistApp[], stats?: any }) {
   const [artists, setArtists] = useState<ArtistApp[]>(initialArtists);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"ARTISTS" | "USERS">("ARTISTS");
@@ -98,6 +98,27 @@ export default function AdminClient({ initialArtists }: { initialArtists: Artist
   return (
     <div className="flex flex-col gap-8">
       
+      {stats && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Toplam Kullanıcı</p>
+            <p className="text-3xl font-black text-white">{stats.totalUsers}</p>
+          </div>
+          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Toplam Şarkı</p>
+            <p className="text-3xl font-black text-white">{stats.totalSongs}</p>
+          </div>
+          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Toplam Dinlenme</p>
+            <p className="text-3xl font-black text-white">{stats.totalListens}</p>
+          </div>
+          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-[#D4AF37] mb-1">Bugün Atılan Mesaj</p>
+            <p className="text-3xl font-black text-[#D4AF37]">{stats.messagesToday}</p>
+          </div>
+        </div>
+      )}
+
       {/* Tabs */}
       <div className="flex gap-4 border-b border-white/10 pb-4">
         <button 

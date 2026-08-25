@@ -47,6 +47,14 @@ export async function POST(request: Request) {
           status: newStatus 
         },
       }),
+      // Yükleyen kişiye bildirim gönder (kendi kendine veremediği için sorun yok)
+      prisma.notification.create({
+        data: {
+          userId: song.uploadedBy,
+          type: "VOTE_RECEIVED",
+          message: `🎉 "${song.title}" şarkın yeni bir oy aldı!`,
+        }
+      })
     ]);
 
     return NextResponse.json({ success: true });
