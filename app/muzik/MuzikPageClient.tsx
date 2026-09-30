@@ -51,7 +51,7 @@ function Sparkline({ data }: { data: number[] }) {
       <polyline
         points={points}
         fill="none"
-        stroke="#D4AF37"
+        stroke="#c8323d"
         strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -68,27 +68,27 @@ function ChartsStrip() {
       whileInView={reduceMotion ? undefined : "show"}
       viewport={{ once: true, margin: "-40px" }}
       variants={reduceMotion ? undefined : container}
-      className="mx-auto flex max-w-[1500px] gap-6 overflow-x-auto px-8 pb-4 pt-12 no-scrollbar"
+      className="mx-auto flex max-w-[1500px] gap-4 overflow-x-auto px-8 pb-4 pt-8 no-scrollbar"
     >
       {charts.map((c) => (
         <motion.a
           key={c.label}
           href={c.href}
           variants={reduceMotion ? undefined : rise}
-          className="group relative flex min-w-[280px] flex-1 items-center justify-between overflow-hidden rounded-3xl border border-white/[0.03] bg-white/[0.01] backdrop-blur-md px-8 py-8 transition-all duration-500 hover:border-[#D4AF37]/30 hover:bg-white/[0.03]"
+          className="group relative flex min-w-[260px] flex-1 items-center justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-[#101010] px-6 py-6 transition-all duration-300 hover:border-[#c8323d]/60 hover:bg-[#130b0c]"
         >
-          <div className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[#D4AF37] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[#c8323d] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="relative z-10 flex flex-col gap-1">
-            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#D4AF37]">
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#ff777e]">
               {c.sub}
             </p>
-            <p className="text-3xl font-black tracking-tighter text-white">
+            <p className="font-display text-3xl tracking-wide text-white">
               {c.label}
             </p>
           </div>
           <div className="relative z-10 flex items-center gap-4">
             <Sparkline data={c.spark} />
-            <ChevronRight className="h-6 w-6 text-zinc-600 transition-all duration-500 group-hover:translate-x-2 group-hover:text-[#D4AF37]" strokeWidth={1} />
+            <ChevronRight className="h-6 w-6 text-zinc-600 transition-all duration-500 group-hover:translate-x-2 group-hover:text-[#ff777e]" strokeWidth={1} />
           </div>
         </motion.a>
       ))}
@@ -98,25 +98,25 @@ function ChartsStrip() {
 
 export default function MuzikPageClient({ session }: { session: Session | null }) {
   return (
-    <main className="relative bg-[#0B0C10] text-white antialiased pb-32">
+    <main className="relative min-h-screen bg-[#080808] text-white antialiased pb-32">
       <Grain />
       
       {/* Avant-Garde Background Glows wrapped in a fixed container so they don't break scroll */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#c8323d]/5 blur-[150px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#c8323d]/5 blur-[120px]"></div>
       </div>
 
       {/* Navbar */}
-      <nav className="relative z-40 border-b border-white/[0.02] bg-[#0B0C10]/80 backdrop-blur-3xl">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-8 py-6">
+      <nav className="relative z-40 border-b border-white/[0.08] bg-[#080808]/90 backdrop-blur-3xl">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-6 py-5 sm:px-8">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-none border border-[#D4AF37]/30 bg-black transition-transform duration-500 group-hover:scale-95 group-hover:bg-[#D4AF37]">
-              <Radio className="h-4 w-4 text-[#D4AF37] group-hover:text-black transition-colors" strokeWidth={1.5} />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c8323d]/50 bg-[#111] transition-all duration-300 group-hover:bg-[#c8323d] group-hover:shadow-[0_0_20px_rgba(200,50,61,0.25)]">
+              <Radio className="h-4 w-4 text-[#ff777e] group-hover:text-white transition-colors" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
               <span className="font-black text-xl tracking-tighter text-white leading-none">THENDISCH</span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#D4AF37] leading-none mt-1">Acoustics</span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#ff777e] leading-none mt-1">STUDIO</span>
             </div>
           </Link>
           <div className="flex items-center gap-6">
@@ -126,6 +126,19 @@ export default function MuzikPageClient({ session }: { session: Session | null }
       </nav>
 
       <div className="relative z-10 flex flex-col items-center">
+        <header className="w-full max-w-[1500px] px-6 pt-12 sm:px-8 sm:pt-16">
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#c8323d]/30 bg-[#c8323d]/[0.08] px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.24em] text-[#ff777e]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#c8323d] shadow-[0_0_10px_rgba(200,50,61,0.7)]" />
+            THENDISCH STUDIO <span className="text-white/30">/</span> CANLI MÜZİK
+          </p>
+          <h1 className="font-sans text-4xl font-medium tracking-tight text-white sm:text-6xl">
+            Müzik <span className="font-display font-normal tracking-normal text-[#ff777e]">odası</span>
+          </h1>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-400 sm:text-base">
+            Birlikte dinle. Sıradaki parçayı birlikte seç.
+          </p>
+        </header>
+
         <div className="w-full">
           <ChartsStrip />
         </div>
