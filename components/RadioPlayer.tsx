@@ -19,7 +19,7 @@ type NowPlaying = {
 
 function Vinyl({ playing, coverUrl }: { playing: boolean; coverUrl?: string }) {
   return (
-    <div className="relative mx-auto mt-6 flex h-64 w-64 sm:h-80 sm:w-80 items-center justify-center rounded-full bg-[#050505] shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/[0.05]">
+    <div className="relative mx-auto mt-6 flex h-64 w-64 sm:h-80 sm:w-80 items-center justify-center rounded-full bg-[#050505] shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_36px_rgba(200,50,61,0.08)] border border-white/[0.08]">
       {/* Plak yivleri (grooves) */}
       <div className="absolute inset-2 rounded-full border border-white/[0.03] pointer-events-none" />
       <div className="absolute inset-6 rounded-full border border-white/[0.02] pointer-events-none" />
@@ -35,12 +35,12 @@ function Vinyl({ playing, coverUrl }: { playing: boolean; coverUrl?: string }) {
       <motion.div
         animate={{ rotate: playing ? 360 : 0 }}
         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        className="relative flex h-24 w-24 sm:h-32 sm:w-32 items-center justify-center rounded-full bg-[#1A1C23] border-4 border-[#0B0C10] shadow-inner overflow-hidden"
+        className="relative flex h-24 w-24 sm:h-32 sm:w-32 items-center justify-center rounded-full bg-[#151515] border-4 border-[#080808] shadow-inner overflow-hidden"
       >
         {coverUrl ? (
           <img src={coverUrl} alt="Cover" className="w-full h-full object-cover opacity-80" />
         ) : (
-          <Disc3 className="h-8 w-8 text-[#D4AF37]/50" />
+          <Disc3 className="h-8 w-8 text-[#ff777e]/50" />
         )}
         <div className="absolute h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-[#050505] border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] z-10" />
       </motion.div>
@@ -90,7 +90,7 @@ function LyricsView({ activeIndex, lines, rawLyrics }: { activeIndex: number; li
               key={i}
               className={`h-12 text-center leading-[48px] transition-all duration-700 w-full max-w-md px-4 truncate font-serif text-lg ${
                 active
-                  ? "scale-105 font-bold text-[#D4AF37] [text-shadow:0_0_15px_rgba(212,175,55,0.3)]"
+                  ? "scale-105 font-bold text-[#ff777e] [text-shadow:0_0_15px_rgba(200,50,61,0.3)]"
                   : past 
                     ? "scale-95 text-zinc-500 opacity-50"
                     : "scale-95 text-zinc-600"
@@ -219,11 +219,11 @@ export default function RadioPlayer() {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full max-w-2xl bg-gradient-to-b from-[#121318]/80 to-[#0B0C10] border-t border-b sm:border border-white/[0.03] sm:rounded-[2.5rem] p-8 sm:p-14 shadow-2xl backdrop-blur-3xl relative">
+      <div className="w-full max-w-2xl border border-white/[0.08] bg-[#101010] sm:rounded-[2rem] p-7 sm:p-12 shadow-[0_18px_60px_rgba(0,0,0,0.45)] relative">
         <div className="absolute top-8 left-8 flex items-center gap-2">
           <span className="relative flex h-1.5 w-1.5">
-            <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${now?.playing ? 'animate-ping bg-[#D4AF37]' : 'bg-zinc-600'}`} />
-            <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${now?.playing ? 'bg-[#D4AF37]' : 'bg-zinc-600'}`} />
+            <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${now?.playing ? 'animate-ping bg-[#c8323d]' : 'bg-zinc-600'}`} />
+            <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${now?.playing ? 'bg-[#c8323d]' : 'bg-zinc-600'}`} />
           </span>
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">CANLI YAYIN</span>
         </div>
@@ -248,7 +248,7 @@ export default function RadioPlayer() {
               <button 
                 onClick={() => handleVote(now.songId)}
                 disabled={isVoting}
-                className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-[#D4AF37]/20 border border-white/10 hover:border-[#D4AF37]/50 rounded-full text-zinc-300 hover:text-[#D4AF37] transition-all disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-[#c8323d]/20 border border-white/10 hover:border-[#c8323d]/50 rounded-full text-zinc-300 hover:text-[#ff777e] transition-all disabled:opacity-50"
               >
                 <Trophy className="w-4 h-4" />
                 <span className="text-[10px] font-bold uppercase tracking-widest">{isVoting ? "Bekleyin..." : "Bu Şarkıya Oy Ver"}</span>
@@ -259,7 +259,7 @@ export default function RadioPlayer() {
               
               {/* Sol: Ses Kontrolü (Daima görünür, Mobil uyumlu) */}
               <div className="absolute left-0 flex items-center gap-3">
-                <button onClick={toggleMute} className="text-zinc-500 hover:text-[#D4AF37] transition-colors" aria-label="Sesi Kapat/Aç">
+                <button onClick={toggleMute} className="text-zinc-500 hover:text-[#ff777e] transition-colors" aria-label="Sesi Kapat/Aç">
                   {volume === 0 ? <VolumeX className="h-5 w-5" /> : volume < 0.5 ? <Volume1 className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                 </button>
                 <input 
@@ -267,7 +267,7 @@ export default function RadioPlayer() {
                   min="0" max="1" step="0.01" 
                   value={volume}
                   onChange={handleVolumeChange}
-                  className="w-16 sm:w-24 h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-[#D4AF37] hover:bg-white/20 transition-all [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D4AF37] [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+                  className="w-16 sm:w-24 h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-[#c8323d] hover:bg-white/20 transition-all [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#c8323d] [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(200,50,61,0.5)]"
                   aria-label="Ses Seviyesi"
                 />
               </div>
@@ -275,7 +275,7 @@ export default function RadioPlayer() {
               {/* Orta: Play/Pause Butonu */}
               <button
                 onClick={togglePlay}
-                className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#D4AF37]/50 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] active:scale-95 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)] z-10"
+                className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#c8323d]/50 text-[#ff777e] transition-all duration-500 hover:bg-[#c8323d]/10 hover:border-[#c8323d] active:scale-95 hover:shadow-[0_0_30px_rgba(200,50,61,0.2)] z-10"
                 aria-label={isPlayingLocally ? "Duraklat" : "Oynat"}
               >
                 {isPlayingLocally ? (
@@ -294,7 +294,7 @@ export default function RadioPlayer() {
             <div className="mt-10 flex items-center gap-4 opacity-50">
               <span className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
               <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-zinc-500">
-                Acoustics
+                Thendisch Studio
               </span>
               <span className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
             </div>

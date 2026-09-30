@@ -105,21 +105,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0B0C10] p-4 relative overflow-hidden selection:bg-[#D4AF37]/30">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <div className="min-h-screen flex items-center justify-center bg-[#080808] p-4 relative overflow-hidden selection:bg-[#c8323d]/30">
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#c8323d]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="bg-[#121318]/80 backdrop-blur-3xl p-8 md:p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md border border-white/5 relative z-10">
         
         {isVerificationStep ? (
           <>
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/30">
-                <ShieldCheck className="w-8 h-8 text-[#D4AF37]" />
+              <div className="w-16 h-16 rounded-full bg-[#c8323d]/10 flex items-center justify-center border border-[#c8323d]/30">
+                <ShieldCheck className="w-8 h-8 text-[#ff777e]" />
               </div>
             </div>
             <h2 className="text-3xl font-black text-center text-white mb-2 tracking-tight">Doğrulama</h2>
             <p className="text-center text-zinc-400 text-sm mb-8 leading-relaxed">
-              <strong className="text-[#D4AF37]">{email}</strong> adresine 6 haneli bir onay kodu gönderdik. Lütfen hesabınızı aktifleştirmek için kodu girin.
+              <strong className="text-[#ff777e]">{email}</strong> adresine 6 haneli bir onay kodu gönderdik. Lütfen hesabınızı aktifleştirmek için kodu girin.
             </p>
 
             {error && <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-xl mb-6 text-center text-sm font-semibold">{error}</div>}
@@ -131,10 +131,10 @@ export default function LoginPage() {
                 maxLength={6}
                 value={verificationCode} 
                 onChange={(e) => setVerificationCode(e.target.value)} 
-                className="bg-black/50 text-white px-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 border border-white/5 text-center text-3xl tracking-[1em] font-mono font-bold" 
+                className="bg-black/50 text-white px-4 py-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c8323d]/50 border border-white/5 text-center text-3xl tracking-[1em] font-mono font-bold"
                 required 
               />
-              <button type="submit" disabled={loading} className="w-full bg-[#D4AF37] hover:bg-[#F3E5AB] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] disabled:opacity-50 tracking-widest uppercase flex justify-center items-center gap-2">
+              <button type="submit" disabled={loading} className="w-full bg-[#c8323d] hover:bg-[#ff777e] text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(200,50,61,0.2)] hover:shadow-[0_0_30px_rgba(200,50,61,0.4)] disabled:opacity-50 tracking-widest uppercase flex justify-center items-center gap-2">
                 {loading ? "Doğrulanıyor..." : "Doğrula ve Gir"} <ArrowRight className="w-5 h-5" />
               </button>
             </form>
@@ -158,31 +158,31 @@ export default function LoginPage() {
             <form onSubmit={handleAuthSubmit} className="flex flex-col gap-4">
               {!isLogin && (
                 <>
-                  <input type="text" placeholder="Kullanıcı Adı" value={name} onChange={(e) => setName(e.target.value)} className="bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" />
+                  <input type="text" placeholder="Kullanıcı Adı" value={name} onChange={(e) => setName(e.target.value)} className="bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" />
                   
-                  <div className="mt-2 mb-2 p-5 rounded-2xl border border-[#D4AF37]/20 bg-[#D4AF37]/5 flex flex-col gap-3">
+                  <div className="mt-2 mb-2 p-5 rounded-2xl border border-[#c8323d]/20 bg-[#c8323d]/5 flex flex-col gap-3">
                     <label className="flex items-center gap-3 cursor-pointer text-white font-medium">
-                      <input type="checkbox" checked={isArtistApplication} onChange={(e) => setIsArtistApplication(e.target.checked)} className="w-5 h-5 accent-[#D4AF37] bg-black border-white/10 rounded" />
-                      <Music2 className="w-5 h-5 text-[#D4AF37]" />
+                      <input type="checkbox" checked={isArtistApplication} onChange={(e) => setIsArtistApplication(e.target.checked)} className="w-5 h-5 accent-[#c8323d] bg-black border-white/10 rounded" />
+                      <Music2 className="w-5 h-5 text-[#ff777e]" />
                       Sanatçı Olarak Başvur
                     </label>
                     
                     {isArtistApplication && (
                       <div className="flex flex-col gap-3 mt-2 animate-in slide-in-from-top-2 duration-300">
                         <p className="text-xs text-zinc-400 leading-relaxed">Doğrulanmış sanatçı rozeti ve özel ayrıcalıklar için sosyal medya hesaplarınızı ekleyin.</p>
-                        <input type="url" placeholder="Instagram Profil Linki" value={instagramUrl} onChange={(e) => setInstagramUrl(e.target.value)} className="bg-black/50 text-white px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" required />
-                        <input type="url" placeholder="Spotify Sanatçı Linki" value={spotifyUrl} onChange={(e) => setSpotifyUrl(e.target.value)} className="bg-black/50 text-white px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" required />
-                        <input type="url" placeholder="YouTube Kanal Linki" value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="bg-black/50 text-white px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" required />
+                        <input type="url" placeholder="Instagram Profil Linki" value={instagramUrl} onChange={(e) => setInstagramUrl(e.target.value)} className="bg-black/50 text-white px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" required />
+                        <input type="url" placeholder="Spotify Sanatçı Linki" value={spotifyUrl} onChange={(e) => setSpotifyUrl(e.target.value)} className="bg-black/50 text-white px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" required />
+                        <input type="url" placeholder="YouTube Kanal Linki" value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="bg-black/50 text-white px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" required />
                       </div>
                     )}
                   </div>
                 </>
               )}
 
-              <input type="email" placeholder="E-posta" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" required />
-              <input type="password" placeholder="Şifre" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" required />
+              <input type="email" placeholder="E-posta" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" required />
+              <input type="password" placeholder="Şifre" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" required />
               
-              <button type="submit" disabled={loading} className="bg-[#D4AF37] hover:bg-[#F3E5AB] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] disabled:opacity-50 mt-2 uppercase tracking-widest text-sm">
+              <button type="submit" disabled={loading} className="bg-[#c8323d] hover:bg-[#ff777e] text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(200,50,61,0.2)] hover:shadow-[0_0_30px_rgba(200,50,61,0.4)] disabled:opacity-50 mt-2 uppercase tracking-widest text-sm">
                 {loading ? "Bekleniyor..." : (isLogin ? "Giriş Yap" : "Kayıt Ol")}
               </button>
             </form>
@@ -200,7 +200,7 @@ export default function LoginPage() {
 
             <p className="mt-8 text-center text-zinc-400 text-sm font-medium">
               {isLogin ? "Hesabın yok mu?" : "Zaten hesabın var mı?"}
-              <button onClick={() => setIsLogin(!isLogin)} className="text-[#D4AF37] hover:text-[#F3E5AB] ml-2 font-bold hover:underline">
+              <button onClick={() => setIsLogin(!isLogin)} className="text-[#ff777e] hover:text-[#ff777e] ml-2 font-bold hover:underline">
                 {isLogin ? "Kayıt Ol" : "Giriş Yap"}
               </button>
             </p>

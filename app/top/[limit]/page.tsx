@@ -10,7 +10,7 @@ export default async function TopPage({ params }: { params: { limit: string } })
   
   if (![10, 20, 50].includes(limitNum)) {
     return (
-      <div className="min-h-screen bg-[#0B0C10] flex items-center justify-center">
+      <div className="min-h-screen bg-[#080808] flex items-center justify-center">
         <div className="text-zinc-500 font-mono text-sm uppercase tracking-widest border border-white/10 px-8 py-4 rounded-full">
           Geçersiz liste limiti.
         </div>
@@ -107,11 +107,11 @@ export default async function TopPage({ params }: { params: { limit: string } })
   const subTitle = titles[limitNum as keyof typeof titles] || "Koleksiyon";
 
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37] pb-32">
+    <main className="relative min-h-screen bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e] pb-32">
       {/* Avant-Garde Background Glows */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#c8323d]/5 blur-[150px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#c8323d]/5 blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-12">
@@ -121,7 +121,7 @@ export default async function TopPage({ params }: { params: { limit: string } })
             Radyoya Dön
           </Link>
           <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02]">
-            <Trophy className="w-4 h-4 text-[#D4AF37]" />
+            <Trophy className="w-4 h-4 text-[#ff777e]" />
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
               {limitNum === 50 ? "Tüm Zamanlar" : "Aylık Liste"}
             </span>
@@ -131,19 +131,19 @@ export default async function TopPage({ params }: { params: { limit: string } })
         {/* Hero Banner */}
         <div className="relative h-72 md:h-80 rounded-[2.5rem] overflow-hidden mb-16 shadow-2xl flex flex-col items-center justify-center border border-white/[0.05]">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-[#121318] opacity-80 z-10"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(212,175,55,0.15),transparent_70%)] z-10 pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(200,50,61,0.15),transparent_70%)] z-10 pointer-events-none" />
           <img 
             src={`/images/top-${limitNum}.jpg`} 
             alt={`Top ${limitNum}`} 
             className="absolute inset-0 w-full h-full object-cover z-0 opacity-20 mix-blend-overlay grayscale"
           />
           <div className="relative z-20 text-center flex flex-col items-center">
-            <span className="font-mono text-[11px] uppercase tracking-[0.4em] text-[#D4AF37] mb-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.4em] text-[#ff777e] mb-4">
               {subTitle}
             </span>
             <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-white drop-shadow-2xl">
               {limitNum === 50 ? "ARŞİV" : (
-                <>TOP <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#8A6D1C]">{limitNum}</span></>
+                <>TOP <span className="text-[#ff777e]">{limitNum}</span></>
               )}
             </h1>
           </div>

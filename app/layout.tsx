@@ -1,11 +1,18 @@
 import "./globals.css";
 import { Providers } from "./Providers";
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Italiana, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-space",
+  display: "swap",
+});
+
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-italiana",
   display: "swap",
 });
 
@@ -19,9 +26,9 @@ export const metadata: Metadata = {
   title: "Thendisch Studio",
   description: "Lüks, kalite ve kesintisiz müzik deneyimi. Canlı VIP Lounge sohbeti.",
   manifest: "/manifest.json",
-  themeColor: "#0B0C10",
+  themeColor: "#080808",
   appleWebApp: {
-    title: "Thendisch",
+    title: "Thendisch Studio",
     statusBarStyle: "black-translucent",
   }
 };
@@ -32,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans bg-[#0B0C10] text-gray-100 min-h-screen selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
+    <html lang="tr" className={`${spaceGrotesk.variable} ${italiana.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-sans bg-[#080808] text-gray-100 min-h-screen selection:bg-[#c8323d]/30 selection:text-[#ff777e]">
         <Providers>
           {children}
         </Providers>

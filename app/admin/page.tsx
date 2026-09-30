@@ -46,11 +46,11 @@ export default async function AdminPage() {
   const stats = { totalUsers, totalSongs, messagesToday, totalListens };
 
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37] pb-32">
+    <main className="relative min-h-screen bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e] pb-32">
       {/* Avant-Garde Background Glows */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#c8323d]/5 blur-[150px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#c8323d]/5 blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-12">
@@ -60,7 +60,7 @@ export default async function AdminPage() {
             Radyoya Dön
           </Link>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-2">
-            Yönetim <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#8A6D1C]">Paneli</span>
+            Yönetim <span className="text-[#ff777e]">Paneli</span>
           </h1>
           <p className="text-zinc-400 font-light max-w-xl">
             Sistemi ve sanatçı başvurularını lüks ve güvenli bir şekilde yönetin.

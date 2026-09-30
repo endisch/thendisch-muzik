@@ -4,14 +4,14 @@
 
 @layer base {
   body {
-    @apply bg-[#0B0C10] text-gray-100 selection:bg-[#D4AF37]/30 selection:text-[#D4AF37];
+    @apply bg-[#080808] text-gray-100 selection:bg-[#c8323d]/30 selection:text-[#ff777e];
   }
 }
 
 .lyrics .active {
-  color: #D4AF37;
+  color: #ff777e;
   font-weight: bold;
-  text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+  text-shadow: 0 0 15px rgba(200, 50, 61, 0.35);
 }
 
 /* Custom Scrollbar */
@@ -21,7 +21,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0C10;
+  background: #080808;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -30,7 +30,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.5); /* Gold hover */
+  background: rgba(200, 50, 61, 0.5);
 }
 
 /* Hide scrollbar completely if needed */

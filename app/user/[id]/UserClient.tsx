@@ -26,15 +26,15 @@ export default function UserClient({ user }: { user: PublicUser }) {
         
         {/* Dekoratif Yansıma */}
         <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-          {user.isVerifiedArtist ? <CheckCircle2 className="w-64 h-64 text-[#D4AF37]" /> : <UserDecoration />}
+          {user.isVerifiedArtist ? <CheckCircle2 className="w-64 h-64 text-[#ff777e]" /> : <UserDecoration />}
         </div>
         
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
-          <div className="w-40 h-40 rounded-[2.5rem] border-4 border-[#D4AF37]/30 flex items-center justify-center bg-zinc-900 overflow-hidden shadow-[0_0_40px_rgba(212,175,55,0.2)] shrink-0">
+          <div className="w-40 h-40 rounded-[2.5rem] border-4 border-[#c8323d]/30 flex items-center justify-center bg-zinc-900 overflow-hidden shadow-[0_0_40px_rgba(200,50,61,0.2)] shrink-0">
             {user.image ? (
               <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-7xl font-black text-[#D4AF37]">{user.name?.charAt(0).toUpperCase()}</span>
+              <span className="text-7xl font-black text-[#ff777e]">{user.name?.charAt(0).toUpperCase()}</span>
             )}
           </div>
           
@@ -43,7 +43,7 @@ export default function UserClient({ user }: { user: PublicUser }) {
               {user.name}
               <div className="flex items-center gap-2">
                 {user.isVerifiedArtist && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-sm uppercase tracking-widest font-bold">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c8323d]/10 border border-[#c8323d]/30 text-[#ff777e] text-sm uppercase tracking-widest font-bold">
                     <CheckCircle2 className="w-4 h-4" /> VIP
                   </span>
                 )}
@@ -99,7 +99,7 @@ export default function UserClient({ user }: { user: PublicUser }) {
       {/* Yüklediği Şarkılar */}
       <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-[2.5rem] p-8 md:p-12 shadow-2xl mt-4">
         <h3 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
-          <Music className="w-6 h-6 text-[#D4AF37]" />
+          <Music className="w-6 h-6 text-[#ff777e]" />
           Radyoya Yüklediği Şarkılar
         </h3>
 
@@ -108,18 +108,18 @@ export default function UserClient({ user }: { user: PublicUser }) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {user.songs.map((song) => (
-              <div key={song.id} className="flex items-center gap-4 bg-black/40 p-4 rounded-2xl border border-white/5 hover:border-[#D4AF37]/30 transition-colors group">
+              <div key={song.id} className="flex items-center gap-4 bg-black/40 p-4 rounded-2xl border border-white/5 hover:border-[#c8323d]/30 transition-colors group">
                 <div className="w-14 h-14 rounded-xl bg-zinc-900 border border-white/10 overflow-hidden shrink-0">
                   {song.coverUrl ? (
                     <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Music className="w-6 h-6 text-[#D4AF37]/50" />
+                      <Music className="w-6 h-6 text-[#ff777e]/50" />
                     </div>
                   )}
                 </div>
                 <div className="flex-1 truncate">
-                  <p className="font-bold text-white truncate group-hover:text-[#D4AF37] transition-colors">{song.title}</p>
+                  <p className="font-bold text-white truncate group-hover:text-[#ff777e] transition-colors">{song.title}</p>
                   <p className="text-xs text-zinc-400 truncate">{song.artist}</p>
                 </div>
               </div>

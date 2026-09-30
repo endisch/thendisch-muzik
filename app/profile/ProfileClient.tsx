@@ -109,34 +109,34 @@ export default function ProfileClient({ user }: { user: UserData }) {
               <form onSubmit={handleUpdateProfile} className="flex flex-col gap-5">
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Kullanıcı Adı</label>
-                  <input type="text" value={editName} onChange={(e) => setEditName(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" />
+                  <input type="text" value={editName} onChange={(e) => setEditName(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Profil Fotoğrafı (URL)</label>
-                  <input type="url" value={editImage} onChange={(e) => setEditImage(e.target.value)} placeholder="https://..." className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" />
+                  <input type="url" value={editImage} onChange={(e) => setEditImage(e.target.value)} placeholder="https://..." className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Hakkımda</label>
-                  <textarea value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} placeholder="Müzik zevkinden, kendinden bahset..." className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5 resize-none"></textarea>
+                  <textarea value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} placeholder="Müzik zevkinden, kendinden bahset..." className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5 resize-none"></textarea>
                 </div>
 
                 <div className="border-t border-white/5 my-2"></div>
-                <h4 className="text-sm font-bold text-[#D4AF37]">Sosyal Medya Bağlantıları</h4>
+                <h4 className="text-sm font-bold text-[#ff777e]">Sosyal Medya Bağlantıları</h4>
                 
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Instagram Profil Linki</label>
-                  <input type="url" value={instagram} onChange={(e) => setInstagram(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" />
+                  <input type="url" value={instagram} onChange={(e) => setInstagram(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Spotify Linki</label>
-                  <input type="url" value={spotify} onChange={(e) => setSpotify(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" />
+                  <input type="url" value={spotify} onChange={(e) => setSpotify(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">YouTube Kanal Linki</label>
-                  <input type="url" value={youtube} onChange={(e) => setYoutube(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#D4AF37] border border-white/5" />
+                  <input type="url" value={youtube} onChange={(e) => setYoutube(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#c8323d] border border-white/5" />
                 </div>
 
-                <button type="submit" disabled={loading} className="w-full mt-4 bg-[#D4AF37] hover:bg-[#F3E5AB] text-black font-black py-4 rounded-xl transition-all disabled:opacity-50 tracking-widest uppercase">
+                <button type="submit" disabled={loading} className="w-full mt-4 bg-[#c8323d] hover:bg-[#ff777e] text-white font-black py-4 rounded-xl transition-all disabled:opacity-50 tracking-widest uppercase">
                   {loading ? "Kaydediliyor..." : "Kaydet"}
                 </button>
               </form>
@@ -150,22 +150,22 @@ export default function ProfileClient({ user }: { user: UserData }) {
         
         {/* Dekoratif Yansıma */}
         <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-          {user.isVerifiedArtist ? <CheckCircle2 className="w-64 h-64 text-[#D4AF37]" /> : <UserDecoration />}
+          {user.isVerifiedArtist ? <CheckCircle2 className="w-64 h-64 text-[#ff777e]" /> : <UserDecoration />}
         </div>
         
         <button 
           onClick={() => setIsEditing(true)}
-          className="absolute top-8 right-8 z-20 flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] text-zinc-400 rounded-xl transition-all border border-white/5 font-bold text-sm"
+          className="absolute top-8 right-8 z-20 flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-[#c8323d]/20 hover:text-[#ff777e] text-zinc-400 rounded-xl transition-all border border-white/5 font-bold text-sm"
         >
           <Edit3 className="w-4 h-4" /> Profili Düzenle
         </button>
 
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10 mt-6 md:mt-0">
-          <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-4 border-[#D4AF37]/30 flex items-center justify-center bg-zinc-900 overflow-hidden shadow-[0_0_30px_rgba(212,175,55,0.2)] shrink-0">
+          <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-4 border-[#c8323d]/30 flex items-center justify-center bg-zinc-900 overflow-hidden shadow-[0_0_30px_rgba(200,50,61,0.2)] shrink-0">
             {user.image ? (
               <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-5xl md:text-7xl font-black text-[#D4AF37]">{user.name?.charAt(0).toUpperCase()}</span>
+              <span className="text-5xl md:text-7xl font-black text-[#ff777e]">{user.name?.charAt(0).toUpperCase()}</span>
             )}
           </div>
           
@@ -174,7 +174,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
               {user.name}
               <div className="flex items-center gap-2">
                 {user.isVerifiedArtist && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs uppercase tracking-widest font-bold">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c8323d]/10 border border-[#c8323d]/30 text-[#ff777e] text-xs uppercase tracking-widest font-bold">
                     <CheckCircle2 className="w-3.5 h-3.5" /> VIP
                   </span>
                 )}
@@ -213,7 +213,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
             
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
                 <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-[#D4AF37] mb-1.5 opacity-90">Şarkı Hakkı</p>
+                  <p className="text-[9px] uppercase tracking-[0.15em] text-[#ff777e] mb-1.5 opacity-90">Şarkı Hakkı</p>
                   <p className="text-2xl font-black text-white">{user.uploadCredits}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#121318] to-black border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col justify-center shadow-lg hover:border-white/10 transition-colors">
@@ -241,7 +241,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
       {!user.isVerifiedArtist && (
         <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-[2.5rem] p-8 md:p-12 shadow-2xl mt-4">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37]">
+            <div className="w-12 h-12 rounded-xl bg-[#c8323d]/10 flex items-center justify-center text-[#ff777e]">
               <Music2 className="w-6 h-6" />
             </div>
             <div>
@@ -251,9 +251,9 @@ export default function ProfileClient({ user }: { user: UserData }) {
           </div>
 
           {user.artistApplication ? (
-            <div className="bg-[#D4AF37]/5 border border-[#D4AF37]/20 rounded-2xl p-6 flex flex-col items-center text-center">
-              <Clock className="w-12 h-12 text-[#D4AF37] mb-4" />
-              <h4 className="text-lg font-bold text-[#D4AF37] mb-2">Başvurunuz İncelemede</h4>
+            <div className="bg-[#c8323d]/5 border border-[#c8323d]/20 rounded-2xl p-6 flex flex-col items-center text-center">
+              <Clock className="w-12 h-12 text-[#ff777e] mb-4" />
+              <h4 className="text-lg font-bold text-[#ff777e] mb-2">Başvurunuz İncelemede</h4>
               <p className="text-zinc-400 text-sm max-w-md">Yöneticilerimiz sosyal medya hesaplarınızı inceliyor. Onaylandığında e-posta ile bilgilendirileceksiniz ve VIP Sanatçı rozetinize kavuşacaksınız.</p>
             </div>
           ) : (
@@ -268,7 +268,7 @@ export default function ProfileClient({ user }: { user: UserData }) {
                 Sosyal medya linklerinizi yukarıdaki <strong>"Profili Düzenle"</strong> menüsünden eklediyseniz buraya otomatik gelecektir. Eksik olanları tamamlayıp başvurabilirsiniz.
               </div>
 
-              <button type="submit" disabled={loading} className="w-full bg-[#D4AF37] hover:bg-[#F3E5AB] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] disabled:opacity-50 tracking-widest uppercase flex justify-center items-center gap-2">
+              <button type="submit" disabled={loading} className="w-full bg-[#c8323d] hover:bg-[#ff777e] text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(200,50,61,0.2)] hover:shadow-[0_0_30px_rgba(200,50,61,0.4)] disabled:opacity-50 tracking-widest uppercase flex justify-center items-center gap-2">
                 {loading ? "Gönderiliyor..." : "Başvuruyu Gönder"} <ArrowRight className="w-5 h-5" />
               </button>
             </form>
@@ -280,30 +280,30 @@ export default function ProfileClient({ user }: { user: UserData }) {
       {user.songs && user.songs.length > 0 && (
         <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-[2.5rem] p-8 md:p-12 shadow-2xl mt-4">
           <h3 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
-            <Music2 className="w-6 h-6 text-[#D4AF37]" />
+            <Music2 className="w-6 h-6 text-[#ff777e]" />
             Radyoya Yüklediğiniz Şarkılar
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {user.songs.map((song) => (
-              <div key={song.id} className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5 hover:border-[#D4AF37]/30 transition-colors group">
+              <div key={song.id} className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5 hover:border-[#c8323d]/30 transition-colors group">
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="w-14 h-14 rounded-xl bg-zinc-900 border border-white/10 overflow-hidden shrink-0">
                     {song.coverUrl ? (
                       <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <Music2 className="w-6 h-6 text-[#D4AF37]/50" />
+                        <Music2 className="w-6 h-6 text-[#ff777e]/50" />
                       </div>
                     )}
                   </div>
                   <div className="truncate">
-                    <p className="font-bold text-white truncate group-hover:text-[#D4AF37] transition-colors">{song.title}</p>
+                    <p className="font-bold text-white truncate group-hover:text-[#ff777e] transition-colors">{song.title}</p>
                     <p className="text-xs text-zinc-400 truncate">{song.artist}</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => setEditingSong(song)}
-                  className="p-3 hover:bg-white/10 rounded-xl transition-colors text-zinc-500 hover:text-[#D4AF37] shrink-0"
+                  className="p-3 hover:bg-white/10 rounded-xl transition-colors text-zinc-500 hover:text-[#ff777e] shrink-0"
                   title="Düzenle"
                 >
                   <Edit2 className="w-5 h-5" />

@@ -4,8 +4,8 @@
   "description": "Premium Müzik Platformu ve Senkronize Canlı Radyo",
   "start_url": "/muzik",
   "display": "standalone",
-  "background_color": "#0B0C10",
-  "theme_color": "#0B0C10",
+  "background_color": "#080808",
+  "theme_color": "#080808",
   "icons": [
     {
       "src": "/favicon.ico",
