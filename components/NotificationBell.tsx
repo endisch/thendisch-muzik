@@ -63,9 +63,9 @@ export default function NotificationBell() {
     <div className="relative" ref={menuRef}>
       <button 
         onClick={handleOpen}
-        className="relative p-2.5 bg-zinc-900/50 backdrop-blur-md border border-white/[0.06] hover:border-[#D4AF37]/50 transition-colors rounded-xl group"
+        className="relative p-2.5 bg-zinc-900/50 backdrop-blur-md border border-white/[0.06] hover:border-[#c8323d]/50 transition-colors rounded-xl group"
       >
-        <Bell className="w-5 h-5 text-zinc-300 group-hover:text-[#D4AF37] transition-colors" />
+        <Bell className="w-5 h-5 text-zinc-300 group-hover:text-[#ff777e] transition-colors" />
         {unreadCount > 0 && (
           <span className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white shadow-lg">
             {unreadCount > 9 ? "9+" : unreadCount}

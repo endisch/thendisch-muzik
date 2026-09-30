@@ -33,7 +33,7 @@ function TrendBadge({ value }: { value: number }) {
   return (
     <span
       className={`flex items-center gap-0.5 font-mono text-[10px] tabular-nums ${
-        up ? "text-[#D4AF37]" : "text-zinc-500"
+        up ? "text-[#ff777e]" : "text-zinc-500"
       }`}
     >
       {up ? <ArrowUp className="h-2.5 w-2.5" /> : <ArrowDown className="h-2.5 w-2.5" />}
@@ -99,10 +99,10 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
 
   return (
     <>
-      <div className="rounded-2xl border border-white/[0.06] bg-zinc-900/40 backdrop-blur-3xl relative z-10">
+      <div className="rounded-2xl border border-white/[0.08] bg-[#101010] relative z-10">
         <div className="flex items-center justify-between px-6 pt-6 mb-4">
           <h3 className="font-bold text-white text-lg">Sırada</h3>
-          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#D4AF37]">
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#ff777e]">
             {queue.length} şarkı
           </span>
         </div>
@@ -127,11 +127,11 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 className="group flex items-center gap-3 rounded-xl px-4 py-3 transition-colors duration-300 hover:bg-white/5 cursor-pointer"
               >
                 <div className="flex w-6 shrink-0 flex-col items-center">
-                  <span className="font-mono text-xs text-zinc-600 group-hover:text-[#D4AF37] transition-colors">{idx + 1}</span>
+                  <span className="font-mono text-xs text-zinc-600 group-hover:text-[#ff777e] transition-colors">{idx + 1}</span>
                   <TrendBadge value={0} />
                 </div>
                 
-                <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-zinc-800 flex items-center justify-center border border-white/5 group-hover:border-[#D4AF37]/50 transition-colors">
+                <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-zinc-800 flex items-center justify-center border border-white/5 group-hover:border-[#c8323d]/50 transition-colors">
                   {song.coverUrl ? (
                     <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />
                   ) : (
@@ -148,8 +148,8 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                   {Math.floor(song.durationSec / 60)}:{(song.durationSec % 60).toString().padStart(2, "0")}
                 </span>
                 
-                <div className="flex flex-col items-center justify-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/5 group-hover:bg-[#D4AF37]/10 group-hover:border-[#D4AF37]/30 transition-all">
-                  <span className="font-mono text-xs tabular-nums font-bold text-white group-hover:text-[#D4AF37]">{song.votesCount}</span>
+                <div className="flex flex-col items-center justify-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/5 group-hover:bg-[#c8323d]/10 group-hover:border-[#c8323d]/30 transition-all">
+                  <span className="font-mono text-xs tabular-nums font-bold text-white group-hover:text-[#ff777e]">{song.votesCount}</span>
                   <span className="text-[8px] uppercase tracking-widest text-zinc-500">Oy</span>
                 </div>
               </motion.div>
@@ -172,7 +172,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="relative w-full max-w-md bg-[#121318] border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-md bg-[#101010] border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col"
             >
               {/* Close Button */}
               <button 
@@ -183,11 +183,11 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
               </button>
 
               {/* Cover Header */}
-              <div className="relative h-64 w-full bg-zinc-900 border-b border-white/5">
+              <div className="relative h-64 w-full bg-[#151515] border-b border-white/5">
                 {selectedSong.coverUrl ? (
                   <>
                     <img src={selectedSong.coverUrl} alt="Cover" className="w-full h-full object-cover opacity-60" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#121318] to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#101010] to-transparent" />
                   </>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800 to-black">
@@ -217,7 +217,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 <div className="flex items-center gap-4">
                   <div className="flex-1 bg-black/50 border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center">
                     <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">Şu Anki Oyu</p>
-                    <p className="text-3xl font-black text-[#D4AF37]">{selectedSong.votesCount}</p>
+                    <p className="text-3xl font-black text-[#ff777e]">{selectedSong.votesCount}</p>
                   </div>
                   <div className="flex-1 bg-black/50 border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center">
                     <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">Süre</p>
@@ -230,7 +230,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 <button 
                   onClick={() => handleVote(selectedSong.id)}
                   disabled={isVoting}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-black font-black uppercase tracking-widest text-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(212,175,55,0.3)]"
+                  className="w-full py-4 rounded-xl bg-[#c8323d] text-white font-black uppercase tracking-widest text-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(200,50,61,0.3)]"
                 >
                   {isVoting ? "Bekleyin..." : (
                     <>
