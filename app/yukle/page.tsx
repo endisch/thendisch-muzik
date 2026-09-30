@@ -10,11 +10,11 @@ export default async function YuklePage() {
   const session = await getServerSession(authOptions);
 
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
+    <main className="relative min-h-screen bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e]">
       {/* Avant-Garde Background Glows */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#c8323d]/5 blur-[150px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#c8323d]/5 blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
@@ -25,15 +25,15 @@ export default async function YuklePage() {
           </Link>
           
           {session?.user?.role === "ARTIST" && session?.user?.isVerifiedArtist && (
-            <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1.5 rounded-full flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
-              <span className="text-[#D4AF37] font-bold text-xs tracking-wide uppercase">Doğrulanmış Sanatçı</span>
+            <div className="bg-[#c8323d]/10 border border-[#c8323d]/20 px-3 py-1.5 rounded-full flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#ff777e]" />
+              <span className="text-[#ff777e] font-bold text-xs tracking-wide uppercase">Doğrulanmış Sanatçı</span>
             </div>
           )}
         </div>
 
         <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-4">Şarkını <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#8A6D1C]">Sahnele</span></h1>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-4">Şarkını <span className="text-[#ff777e]">Sahnele</span></h1>
           <p className="text-zinc-400 text-sm md:text-base max-w-xl mx-auto font-light">
             Eserini Thendisch topluluğu ile paylaş. VIP Lounge radyo kuyruğunda yerini al.
           </p>

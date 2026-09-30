@@ -31,7 +31,7 @@ export default function YukleClientView({ session }: { session: any }) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-12">
         <p className="text-zinc-400 font-medium mb-6">Şarkı yüklemek için önce giriş yapmalısınız.</p>
-        <Link href="/login" className="bg-[#D4AF37] text-black px-8 py-3 rounded-full font-bold tracking-widest uppercase transition-all hover:bg-[#F3E5AB]">
+        <Link href="/login" className="bg-[#c8323d] text-white px-8 py-3 rounded-full font-bold tracking-widest uppercase transition-all hover:bg-[#ff777e]">
           Giriş Yap
         </Link>
       </div>
