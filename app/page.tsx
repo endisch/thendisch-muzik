@@ -41,15 +41,15 @@ export default function LandingPage() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <div className="min-h-screen bg-[#0B0C10]" />;
+  if (!mounted) return <div className="min-h-screen bg-[#080808]" />;
 
   return (
-    <main className="relative bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37]">
+    <main className="relative bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e]">
       <Grain />
 
       {/* Abstract Glowing Orbs */}
-      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#D4AF37]/5 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full bg-[#D4AF37]/3 blur-[180px] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#c8323d]/5 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full bg-[#c8323d]/3 blur-[180px] pointer-events-none" />
 
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-8 md:px-16">
@@ -60,7 +60,7 @@ export default function LandingPage() {
           className="flex flex-col"
         >
           <span className="font-black text-2xl tracking-tighter leading-none">THENDISCH</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#D4AF37] leading-none mt-1">Studio</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#ff777e] leading-none mt-1">Studio</span>
         </motion.div>
         
         <motion.div
@@ -68,8 +68,8 @@ export default function LandingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Link href="/muzik" className="group flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-zinc-500 hover:text-[#D4AF37] transition-colors">
-            VIP Giriş
+          <Link href="/muzik" className="group flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-zinc-500 hover:text-[#ff777e] transition-colors">
+            Müzik Odası
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </motion.div>
@@ -84,7 +84,7 @@ export default function LandingPage() {
           className="max-w-5xl mx-auto flex flex-col items-center"
         >
           <motion.div variants={fadeUp} className="mb-8 overflow-hidden rounded-full border border-white/[0.05] bg-white/[0.02] backdrop-blur-md px-6 py-2">
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#D4AF37]">
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#ff777e]">
               Lüks, Kalite ve Kesintisiz Müzik
             </span>
           </motion.div>
@@ -94,7 +94,7 @@ export default function LandingPage() {
             className="text-balance font-black tracking-tighter text-white [font-size:clamp(3.5rem,8vw,8rem)] leading-[0.9]"
           >
             Sıradanlığı <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#8A6D1C]">
+            <span className="text-[#ff777e]">
               Reddet.
             </span>
           </motion.h1>
@@ -110,7 +110,7 @@ export default function LandingPage() {
             {/* Elegant, sophisticated Play button without background blob */}
             <Link 
               href="/muzik"
-              className="group flex items-center gap-3 border border-[#D4AF37]/50 rounded-full px-10 py-4 text-[#D4AF37] transition-all duration-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+              className="group flex items-center gap-3 border border-[#c8323d]/50 rounded-full px-10 py-4 text-[#ff777e] transition-all duration-500 hover:bg-[#c8323d]/10 hover:border-[#c8323d] hover:shadow-[0_0_30px_rgba(200,50,61,0.2)]"
             >
               <span className="font-bold uppercase tracking-widest text-sm">Deneyimi Başlat</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -128,7 +128,7 @@ export default function LandingPage() {
       </section>
 
       {/* Decorative Minimalist Features */}
-      <section className="relative z-10 border-t border-white/[0.05] bg-gradient-to-b from-[#121318]/50 to-[#0B0C10]">
+      <section className="relative z-10 border-t border-white/[0.05] bg-gradient-to-b from-[#121318]/50 to-[#080808]">
         <div className="mx-auto max-w-7xl px-8 py-24 md:py-32">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
             {[
@@ -154,9 +154,9 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: i * 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col gap-4 border-l border-white/[0.05] pl-6 hover:border-[#D4AF37]/30 transition-colors duration-500"
+                className="flex flex-col gap-4 border-l border-white/[0.05] pl-6 hover:border-[#c8323d]/30 transition-colors duration-500"
               >
-                <f.icon className="h-6 w-6 text-[#D4AF37]" strokeWidth={1.5} />
+                <f.icon className="h-6 w-6 text-[#ff777e]" strokeWidth={1.5} />
                 <h3 className="text-xl font-bold tracking-tight text-white">{f.title}</h3>
                 <p className="text-zinc-500 font-light leading-relaxed">{f.desc}</p>
               </motion.div>
