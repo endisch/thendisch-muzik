@@ -46,9 +46,9 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
   };
 
   return (
-    <main className="relative min-h-screen bg-[#0B0C10] text-white antialiased overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#D4AF37] pb-32">
+    <main className="relative min-h-screen bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e] pb-32">
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[150px]" />
+        <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#c8323d]/5 blur-[150px]" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
