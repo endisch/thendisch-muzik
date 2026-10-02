@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Bell, X } from "lucide-react";
-import Link from "next/link";
 
 type Notification = {
   id: string;
@@ -63,9 +62,9 @@ export default function NotificationBell() {
     <div className="relative" ref={menuRef}>
       <button 
         onClick={handleOpen}
-        className="relative p-2.5 bg-zinc-900/50 backdrop-blur-md border border-white/[0.06] hover:border-[#c8323d]/50 transition-colors rounded-xl group"
+        className="relative rounded-lg border border-white/[0.08] bg-[#171614] p-2.5 transition-colors hover:border-[#9A7950]/50 group"
       >
-        <Bell className="w-5 h-5 text-zinc-300 group-hover:text-[#ff777e] transition-colors" />
+        <Bell className="w-5 h-5 text-zinc-300 group-hover:text-[#D0B98D] transition-colors" />
         {unreadCount > 0 && (
           <span className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white shadow-lg">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -74,7 +73,7 @@ export default function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 bg-[#121318] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 origin-top-right animate-in fade-in zoom-in duration-200">
+        <div className="absolute right-0 mt-3 w-80 bg-[#171614] border border-white/10 rounded-lg shadow-2xl overflow-hidden z-50 origin-top-right animate-in fade-in zoom-in duration-200">
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/20">
             <h3 className="font-bold text-white text-sm tracking-wide">Bildirimler</h3>
             <button onClick={() => setIsOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
@@ -92,7 +91,7 @@ export default function NotificationBell() {
                 {notifications.map(notification => (
                   <div 
                     key={notification.id} 
-                    className={`p-3 rounded-xl flex gap-3 transition-colors ${notification.isRead ? "hover:bg-white/5 opacity-70" : "bg-white/5 border border-white/5"}`}
+                    className={`p-3 rounded-lg flex gap-3 transition-colors ${notification.isRead ? "hover:bg-white/5 opacity-70" : "bg-white/5 border border-white/5"}`}
                   >
                     <div className="text-sm text-zinc-200 leading-snug">
                       {notification.message}

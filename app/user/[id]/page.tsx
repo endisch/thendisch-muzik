@@ -1,15 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import UserClient from "./UserClient";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { getPlaybackUrl } from "@/lib/storage";
+import { SiteNavigation } from "@/components/SiteNavigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function PublicProfilePage({ params }: { params: { id: string } }) {
+export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const user = await prisma.user.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: {
       id: true,
       name: true,
@@ -46,19 +46,13 @@ export default async function PublicProfilePage({ params }: { params: { id: stri
   };
 
   return (
-    <main className="relative min-h-screen bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e] pb-32">
+    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased overflow-x-hidden selection:bg-[#9A7950]/30 selection:text-[#D0B98D] pb-32">
+      <SiteNavigation active="community" />
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#c8323d]/5 blur-[150px]" />
+        <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#9A7950]/5 hidden" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
-        <div className="mb-12">
-          <Link href="/muzik" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm font-medium mb-8">
-            <ArrowLeft className="w-4 h-4" />
-            Radyoya Dön
-          </Link>
-        </div>
-        
         <UserClient user={userWithUrls} />
       </div>
     </main>

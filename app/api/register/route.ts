@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/email";
-import crypto from "crypto";
+import { randomInt } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     if (existingUser) {
       if (!existingUser.emailVerified) {
         // Kullanıcı var ama doğrulamamış. Yeni kod gönderelim.
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        const code = randomInt(100000, 1000000).toString();
         const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 dakika
 
         // Yeni şifreyi de kaydedelim ki değiştirdiyse güncellensin
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         });
 
         // Mail gönder
-        const emailSent = await sendVerificationEmail(email, code);
+        await sendVerificationEmail(email, code);
         
         return NextResponse.json({ 
           message: "Hesap doğrulama bekliyor. Yeni kod gönderildi.", 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     }
 
     // 6 haneli doğrulama kodu oluştur
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationCode = randomInt(100000, 1000000).toString();
     const verificationCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 dakika geçerli
 
     await prisma.user.create({

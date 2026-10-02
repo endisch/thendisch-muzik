@@ -174,18 +174,18 @@ export default function LiveChat() {
   };
 
   return (
-    <div className="flex flex-col h-[700px] w-full bg-[#101010] border border-white/[0.08] rounded-2xl overflow-hidden shadow-[0_18px_60px_rgba(0,0,0,0.35)] relative z-20">
+    <div className="relative z-20 flex h-[700px] w-full flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-[#171614]">
       
       {/* Context Menu (Sağ Tık) */}
       {contextMenu?.visible && (
         <div 
           style={{ top: contextMenu.y, left: contextMenu.x }}
-          className="fixed z-50 bg-[#080808] border border-white/10 rounded-2xl shadow-2xl w-56 py-2 overflow-hidden flex flex-col"
+          className="fixed z-50 bg-[#100F0E] border border-white/10 rounded-lg shadow-2xl w-56 py-2 overflow-hidden flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="px-4 py-2 border-b border-white/5 mb-1">
             <p className="text-xs font-bold text-zinc-400">Hedef Kullanıcı</p>
-            <p className="text-sm font-black text-[#ff777e] truncate">{contextMenu.userName}</p>
+            <p className="text-sm font-black text-[#D0B98D] truncate">{contextMenu.userName}</p>
           </div>
           <button onClick={() => openModModal("PROFILE")} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 text-sm text-zinc-300 font-medium transition-colors text-left w-full"><Shield className="w-4 h-4 text-emerald-500" /> Profil Özeti</button>
           <button onClick={() => openModModal("MESSAGES")} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 text-sm text-zinc-300 font-medium transition-colors text-left w-full"><MessageSquare className="w-4 h-4 text-blue-500" /> Mesaj Geçmişi</button>
@@ -197,8 +197,8 @@ export default function LiveChat() {
 
       {/* Moderasyon Modalı */}
       {activeModal && (
-        <div className="absolute inset-0 z-40 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#101010] border border-white/10 rounded-2xl w-full max-w-md max-h-[90%] flex flex-col shadow-2xl overflow-hidden relative">
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/80 p-4">
+          <div className="bg-[#171614] border border-white/10 rounded-lg w-full max-w-md max-h-[90%] flex flex-col shadow-2xl overflow-hidden relative">
             <div className="flex items-center justify-between p-5 border-b border-white/5 bg-[#151515]">
               <h3 className="font-black text-white text-lg">
                 {activeModal === "PROFILE" && "Kullanıcı Özeti"}
@@ -213,12 +213,12 @@ export default function LiveChat() {
             
             <div className="flex-1 overflow-y-auto p-5 no-scrollbar">
               {modLoading ? (
-                <div className="flex items-center justify-center h-40 text-[#ff777e] animate-pulse font-bold">Veriler Yükleniyor...</div>
+                <div className="flex items-center justify-center h-40 text-[#D0B98D] animate-pulse font-bold">Veriler Yükleniyor...</div>
               ) : modData ? (
                 <div className="flex flex-col gap-4">
                   {/* Profil Detayları */}
-                  <div className="flex items-center gap-4 bg-black/50 p-4 rounded-2xl border border-white/5 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-zinc-800 shrink-0 border border-[#c8323d]/30 flex items-center justify-center overflow-hidden text-[#ff777e] font-black text-xl">
+                  <div className="flex items-center gap-4 bg-black/50 p-4 rounded-lg border border-white/5 mb-4">
+                    <div className="w-12 h-12 rounded-lg bg-zinc-800 shrink-0 border border-[#9A7950]/30 flex items-center justify-center overflow-hidden text-[#D0B98D] font-black text-xl">
                       {modData.image ? <img src={modData.image} alt="Avatar" className="w-full h-full object-cover" /> : modData.name?.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -229,15 +229,15 @@ export default function LiveChat() {
 
                   {activeModal === "PROFILE" && (
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                      <div className="bg-white/5 p-4 rounded-lg border border-white/5">
                         <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Yetki</p>
                         <p className="font-bold text-white">{modData.role}</p>
                       </div>
-                      <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                      <div className="bg-white/5 p-4 rounded-lg border border-white/5">
                         <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Şarkı Kredisi</p>
-                        <p className="font-bold text-[#ff777e]">{modData.uploadCredits}</p>
+                        <p className="font-bold text-[#D0B98D]">{modData.uploadCredits}</p>
                       </div>
-                      <div className="bg-white/5 p-4 rounded-2xl border border-white/5 col-span-2">
+                      <div className="bg-white/5 p-4 rounded-lg border border-white/5 col-span-2">
                         <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Ceza Durumu</p>
                         {modData.chatTimeoutUntil && new Date(modData.chatTimeoutUntil) > new Date() ? (
                           <p className="font-bold text-red-500">Susturuldu (Bitiş: {new Date(modData.chatTimeoutUntil).toLocaleString("tr-TR")})</p>
@@ -254,7 +254,7 @@ export default function LiveChat() {
                         <p className="text-zinc-500 text-center py-4 text-sm font-medium">Hiç mesajı yok.</p>
                       ) : (
                         modData.messages.map(m => (
-                          <div key={m.id} className="bg-white/5 p-3 rounded-xl border border-white/5">
+                          <div key={m.id} className="bg-white/5 p-3 rounded-lg border border-white/5">
                             <p className="text-sm text-zinc-300">{m.text}</p>
                             <p className="text-[10px] text-zinc-600 mt-2">{new Date(m.createdAt).toLocaleString("tr-TR")}</p>
                           </div>
@@ -269,8 +269,8 @@ export default function LiveChat() {
                         <p className="text-zinc-500 text-center py-4 text-sm font-medium">Yüklediği şarkı yok.</p>
                       ) : (
                         modData.songs.map(s => (
-                          <div key={s.id} className="bg-white/5 p-3 rounded-xl border border-white/5 flex items-center gap-3">
-                            <Music className="w-4 h-4 text-[#ff777e]" />
+                          <div key={s.id} className="bg-white/5 p-3 rounded-lg border border-white/5 flex items-center gap-3">
+                            <Music className="w-4 h-4 text-[#D0B98D]" />
                             <div className="flex-1 truncate">
                               <p className="text-sm font-bold text-zinc-300 truncate">{s.title}</p>
                               <p className="text-[10px] text-zinc-600 mt-1">{new Date(s.createdAt).toLocaleDateString("tr-TR")}</p>
@@ -284,10 +284,10 @@ export default function LiveChat() {
                   {activeModal === "TIMEOUT" && (
                     <div className="flex flex-col gap-3">
                       <p className="text-sm text-zinc-400 mb-2">Kullanıcının sohbete mesaj yazmasını ne kadar süreliğine engellemek istiyorsunuz?</p>
-                      <button onClick={() => handleTimeout(15)} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-4 rounded-2xl font-black text-sm transition-all text-center">15 Dakika Sustur</button>
-                      <button onClick={() => handleTimeout(60)} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-4 rounded-2xl font-black text-sm transition-all text-center">1 Saat Sustur</button>
-                      <button onClick={() => handleTimeout(1440)} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-4 rounded-2xl font-black text-sm transition-all text-center">24 Saat Sustur</button>
-                      <button onClick={() => handleTimeout(0)} className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 py-4 rounded-2xl font-black text-sm transition-all text-center mt-4">Cezayı Kaldır</button>
+                      <button onClick={() => handleTimeout(15)} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-4 rounded-lg font-black text-sm transition-all text-center">15 Dakika Sustur</button>
+                      <button onClick={() => handleTimeout(60)} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-4 rounded-lg font-black text-sm transition-all text-center">1 Saat Sustur</button>
+                      <button onClick={() => handleTimeout(1440)} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-4 rounded-lg font-black text-sm transition-all text-center">24 Saat Sustur</button>
+                      <button onClick={() => handleTimeout(0)} className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 py-4 rounded-lg font-black text-sm transition-all text-center mt-4">Cezayı Kaldır</button>
                     </div>
                   )}
                   
@@ -302,7 +302,7 @@ export default function LiveChat() {
       <div className="relative p-5 border-b border-white/[0.08] bg-[#151515] flex items-center justify-between">
         <div>
           <h2 className="text-lg font-black text-white tracking-tight flex items-center gap-2">
-            VIP <span className="text-[#ff777e]">Lounge</span>
+            VIP <span className="text-[#D0B98D]">Lounge</span>
           </h2>
           <p className="text-[10px] uppercase tracking-widest text-zinc-500 mt-1">Canlı Sohbet</p>
         </div>
@@ -325,14 +325,14 @@ export default function LiveChat() {
             return (
               <div key={msg.id || idx} className={`flex gap-3 group ${isMyMsg ? 'flex-row-reverse' : ''}`}>
                 <div 
-                  className="w-8 h-8 rounded-full bg-zinc-800 shrink-0 border border-white/5 overflow-hidden flex items-center justify-center cursor-pointer hover:border-[#c8323d] transition-colors"
+                  className="w-8 h-8 rounded-full bg-zinc-800 shrink-0 border border-white/5 overflow-hidden flex items-center justify-center cursor-pointer hover:border-[#9A7950] transition-colors"
                   onClick={() => router.push(`/user/${msg.user.id}`)}
                   onContextMenu={(e) => handleContextMenu(e, msg.user.id, msg.user.name || "Anonim")}
                 >
                   {msg.user.image ? (
                     <img src={msg.user.image} alt="Avatar" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-[10px] font-bold text-[#ff777e]">{msg.user.name?.charAt(0).toUpperCase()}</span>
+                    <span className="text-[10px] font-bold text-[#D0B98D]">{msg.user.name?.charAt(0).toUpperCase()}</span>
                   )}
                 </div>
                 <div className={`flex flex-col max-w-[75%] ${isMyMsg ? 'items-end' : 'items-start'}`}>
@@ -342,7 +342,7 @@ export default function LiveChat() {
                     onContextMenu={(e) => handleContextMenu(e, msg.user.id, msg.user.name || "Anonim")}
                   >
                     <span className="text-[10px] text-zinc-500 font-medium hover:text-white transition-colors">{msg.user.name}</span>
-                    {msg.user.isVerifiedArtist && <span title="Doğrulanmış Sanatçı"><CheckCircle2 className="w-3 h-3 text-[#ff777e]" /></span>}
+                    {msg.user.isVerifiedArtist && <span title="Doğrulanmış Sanatçı"><CheckCircle2 className="w-3 h-3 text-[#D0B98D]" /></span>}
                     {msg.user.role === "ADMIN" && <span title="Yönetici"><ShieldAlert className="w-3 h-3 text-red-500" /></span>}
                   </div>
                   
@@ -357,7 +357,7 @@ export default function LiveChat() {
                       </button>
                     )}
                     
-                    <div className={`px-4 py-2.5 rounded-2xl text-sm ${isMyMsg ? 'bg-[#c8323d] text-white rounded-tr-sm font-medium' : 'bg-white/[0.04] text-zinc-300 rounded-tl-sm border border-white/[0.02]'}`}>
+                    <div className={`px-4 py-2.5 rounded-lg text-sm ${isMyMsg ? 'bg-[#9A7950] text-white rounded-tr-sm font-medium' : 'bg-white/[0.04] text-zinc-300 rounded-tl-sm border border-white/[0.02]'}`}>
                       {msg.text}
                     </div>
 
@@ -379,7 +379,7 @@ export default function LiveChat() {
         )}
       </div>
 
-      <div className="p-4 border-t border-white/[0.05] bg-[#080808]">
+      <div className="p-4 border-t border-white/[0.05] bg-[#100F0E]">
         {session?.user ? (
           <form onSubmit={sendMessage} className="relative">
             <input 
@@ -388,19 +388,19 @@ export default function LiveChat() {
               onChange={(e) => setInput(e.target.value)}
               maxLength={200}
               placeholder="Mesajınızı yazın..." 
-              className="w-full bg-white/[0.03] border border-white/[0.08] text-white text-sm rounded-full px-5 py-3.5 pr-12 focus:outline-none focus:border-[#c8323d]/50 focus:bg-white/[0.05] transition-all"
+              className="w-full rounded-lg border border-white/[0.08] bg-black/30 px-4 py-3.5 pr-12 text-sm text-white transition-colors focus:border-[#9A7950]/50 focus:bg-black/50 focus:outline-none"
             />
             <button 
               type="submit" 
               disabled={!input.trim()}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-[#c8323d] text-white rounded-full disabled:opacity-50 disabled:bg-zinc-700 transition-colors"
+              className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md bg-[#9A7950] text-white transition-colors disabled:bg-zinc-700 disabled:opacity-50"
             >
               <Send className="w-4 h-4 translate-x-px translate-y-px" />
             </button>
           </form>
         ) : (
-          <div className="text-center text-xs text-zinc-500 p-3 bg-white/[0.02] rounded-xl border border-white/[0.02]">
-            Sohbete katılmak için <a href="/login" className="text-[#ff777e] font-bold hover:underline">Giriş Yapın</a>
+          <div className="text-center text-xs text-zinc-500 p-3 bg-white/[0.02] rounded-lg border border-white/[0.02]">
+            Sohbete katılmak için <a href="/login" className="text-[#D0B98D] font-bold hover:underline">Giriş Yapın</a>
           </div>
         )}
       </div>

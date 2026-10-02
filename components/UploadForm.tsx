@@ -128,10 +128,10 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
     <div className="w-full">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative flex items-center justify-between w-full rounded-2xl bg-gradient-to-r from-zinc-900/80 to-black/80 border border-white/[0.05] p-5 shadow-2xl transition-all hover:border-[#c8323d]/50"
+        className="group relative flex items-center justify-between w-full rounded-lg bg-[#171614] border border-white/[0.08] p-5 transition-colors hover:border-[#9A7950]/60"
       >
         <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#c8323d]/10 text-[#ff777e] transition-transform group-hover:scale-110">
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#9A7950]/10 text-[#D0B98D] transition-transform group-hover:scale-110">
             <UploadCloud className="h-5 w-5" />
           </div>
           <div className="text-left">
@@ -139,7 +139,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
             <p className="text-xs text-zinc-500 font-medium mt-0.5">MP3 / WAV formatında eserini ekle</p>
           </div>
         </div>
-        <div className={`rounded-full border border-white/10 p-2 text-zinc-500 transition-transform ${isOpen ? "rotate-180 bg-white/5" : "group-hover:bg-[#c8323d] group-hover:text-white group-hover:border-[#c8323d]"}`}>
+        <div className={`rounded-full border border-white/10 p-2 text-zinc-500 transition-transform ${isOpen ? "rotate-180 bg-white/5" : "group-hover:bg-[#9A7950] group-hover:text-white group-hover:border-[#9A7950]"}`}>
           <ChevronDown className="h-4 w-4" />
         </div>
       </button>
@@ -152,7 +152,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
             exit={{ height: 0, opacity: 0 }}
             className="overflow-visible mt-4 relative z-50"
           >
-            <div className="rounded-3xl border border-white/[0.05] bg-gradient-to-b from-zinc-900/60 to-[#050505]/80 p-6 sm:p-8 shadow-2xl backdrop-blur-xl flex flex-col gap-6 relative">
+            <div className="rounded-xl border border-white/[0.08] bg-[#171614] p-6 sm:p-8 flex flex-col gap-6 relative">
               
               <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-widest">Kapat</button>
 
@@ -164,7 +164,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Örn. Gece Yarısı Sinyali"
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#c8323d]/40 focus:shadow-[0_0_0_3px_rgba(200,50,61,0.1)]"
+                    className="w-full rounded-lg border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#9A7950]/40 focus:shadow-sm"
                   />
                 </div>
                 <div>
@@ -174,7 +174,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={artist}
                     onChange={(e) => setArtist(e.target.value)}
                     placeholder="Örn. Thendisch"
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#c8323d]/40 focus:shadow-[0_0_0_3px_rgba(200,50,61,0.1)]"
+                    className="w-full rounded-lg border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#9A7950]/40 focus:shadow-sm"
                   />
                 </div>
               </div>
@@ -182,16 +182,16 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Ses Dosyası (.mp3 / .wav)</label>
-                  <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-[#c8323d]/40 hover:bg-[#c8323d]/5">
-                    <UploadCloud className="h-6 w-6 text-[#ff777e]/70" />
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-[#9A7950]/40 hover:bg-[#9A7950]/5">
+                    <UploadCloud className="h-6 w-6 text-[#D0B98D]/70" />
                     <span className="text-xs text-zinc-400 font-medium">{file ? file.name : "Ses dosyasını seç"}</span>
-                    {durationSec && <span className="text-[10px] text-[#ff777e] font-mono font-bold bg-[#c8323d]/10 px-2 py-1 rounded-md">{Math.floor(durationSec)} sn</span>}
+                    {durationSec && <span className="text-[10px] text-[#D0B98D] font-mono font-bold bg-[#9A7950]/10 px-2 py-1 rounded-md">{Math.floor(durationSec)} sn</span>}
                     <input type="file" accept="audio/*" onChange={handleFileChange} className="hidden" required />
                   </label>
                 </div>
                 <div>
                   <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kapak Görseli</label>
-                  <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-zinc-500/30 hover:bg-white/[0.02]">
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-white/[0.12] bg-black/30 px-4 py-6 text-center transition-colors hover:border-zinc-500/30 hover:bg-white/[0.02]">
                     <ImageIcon className="h-6 w-6 text-zinc-500/70" />
                     <span className="text-xs text-zinc-400 font-medium">{coverFile ? coverFile.name : "Opsiyonel görsel seç"}</span>
                     <input type="file" accept="image/*" onChange={handleCoverChange} className="hidden" />
@@ -205,7 +205,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                   <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Kategoriler</label>
                   <div 
                     onClick={() => setIsCatOpen(!isCatOpen)}
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#c8323d]/40 transition-all flex items-center justify-between"
+                    className="w-full rounded-lg border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#9A7950]/40 transition-all flex items-center justify-between"
                   >
                     <span className="truncate">{selectedCategories.length > 0 ? selectedCategories.join(", ") : "Kategori Seçin..."}</span>
                     <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isCatOpen ? "rotate-180" : ""}`} />
@@ -216,7 +216,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute top-full left-0 w-full mt-2 bg-[#1A1C23] border border-white/[0.1] rounded-xl shadow-2xl overflow-hidden z-50 max-h-48 overflow-y-auto no-scrollbar"
+                        className="absolute top-full left-0 w-full mt-2 bg-[#1A1C23] border border-white/[0.1] rounded-lg shadow-2xl overflow-hidden z-50 max-h-48 overflow-y-auto no-scrollbar"
                       >
                         {CATEGORIES.map(cat => (
                           <label key={cat} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.03] cursor-pointer border-b border-white/[0.02] last:border-0">
@@ -224,9 +224,9 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                               type="checkbox" 
                               checked={selectedCategories.includes(cat)} 
                               onChange={() => handleCategoryToggle(cat)} 
-                              className="w-4 h-4 rounded border-zinc-700 text-[#ff777e] focus:ring-[#c8323d] bg-black/50 accent-[#c8323d]"
+                              className="w-4 h-4 rounded border-zinc-700 text-[#D0B98D] focus:ring-[#9A7950] bg-black/50 accent-[#9A7950]"
                             />
-                            <span className={`text-sm ${selectedCategories.includes(cat) ? 'text-[#ff777e] font-bold' : 'text-zinc-300'}`}>{cat}</span>
+                            <span className={`text-sm ${selectedCategories.includes(cat) ? 'text-[#D0B98D] font-bold' : 'text-zinc-300'}`}>{cat}</span>
                           </label>
                         ))}
                       </motion.div>
@@ -239,7 +239,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                   <label className="mb-2 block font-mono text-[10px] uppercase tracking-[0.15em] text-zinc-500">Türler</label>
                   <div 
                     onClick={() => setIsGenOpen(!isGenOpen)}
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#c8323d]/40 transition-all flex items-center justify-between"
+                    className="w-full rounded-lg border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-white outline-none cursor-pointer hover:border-[#9A7950]/40 transition-all flex items-center justify-between"
                   >
                     <span className="truncate">{selectedGenres.length > 0 ? selectedGenres.join(", ") : "Tür Seçin..."}</span>
                     <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isGenOpen ? "rotate-180" : ""}`} />
@@ -250,7 +250,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute top-full left-0 w-full mt-2 bg-[#1A1C23] border border-white/[0.1] rounded-xl shadow-2xl overflow-hidden z-50 max-h-48 overflow-y-auto no-scrollbar"
+                        className="absolute top-full left-0 w-full mt-2 bg-[#1A1C23] border border-white/[0.1] rounded-lg shadow-2xl overflow-hidden z-50 max-h-48 overflow-y-auto no-scrollbar"
                       >
                         {GENRES.map(gen => (
                           <label key={gen} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.03] cursor-pointer border-b border-white/[0.02] last:border-0">
@@ -258,9 +258,9 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                               type="checkbox" 
                               checked={selectedGenres.includes(gen)} 
                               onChange={() => handleGenreToggle(gen)}
-                              className="w-4 h-4 rounded border-zinc-700 text-[#ff777e] focus:ring-[#c8323d] bg-black/50 accent-[#c8323d]"
+                              className="w-4 h-4 rounded border-zinc-700 text-[#D0B98D] focus:ring-[#9A7950] bg-black/50 accent-[#9A7950]"
                             />
-                            <span className={`text-sm ${selectedGenres.includes(gen) ? 'text-[#ff777e] font-bold' : 'text-zinc-300'}`}>{gen}</span>
+                            <span className={`text-sm ${selectedGenres.includes(gen) ? 'text-[#D0B98D] font-bold' : 'text-zinc-300'}`}>{gen}</span>
                           </label>
                         ))}
                       </motion.div>
@@ -276,7 +276,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={lyricsLrc}
                     onChange={(e) => setLyricsLrc(e.target.value)}
                     placeholder="[00:12.50] İlk satır..."
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#c8323d]/40 focus:shadow-[0_0_0_3px_rgba(200,50,61,0.1)] h-24 resize-none font-mono"
+                    className="w-full rounded-lg border border-white/[0.08] bg-black/40 px-4 py-3 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#9A7950]/40 focus:shadow-sm h-24 resize-none font-mono"
                   />
                 </div>
                 <div>
@@ -286,7 +286,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
                     value={youtubeUrl}
                     onChange={(e) => setYoutubeUrl(e.target.value)}
                     placeholder="https://youtube.com/watch?v=..."
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#c8323d]/40 focus:shadow-[0_0_0_3px_rgba(200,50,61,0.1)]"
+                    className="w-full rounded-lg border border-white/[0.08] bg-black/40 px-4 py-3.5 text-sm text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-[#9A7950]/40 focus:shadow-sm"
                   />
                 </div>
               </div>
@@ -294,7 +294,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess: () =>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full rounded-xl bg-[#c8323d] py-4 text-sm font-black text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(200,50,61,0.3)] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none uppercase tracking-wider mt-4"
+                className="w-full rounded-lg bg-[#9A7950] py-4 text-sm font-black text-white transition-all duration-300 hover:scale-[1.01] hover:shadow-sm active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none uppercase tracking-wider mt-4"
               >
                 {loading ? "Yükleniyor..." : "Yükle ve Kuyruğa Ekle"}
               </button>

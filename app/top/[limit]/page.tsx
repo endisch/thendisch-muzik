@@ -1,16 +1,27 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, Trophy, Music } from "lucide-react";
 import TopListClient from "./TopListClient";
+import { SiteNavigation } from "@/components/SiteNavigation";
+import { getPlaybackUrl } from "@/lib/storage";
+
+type ChartSong = {
+  id: string;
+  title: string;
+  artist: string;
+  monthlyVotes: number;
+  coverUrl: string | null;
+  playbackUrl: string;
+};
 
 export const dynamic = "force-dynamic";
 
-export default async function TopPage({ params }: { params: { limit: string } }) {
-  const limitNum = parseInt(params.limit) || 10;
+export default async function TopPage({ params }: { params: Promise<{ limit: string }> }) {
+  const { limit } = await params;
+  const limitNum = parseInt(limit) || 10;
   
   if (![10, 20, 50].includes(limitNum)) {
     return (
-      <div className="min-h-screen bg-[#080808] flex items-center justify-center">
+      <div className="min-h-screen bg-[#100F0E] flex items-center justify-center">
         <div className="text-zinc-500 font-mono text-sm uppercase tracking-widest border border-white/10 px-8 py-4 rounded-full">
           Geçersiz liste limiti.
         </div>
@@ -18,8 +29,7 @@ export default async function TopPage({ params }: { params: { limit: string } })
     );
   }
 
-  const { getPlaybackUrl } = await import("@/lib/storage");
-  let topSongs = [];
+  let topSongs: ChartSong[] = [];
 
   if (limitNum === 50) {
     // 50 = ARŞİV: Bugüne kadar en çok oy alan (Tüm Zamanlar)
@@ -107,52 +117,26 @@ export default async function TopPage({ params }: { params: { limit: string } })
   const subTitle = titles[limitNum as keyof typeof titles] || "Koleksiyon";
 
   return (
-    <main className="relative min-h-screen bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e] pb-32">
-      {/* Avant-Garde Background Glows */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#c8323d]/5 blur-[150px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#c8323d]/5 blur-[120px]" />
-      </div>
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 py-12">
-        <div className="mb-12 flex items-center justify-between">
-          <Link href="/muzik" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm font-medium">
-            <ArrowLeft className="w-4 h-4" />
-            Radyoya Dön
-          </Link>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02]">
-            <Trophy className="w-4 h-4 text-[#ff777e]" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-              {limitNum === 50 ? "Tüm Zamanlar" : "Aylık Liste"}
-            </span>
-          </div>
-        </div>
-
-        {/* Hero Banner */}
-        <div className="relative h-72 md:h-80 rounded-[2.5rem] overflow-hidden mb-16 shadow-2xl flex flex-col items-center justify-center border border-white/[0.05]">
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-[#121318] opacity-80 z-10"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(200,50,61,0.15),transparent_70%)] z-10 pointer-events-none" />
-          <img 
-            src={`/images/top-${limitNum}.jpg`} 
-            alt={`Top ${limitNum}`} 
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-20 mix-blend-overlay grayscale"
-          />
-          <div className="relative z-20 text-center flex flex-col items-center">
-            <span className="font-mono text-[11px] uppercase tracking-[0.4em] text-[#ff777e] mb-4">
-              {subTitle}
-            </span>
-            <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-white drop-shadow-2xl">
-              {limitNum === 50 ? "ARŞİV" : (
-                <>TOP <span className="text-[#ff777e]">{limitNum}</span></>
-              )}
+    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased overflow-x-hidden selection:bg-[#9A7950]/30 selection:text-[#D0B98D] pb-24">
+      <SiteNavigation active="charts" />
+      <div className="studio-page-width relative z-10 py-12 sm:py-16">
+        <header className="chart-page-heading">
+          <div>
+            <p className="studio-page-kicker">{limitNum === 50 ? "Thendisch arşivi" : "Topluluğun seçimi · aylık liste"}</p>
+            <h1 className="studio-page-title mt-4">
+              {limitNum === 50 ? "Arşiv" : <>Top <span className="studio-page-title-accent">{limitNum}</span></>}
             </h1>
+            <p className="chart-page-description">{subTitle} — topluluğun dinleyip oy verdiği parçalar.</p>
           </div>
-        </div>
-
-        {/* Song List */}
-        <div className="bg-[#121318]/50 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-12 border border-white/[0.05] shadow-2xl">
+          <nav className="chart-range-nav" aria-label="Liste türü">
+            <Link href="/top/10" aria-current={limitNum === 10 ? "page" : undefined}>Top 10</Link>
+            <Link href="/top/20" aria-current={limitNum === 20 ? "page" : undefined}>Keşifler</Link>
+            <Link href="/top/50" aria-current={limitNum === 50 ? "page" : undefined}>Arşiv</Link>
+          </nav>
+        </header>
+        <section className="chart-list-shell" aria-label={`${subTitle} parça listesi`}>
           <TopListClient initialSongs={topSongs} />
-        </div>
+        </section>
       </div>
     </main>
   );

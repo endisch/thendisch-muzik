@@ -1,175 +1,116 @@
-"use client";
-
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Music, Trophy, Disc3, ArrowRight } from "lucide-react";
+import { ArrowRight, Trophy, Radio, Upload, UsersRound, UserRound } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { SiteNavigation } from "@/components/SiteNavigation";
 
-function Grain() {
+const destinations = [
+  { number: "01", icon: Radio, title: "Müzik Odası", description: "Canlı yayına katıl, sıradaki parçayı dinle ve sohbete dahil ol.", href: "/muzik", action: "Dinlemeye başla", style: "featured" },
+  { number: "02", icon: Trophy, title: "Topluluk listeleri", description: "Bu ayın favorilerini ve arşivde iz bırakan parçaları keşfet.", href: "/top/10", action: "Top 10'u aç", style: "" },
+  { number: "03", icon: Upload, title: "Parçanı sahnele", description: "Üretimini paylaş, topluluğun ortak akışında yerini al.", href: "/yukle", action: "Şarkı yükle", style: "" },
+  { number: "04", icon: UsersRound, title: "Topluluk", description: "En aktif dinleyicileri ve üreticileri tanı.", href: "/liderler", action: "Liderlik tablosu", style: "" },
+  { number: "05", icon: UserRound, title: "Hesabın", description: "Giriş yap, profilini düzenle ve dinleme geçmişine ulaş.", href: "/login", action: "Giriş / Üyelik", style: "" },
+];
+
+function VinylArtwork() {
   return (
-    <div
-      className="pointer-events-none fixed inset-0 z-[1] opacity-[0.03] mix-blend-overlay"
-      style={{
-        backgroundImage:
-          "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-      }}
-    />
+    <div className="home-art" aria-hidden="true">
+      <div className="home-art-index">
+        <span className="home-art-index-dot" />
+        <span>THENDISCH RADIO</span>
+        <span className="home-art-index-live">MÜZİK · TOPLULUK</span>
+      </div>
+      <div className="vinyl-disc">
+        <svg className="vinyl-grooves" viewBox="0 0 440 440" fill="none">
+          <circle cx="220" cy="220" r="206" />
+          <circle cx="220" cy="220" r="193" />
+          <circle cx="220" cy="220" r="178" />
+          <circle cx="220" cy="220" r="163" />
+          <circle cx="220" cy="220" r="146" />
+          <circle cx="220" cy="220" r="128" />
+          <circle cx="220" cy="220" r="108" />
+          <circle cx="220" cy="220" r="87" />
+          <path d="M220 14a206 206 0 0 1 145.66 60.34" />
+        </svg>
+        <div className="vinyl-label">
+          <span className="vinyl-label-mark">T</span>
+          <span className="vinyl-label-name">THENDISCH</span>
+          <span className="vinyl-label-sub">BAĞIMSIZ MÜZİK</span>
+          <span className="vinyl-label-hole" />
+        </div>
+      </div>
+    </div>
   );
 }
 
-const container: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.3 },
-  },
-};
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 export default function LandingPage() {
-  const reduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return <div className="min-h-screen bg-[#080808]" />;
-
   return (
-    <main className="relative bg-[#080808] text-white antialiased overflow-x-hidden selection:bg-[#c8323d]/30 selection:text-[#ff777e]">
-      <Grain />
+    <main className="studio-home">
+      <SiteNavigation active="home" />
 
-      {/* Abstract Glowing Orbs */}
-      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#c8323d]/5 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full bg-[#c8323d]/3 blur-[180px] pointer-events-none" />
-
-      {/* Navigation */}
-      <nav className="relative z-10 flex items-center justify-between px-8 py-8 md:px-16">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col"
-        >
-          <span className="font-black text-2xl tracking-tighter leading-none">THENDISCH</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#ff777e] leading-none mt-1">Studio</span>
-        </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <Link href="/muzik" className="group flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-zinc-500 hover:text-[#ff777e] transition-colors">
-            Müzik Odası
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </motion.div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="relative z-10 flex flex-col items-center justify-center min-h-[75vh] px-6 text-center pb-20">
-        <motion.div
-          variants={reduceMotion ? undefined : container}
-          initial="hidden"
-          animate="show"
-          className="max-w-5xl mx-auto flex flex-col items-center"
-        >
-          <motion.div variants={fadeUp} className="mb-8 overflow-hidden rounded-full border border-white/[0.05] bg-white/[0.02] backdrop-blur-md px-6 py-2">
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#ff777e]">
-              Lüks, Kalite ve Kesintisiz Müzik
-            </span>
-          </motion.div>
-
-          <motion.h1 
-            variants={fadeUp}
-            className="text-balance font-black tracking-tighter text-white [font-size:clamp(3.5rem,8vw,8rem)] leading-[0.9]"
-          >
-            Sıradanlığı <br />
-            <span className="text-[#ff777e]">
-              Reddet.
-            </span>
-          </motion.h1>
-
-          <motion.p 
-            variants={fadeUp}
-            className="mt-8 max-w-2xl text-balance text-lg md:text-xl text-zinc-400 font-light leading-relaxed"
-          >
-            Dünyanın ilk sanat galerisi formatındaki canlı müzik kulübü. Kendi müziklerini yükle, topluluğun seçtiği ritimlere yön ver ve VIP Lounge'da elit dinleyicilerle anı yaşa.
-          </motion.p>
-
-          <motion.div variants={fadeUp} className="mt-14 flex flex-col sm:flex-row items-center gap-6">
-            {/* Elegant, sophisticated Play button without background blob */}
-            <Link 
-              href="/muzik"
-              className="group flex items-center gap-3 border border-[#c8323d]/50 rounded-full px-10 py-4 text-[#ff777e] transition-all duration-500 hover:bg-[#c8323d]/10 hover:border-[#c8323d] hover:shadow-[0_0_30px_rgba(200,50,61,0.2)]"
-            >
-              <span className="font-bold uppercase tracking-widest text-sm">Deneyimi Başlat</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+      <section className="home-hero" aria-labelledby="home-title">
+        <div className="home-copy">
+          <p className="home-eyebrow"><span /> THENDISCH STUDIO · BAĞIMSIZ MÜZİK TOPLULUĞU</p>
+          <h1 id="home-title" className="home-title">
+            Müziğin
+            <span>buluştuğu yer.</span>
+          </h1>
+          <p className="home-description">
+            Canlı dinle, yeni parçalar keşfet ve kendi üretimini müzik topluluğuyla paylaş.
+          </p>
+          <div className="home-actions">
+            <Link href="/muzik" className="home-primary-action">
+              Müzik odasına geç <ArrowRight size={17} strokeWidth={1.8} />
             </Link>
-            
-            <Link 
-              href="/top/10"
-              className="group flex items-center gap-3 rounded-full border border-white/10 px-10 py-4 text-white transition-all duration-500 hover:border-white/30 hover:bg-white/[0.02]"
-            >
-              <Trophy className="h-4 w-4 text-zinc-500 group-hover:text-white transition-colors" />
-              <span className="font-medium uppercase tracking-widest text-sm text-zinc-300 group-hover:text-white transition-colors">Zirvedekiler</span>
+            <Link href="/top/10" className="home-secondary-action">
+              <Trophy size={16} strokeWidth={1.6} /> Listeleri keşfet
             </Link>
-          </motion.div>
-        </motion.div>
+          </div>
+          <div className="home-proof">
+            <span className="home-proof-line" />
+            <span>Dinle · Keşfet · Paylaş</span>
+          </div>
+        </div>
+
+        <VinylArtwork />
       </section>
 
-      {/* Decorative Minimalist Features */}
-      <section className="relative z-10 border-t border-white/[0.05] bg-gradient-to-b from-[#121318]/50 to-[#080808]">
-        <div className="mx-auto max-w-7xl px-8 py-24 md:py-32">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
-            {[
-              {
-                icon: Disc3,
-                title: "Kusursuz Akustik",
-                desc: "Her parça, en ince detayına kadar dinleyicilerin onayından geçer."
-              },
-              {
-                icon: Music,
-                title: "Senin Sahnen",
-                desc: "Doğrulanmış sanatçı ol, eserlerini milyonların beğenebileceği bir vitrine taşı."
-              },
-              {
-                icon: Trophy,
-                title: "Koleksiyon",
-                desc: "Her ayın en elit 10 parçası arşivlenir ve Thendisch efsaneleri arasına girer."
-              }
-            ].map((f, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: i * 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col gap-4 border-l border-white/[0.05] pl-6 hover:border-[#c8323d]/30 transition-colors duration-500"
-              >
-                <f.icon className="h-6 w-6 text-[#ff777e]" strokeWidth={1.5} />
-                <h3 className="text-xl font-bold tracking-tight text-white">{f.title}</h3>
-                <p className="text-zinc-500 font-light leading-relaxed">{f.desc}</p>
-              </motion.div>
-            ))}
+      <section className="home-destinations" aria-labelledby="home-destinations-title">
+        <div className="home-destinations-heading">
+          <div>
+            <p className="home-eyebrow"><span /> PLATFORM</p>
+            <h2 id="home-destinations-title">Stüdyoyu<br /><em>keşfet.</em></h2>
           </div>
+          <p className="home-destinations-summary">Dinleme, keşif, paylaşım ve topluluk araçlarına tek yerden ulaş.</p>
+        </div>
+        <div className="home-destination-grid">
+          {destinations.map(({ number, icon: Icon, title, description, href, action, style }) => (
+            <article className={`home-destination ${style ? `home-destination-${style}` : ""}`} key={number}>
+              <div className="home-destination-top">
+                <span className="home-destination-number">{number}</span>
+                <Icon size={19} strokeWidth={1.5} aria-hidden="true" />
+              </div>
+              <h3>{title}</h3>
+              <p>{description}</p>
+              <Link href={href} className="home-destination-link">{action}<ArrowRight size={14} /></Link>
+              {number === "02" && (
+                <div className="home-chart-shortcuts" aria-label="Diğer listeler">
+                  <Link href="/top/20">Yeni Keşifler</Link>
+                  <Link href="/top/50">Arşiv</Link>
+                </div>
+              )}
+              {number === "05" && (
+                <div className="home-chart-shortcuts" aria-label="Hesap sayfaları">
+                  <Link href="/profile">Profilim</Link>
+                </div>
+              )}
+            </article>
+          ))}
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/[0.05] py-8 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-600">
-          © 2026 Thendisch Studio.
-        </p>
+      <footer className="home-footer">
+        <Link href="/" className="home-footer-brand">THENDISCH STUDIO</Link>
+        <span>© 2026 · Müziğin buluşma noktası.</span>
+        <Link href="/muzik" className="home-footer-link">Frekansa katıl <ArrowRight size={14} /></Link>
       </footer>
     </main>
   );

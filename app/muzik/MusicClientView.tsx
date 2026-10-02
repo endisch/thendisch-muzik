@@ -1,14 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import QueueList from "@/components/QueueList";
 
-export default function MusicClientView({ session }: { session: any }) {
-  const [refreshQueue, setRefreshQueue] = useState(0);
-
+export default function MusicClientView() {
   return (
     <div className="w-full mt-12">
-      <QueueList refreshTrigger={refreshQueue} />
+      <QueueList />
     </div>
   );
 }

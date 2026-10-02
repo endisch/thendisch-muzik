@@ -29,7 +29,7 @@ export async function GET() {
   }
 }
 
-export async function PATCH(req: Request) {
+export async function PATCH(_req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {

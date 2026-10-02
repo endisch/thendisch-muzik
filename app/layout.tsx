@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Providers } from "./Providers";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Italiana, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({
@@ -24,13 +24,16 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Thendisch Studio",
-  description: "Lüks, kalite ve kesintisiz müzik deneyimi. Canlı VIP Lounge sohbeti.",
+  description: "Thendisch Studio: canlı müzik, yeni keşifler ve bağımsız üreticiler için bir topluluk.",
   manifest: "/manifest.json",
-  themeColor: "#080808",
   appleWebApp: {
     title: "Thendisch Studio",
     statusBarStyle: "black-translucent",
   }
+};
+
+export const viewport: Viewport = {
+  themeColor: "#100F0E",
 };
 
 export default function RootLayout({
@@ -40,7 +43,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className={`${spaceGrotesk.variable} ${italiana.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans bg-[#080808] text-gray-100 min-h-screen selection:bg-[#c8323d]/30 selection:text-[#ff777e]">
+      <body className="font-sans bg-[#100F0E] text-gray-100 min-h-screen selection:bg-[#9A7950]/30 selection:text-[#D0B98D]">
         <Providers>
           {children}
         </Providers>

@@ -69,28 +69,26 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
 
   if (songs.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <Music className="w-12 h-12 text-zinc-800 mb-6" />
-        <h3 className="text-xl font-bold text-white mb-2">Henüz Kimse Yok</h3>
-        <p className="text-zinc-500 max-w-sm">Bu listede henüz hiçbir parça bulunmuyor.</p>
+      <div className="chart-empty">
+        <Music className="h-8 w-8 text-zinc-700" />
+        <h3>Henüz parça yok</h3>
+        <p>Yeni parçalar eklendikçe burada görünecek.</p>
       </div>
     );
   }
 
   return (
-    <ul className="flex flex-col gap-4">
+    <ul className="chart-song-list">
       {songs.map((song, idx) => (
-        <li key={song.id} className="group flex flex-col sm:flex-row sm:items-center gap-6 p-6 rounded-3xl bg-black/40 hover:bg-black/80 transition-all duration-500 border border-white/[0.03] hover:border-[#c8323d]/30 relative overflow-hidden">
-          
-          <div className="absolute inset-0 bg-gradient-to-r from-[#c8323d]/0 via-[#c8323d]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <li key={song.id} className="chart-song group">
 
           {/* Rank */}
-          <div className="text-4xl md:text-5xl font-black text-zinc-800 group-hover:text-[#ff777e] w-12 text-center transition-colors duration-500 shrink-0">
+          <div className="chart-song-rank">
             {idx + 1}
           </div>
           
           {/* Cover */}
-          <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-zinc-900 border border-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-lg relative z-10 group-hover:shadow-[0_0_20px_rgba(200,50,61,0.2)] transition-shadow duration-500">
+          <div className="chart-song-cover">
             {song.coverUrl ? (
               <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />
             ) : (
@@ -100,10 +98,11 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
             {/* Oynatma Butonu Overlay */}
             <button 
               onClick={() => togglePlay(song.id, song.playbackUrl)}
-              className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm"
+              aria-label={playingId === song.id ? `${song.title} parçasını duraklat` : `${song.title} parçasını çal`}
+              className="chart-song-play"
             >
               {playingId === song.id ? (
-                <Pause className="w-8 h-8 text-[#ff777e]" fill="currentColor" />
+                <Pause className="w-8 h-8 text-[#D0B98D]" fill="currentColor" />
               ) : (
                 <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
               )}
@@ -111,24 +110,24 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
           </div>
 
           {/* Info */}
-          <div className="flex-1 relative z-10 min-w-0">
-            <h3 className="text-xl font-bold text-white mb-1 truncate group-hover:text-[#ff777e] transition-colors">{song.title}</h3>
-            <p className="text-zinc-500 truncate">{song.artist}</p>
+          <div className="chart-song-info">
+            <h3>{song.title}</h3>
+            <p>{song.artist}</p>
           </div>
           
           {/* Oylama ve Oy Sayısı */}
-          <div className="flex items-center gap-4 shrink-0 relative z-10">
+          <div className="chart-song-voting">
             <button
               onClick={() => handleVote(song.id)}
               disabled={isVoting === song.id}
-              className="flex items-center gap-2 bg-white/5 hover:bg-[#c8323d]/20 border border-white/10 hover:border-[#c8323d]/50 text-white hover:text-[#ff777e] px-4 py-2 rounded-xl transition-all duration-300 disabled:opacity-50"
+              className="chart-vote-button"
             >
               <Trophy className="w-4 h-4" />
               <span className="text-xs font-bold uppercase tracking-widest">{isVoting === song.id ? "..." : "Oy Ver"}</span>
             </button>
-            <div className="flex flex-col items-center justify-center bg-black/50 rounded-2xl px-6 py-4 border border-white/5 w-24">
-              <span className="text-3xl font-black text-white group-hover:text-[#ff777e] transition-colors leading-none">{song.monthlyVotes}</span>
-              <span className="text-[9px] text-zinc-500 uppercase tracking-widest font-bold mt-2">Oy</span>
+            <div className="chart-vote-count">
+              <span>{song.monthlyVotes}</span>
+              <span>Oy</span>
             </div>
           </div>
         </li>

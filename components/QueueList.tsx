@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion, type Variants, AnimatePresence } from "framer-motion";
-import { ChevronUp, ArrowUp, ArrowDown, Minus, Music, X, Trophy } from "lucide-react";
+import { ArrowUp, ArrowDown, Minus, Music, X, Trophy } from "lucide-react";
 
 type QueuedSong = {
   id: string;
@@ -33,7 +33,7 @@ function TrendBadge({ value }: { value: number }) {
   return (
     <span
       className={`flex items-center gap-0.5 font-mono text-[10px] tabular-nums ${
-        up ? "text-[#ff777e]" : "text-zinc-500"
+        up ? "text-[#D0B98D]" : "text-zinc-500"
       }`}
     >
       {up ? <ArrowUp className="h-2.5 w-2.5" /> : <ArrowDown className="h-2.5 w-2.5" />}
@@ -42,7 +42,7 @@ function TrendBadge({ value }: { value: number }) {
   );
 }
 
-export default function QueueList({ refreshTrigger }: { refreshTrigger: number }) {
+export default function QueueList({ refreshTrigger = 0 }: { refreshTrigger?: number }) {
   const [queue, setQueue] = useState<QueuedSong[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSong, setSelectedSong] = useState<QueuedSong | null>(null);
@@ -99,10 +99,10 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
 
   return (
     <>
-      <div className="rounded-2xl border border-white/[0.08] bg-[#101010] relative z-10">
+      <div className="rounded-lg border border-white/[0.08] bg-[#171614] relative z-10">
         <div className="flex items-center justify-between px-6 pt-6 mb-4">
           <h3 className="font-bold text-white text-lg">Sırada</h3>
-          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#ff777e]">
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#D0B98D]">
             {queue.length} şarkı
           </span>
         </div>
@@ -124,14 +124,14 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 variants={reduceMotion ? undefined : rise}
                 key={song.id}
                 onClick={() => setSelectedSong(song)}
-                className="group flex items-center gap-3 rounded-xl px-4 py-3 transition-colors duration-300 hover:bg-white/5 cursor-pointer"
+                className="group flex items-center gap-3 rounded-lg px-4 py-3 transition-colors duration-300 hover:bg-white/5 cursor-pointer"
               >
                 <div className="flex w-6 shrink-0 flex-col items-center">
-                  <span className="font-mono text-xs text-zinc-600 group-hover:text-[#ff777e] transition-colors">{idx + 1}</span>
+                  <span className="font-mono text-xs text-zinc-600 group-hover:text-[#D0B98D] transition-colors">{idx + 1}</span>
                   <TrendBadge value={0} />
                 </div>
                 
-                <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-zinc-800 flex items-center justify-center border border-white/5 group-hover:border-[#c8323d]/50 transition-colors">
+                <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-zinc-800 flex items-center justify-center border border-white/5 group-hover:border-[#9A7950]/50 transition-colors">
                   {song.coverUrl ? (
                     <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />
                   ) : (
@@ -148,8 +148,8 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                   {Math.floor(song.durationSec / 60)}:{(song.durationSec % 60).toString().padStart(2, "0")}
                 </span>
                 
-                <div className="flex flex-col items-center justify-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/5 group-hover:bg-[#c8323d]/10 group-hover:border-[#c8323d]/30 transition-all">
-                  <span className="font-mono text-xs tabular-nums font-bold text-white group-hover:text-[#ff777e]">{song.votesCount}</span>
+                <div className="flex flex-col items-center justify-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/5 group-hover:bg-[#9A7950]/10 group-hover:border-[#9A7950]/30 transition-all">
+                  <span className="font-mono text-xs tabular-nums font-bold text-white group-hover:text-[#D0B98D]">{song.votesCount}</span>
                   <span className="text-[8px] uppercase tracking-widest text-zinc-500">Oy</span>
                 </div>
               </motion.div>
@@ -164,7 +164,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+              className="absolute inset-0 bg-black/80"
               onClick={() => setSelectedSong(null)}
             />
             
@@ -172,7 +172,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="relative w-full max-w-md bg-[#101010] border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col"
+              className="relative flex w-full max-w-md flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171614] shadow-lg"
             >
               {/* Close Button */}
               <button 
@@ -187,16 +187,16 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 {selectedSong.coverUrl ? (
                   <>
                     <img src={selectedSong.coverUrl} alt="Cover" className="w-full h-full object-cover opacity-60" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#101010] to-transparent" />
+                    <div className="absolute inset-0 bg-black/40" />
                   </>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800 to-black">
+                  <div className="w-full h-full flex items-center justify-center bg-[#171614]">
                     <Music className="w-20 h-20 text-zinc-700" />
                   </div>
                 )}
                 
                 {/* Mini Cover Overlay */}
-                <div className="absolute -bottom-8 left-6 w-24 h-24 rounded-2xl border-4 border-[#121318] shadow-2xl overflow-hidden bg-black">
+                <div className="absolute -bottom-8 left-6 w-24 h-24 rounded-lg border-4 border-[#171614] shadow-2xl overflow-hidden bg-black">
                   {selectedSong.coverUrl ? (
                     <img src={selectedSong.coverUrl} alt="Cover" className="w-full h-full object-cover" />
                   ) : (
@@ -215,11 +215,11 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 </div>
                 
                 <div className="flex items-center gap-4">
-                  <div className="flex-1 bg-black/50 border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center">
+                  <div className="flex-1 bg-black/50 border border-white/5 rounded-lg p-4 flex flex-col items-center justify-center">
                     <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">Şu Anki Oyu</p>
-                    <p className="text-3xl font-black text-[#ff777e]">{selectedSong.votesCount}</p>
+                    <p className="text-3xl font-black text-[#D0B98D]">{selectedSong.votesCount}</p>
                   </div>
-                  <div className="flex-1 bg-black/50 border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center">
+                  <div className="flex-1 bg-black/50 border border-white/5 rounded-lg p-4 flex flex-col items-center justify-center">
                     <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">Süre</p>
                     <p className="text-3xl font-black text-white">
                       {Math.floor(selectedSong.durationSec / 60)}:{(selectedSong.durationSec % 60).toString().padStart(2, "0")}
@@ -230,7 +230,7 @@ export default function QueueList({ refreshTrigger }: { refreshTrigger: number }
                 <button 
                   onClick={() => handleVote(selectedSong.id)}
                   disabled={isVoting}
-                  className="w-full py-4 rounded-xl bg-[#c8323d] text-white font-black uppercase tracking-widest text-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(200,50,61,0.3)]"
+                  className="w-full py-4 rounded-lg bg-[#9A7950] text-white font-black uppercase tracking-widest text-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
                 >
                   {isVoting ? "Bekleyin..." : (
                     <>

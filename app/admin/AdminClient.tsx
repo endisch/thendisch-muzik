@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X, Music, Search, Shield, User, RefreshCw, Minus, Plus } from "lucide-react";
+import { Check, X, Music, Search, Shield, RefreshCw, Minus, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type ArtistApp = {
@@ -100,21 +100,21 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
       
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
+          <div className="bg-[#171614]/80  border border-white/5 rounded-lg p-5 shadow-lg">
             <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Toplam Kullanıcı</p>
             <p className="text-3xl font-black text-white">{stats.totalUsers}</p>
           </div>
-          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
+          <div className="bg-[#171614]/80  border border-white/5 rounded-lg p-5 shadow-lg">
             <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Toplam Şarkı</p>
             <p className="text-3xl font-black text-white">{stats.totalSongs}</p>
           </div>
-          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
+          <div className="bg-[#171614]/80  border border-white/5 rounded-lg p-5 shadow-lg">
             <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 mb-1">Toplam Dinlenme</p>
             <p className="text-3xl font-black text-white">{stats.totalListens}</p>
           </div>
-          <div className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-5 shadow-lg">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-[#ff777e] mb-1">Bugün Atılan Mesaj</p>
-            <p className="text-3xl font-black text-[#ff777e]">{stats.messagesToday}</p>
+          <div className="bg-[#171614]/80  border border-white/5 rounded-lg p-5 shadow-lg">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-[#D0B98D] mb-1">Bugün Atılan Mesaj</p>
+            <p className="text-3xl font-black text-[#D0B98D]">{stats.messagesToday}</p>
           </div>
         </div>
       )}
@@ -123,13 +123,13 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
       <div className="flex gap-4 border-b border-white/10 pb-4">
         <button 
           onClick={() => setActiveTab("ARTISTS")}
-          className={`px-6 py-3 rounded-full text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "ARTISTS" ? "bg-[#c8323d] text-white" : "bg-black/50 text-zinc-400 hover:text-white border border-white/10"}`}
+          className={`px-6 py-3 rounded-full text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "ARTISTS" ? "bg-[#9A7950] text-white" : "bg-black/50 text-zinc-400 hover:text-white border border-white/10"}`}
         >
           Sanatçı Başvuruları
         </button>
         <button 
           onClick={() => setActiveTab("USERS")}
-          className={`px-6 py-3 rounded-full text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "USERS" ? "bg-[#c8323d] text-white" : "bg-black/50 text-zinc-400 hover:text-white border border-white/10"}`}
+          className={`px-6 py-3 rounded-full text-sm font-bold tracking-widest uppercase transition-all ${activeTab === "USERS" ? "bg-[#9A7950] text-white" : "bg-black/50 text-zinc-400 hover:text-white border border-white/10"}`}
         >
           Kullanıcı Yönetimi
         </button>
@@ -138,17 +138,17 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
       {activeTab === "ARTISTS" && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {artists.length === 0 ? (
-            <div className="col-span-full py-12 text-center bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-3xl">
+            <div className="col-span-full py-12 text-center bg-[#171614]/50  border border-white/[0.05] rounded-xl">
               <Music className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-white mb-2">Bekleyen Başvuru Yok</h3>
               <p className="text-zinc-500">Tüm sanatçı başvuruları değerlendirildi.</p>
             </div>
           ) : (
             artists.map(artist => (
-              <div key={artist.id} className="bg-[#121318]/80 backdrop-blur-xl border border-white/5 rounded-[2rem] p-6 shadow-2xl relative overflow-hidden group hover:border-[#c8323d]/30 transition-all">
+              <div key={artist.id} className="group relative overflow-hidden rounded-lg border border-white/10 bg-[#171614] p-6 transition-colors hover:border-[#9A7950]/30">
                 
                 <div className="absolute top-0 right-0 p-4">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm animate-pulse" />
                 </div>
 
                 <h3 className="text-xl font-black text-white mb-1">{artist.name}</h3>
@@ -156,17 +156,17 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
                 
                 <div className="space-y-3 mb-8">
                   {artist.instagramUrl && (
-                    <a href={artist.instagramUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-xl text-zinc-300 hover:text-[#ff777e] hover:border-[#c8323d]/30 transition-all truncate">
+                    <a href={artist.instagramUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-lg text-zinc-300 hover:text-[#D0B98D] hover:border-[#9A7950]/30 transition-all truncate">
                       Instagram Profili
                     </a>
                   )}
                   {artist.spotifyUrl && (
-                    <a href={artist.spotifyUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-xl text-zinc-300 hover:text-[#ff777e] hover:border-[#c8323d]/30 transition-all truncate">
+                    <a href={artist.spotifyUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-lg text-zinc-300 hover:text-[#D0B98D] hover:border-[#9A7950]/30 transition-all truncate">
                       Spotify Profili
                     </a>
                   )}
                   {artist.youtubeUrl && (
-                    <a href={artist.youtubeUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-xl text-zinc-300 hover:text-[#ff777e] hover:border-[#c8323d]/30 transition-all truncate">
+                    <a href={artist.youtubeUrl} target="_blank" rel="noreferrer" className="block text-sm bg-black/50 border border-white/5 px-4 py-3 rounded-lg text-zinc-300 hover:text-[#D0B98D] hover:border-[#9A7950]/30 transition-all truncate">
                       YouTube Kanalı
                     </a>
                   )}
@@ -176,7 +176,7 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
                   <button 
                     onClick={() => handleArtistAction(artist.id, "REJECT")}
                     disabled={loadingId === artist.id}
-                    className="flex-1 flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-3 rounded-xl font-bold text-sm transition-all disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-3 rounded-lg font-bold text-sm transition-all disabled:opacity-50"
                   >
                     <X className="w-4 h-4" />
                     Reddet
@@ -184,7 +184,7 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
                   <button 
                     onClick={() => handleArtistAction(artist.id, "VERIFY")}
                     disabled={loadingId === artist.id}
-                    className="flex-1 flex items-center justify-center gap-2 bg-[#c8323d]/10 hover:bg-[#c8323d]/20 text-[#ff777e] border border-[#c8323d]/20 py-3 rounded-xl font-bold text-sm transition-all disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-2 bg-[#9A7950]/10 hover:bg-[#9A7950]/20 text-[#D0B98D] border border-[#9A7950]/20 py-3 rounded-lg font-bold text-sm transition-all disabled:opacity-50"
                   >
                     <Check className="w-4 h-4" />
                     Onayla
@@ -197,18 +197,18 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
       )}
 
       {activeTab === "USERS" && (
-        <div className="bg-[#121318]/50 backdrop-blur-xl border border-white/[0.05] rounded-[2.5rem] p-8 shadow-2xl">
+        <div className="bg-[#171614]/50  border border-white/[0.05] rounded-xl p-8 shadow-2xl">
           
           <form onSubmit={handleSearchUser} className="relative mb-12">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-[#ff777e]" />
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-[#D0B98D]" />
             <input 
               type="text" 
               placeholder="Kullanıcı e-posta adresi ile ara..." 
               value={searchEmail}
               onChange={(e) => setSearchEmail(e.target.value)}
-              className="w-full bg-black/50 text-white pl-16 pr-6 py-5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c8323d]/50 border border-white/5 text-lg"
+              className="w-full bg-black/50 text-white pl-16 pr-6 py-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9A7950]/50 border border-white/5 text-lg"
             />
-            <button type="submit" disabled={isSearching} className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#c8323d] text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-[#ff777e] transition-colors disabled:opacity-50">
+            <button type="submit" disabled={isSearching} className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#9A7950] text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-[#D0B98D] transition-colors disabled:opacity-50">
               {isSearching ? <RefreshCw className="w-5 h-5 animate-spin" /> : "Bul"}
             </button>
           </form>
@@ -216,18 +216,18 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
           {searchResults.length > 0 && (
             <div className="flex flex-col gap-4">
               {searchResults.map(user => (
-                <div key={user.id} className="bg-black/40 border border-white/5 rounded-3xl p-6 flex flex-col xl:flex-row xl:items-center justify-between gap-6 hover:border-[#c8323d]/20 transition-all">
+                <div key={user.id} className="bg-black/40 border border-white/5 rounded-xl p-6 flex flex-col xl:flex-row xl:items-center justify-between gap-6 hover:border-[#9A7950]/20 transition-all">
                   
                   {/* User Info */}
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-[#ff777e] font-bold text-xl overflow-hidden shrink-0">
+                    <div className="w-14 h-14 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center text-[#D0B98D] font-bold text-xl overflow-hidden shrink-0">
                       {user.image ? <img src={user.image} alt="Avatar" className="w-full h-full object-cover" /> : user.name?.charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-white flex items-center gap-2">
                         {user.name} 
                         {user.role === "ADMIN" && <Shield className="w-4 h-4 text-red-500" />}
-                        {user.isVerifiedArtist && <Check className="w-4 h-4 text-[#ff777e]" />}
+                        {user.isVerifiedArtist && <Check className="w-4 h-4 text-[#D0B98D]" />}
                       </h4>
                       <p className="text-zinc-500 text-sm font-mono">{user.email}</p>
                     </div>
@@ -240,7 +240,7 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
                     <select 
                       value={user.role} 
                       onChange={(e) => handleUpdateUser(user.id, { role: e.target.value })}
-                      className="bg-black border border-white/10 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-[#c8323d]"
+                      className="bg-black border border-white/10 text-white px-4 py-2.5 rounded-lg text-sm focus:outline-none focus:border-[#9A7950]"
                     >
                       <option value="USER">Üye (USER)</option>
                       <option value="ARTIST">Sanatçı (ARTIST)</option>
@@ -250,13 +250,13 @@ export default function AdminClient({ initialArtists, stats }: { initialArtists:
                     {/* Artist Toggle */}
                     <button 
                       onClick={() => handleUpdateUser(user.id, { isVerifiedArtist: !user.isVerifiedArtist })}
-                      className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-colors border ${user.isVerifiedArtist ? 'bg-[#c8323d]/10 text-[#ff777e] border-[#c8323d]/30' : 'bg-black border-white/10 text-zinc-400 hover:text-white'}`}
+                      className={`px-4 py-2.5 rounded-lg text-sm font-bold transition-colors border ${user.isVerifiedArtist ? 'bg-[#9A7950]/10 text-[#D0B98D] border-[#9A7950]/30' : 'bg-black border-white/10 text-zinc-400 hover:text-white'}`}
                     >
                       {user.isVerifiedArtist ? "VIP Sanatçı (Aktif)" : "VIP Sanatçı Yap"}
                     </button>
 
                     {/* Credits Control */}
-                    <div className="flex items-center bg-black border border-white/10 rounded-xl overflow-hidden">
+                    <div className="flex items-center bg-black border border-white/10 rounded-lg overflow-hidden">
                       <div className="px-4 py-2.5 text-zinc-400 text-sm font-mono border-r border-white/10 bg-white/5">
                         Kredi: <strong className="text-white">{user.uploadCredits}</strong>
                       </div>

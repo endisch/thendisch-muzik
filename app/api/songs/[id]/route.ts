@@ -3,8 +3,9 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session?.user?.email)
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,7 +16,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (!user)
       return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    const song = await prisma.song.findUnique({ where: { id: params.id } });
+    const song = await prisma.song.findUnique({ where: { id } });
     if (!song)
       return NextResponse.json({ error: "Song not found" }, { status: 404 });
 
@@ -36,7 +37,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (youtubeUrl !== undefined) updateData.youtubeUrl = youtubeUrl;
 
     const updatedSong = await prisma.song.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
     });
 
