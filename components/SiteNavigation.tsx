@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 type SiteNavigationProps = {
-  active?: "home" | "music" | "charts" | "community";
+  active?: "home" | "music" | "charts" | "community" | "projects";
   actions?: ReactNode;
 };
 
@@ -11,6 +11,7 @@ const links = [
   { label: "Müzik Odası", href: "/muzik", key: "music" },
   { label: "Top 10", href: "/top/10", key: "charts" },
   { label: "Topluluk", href: "/liderler", key: "community" },
+  { label: "Projeler", href: "/#projects", key: "projects" },
 ] as const;
 
 export function SiteNavigation({ active, actions }: SiteNavigationProps) {
@@ -19,7 +20,7 @@ export function SiteNavigation({ active, actions }: SiteNavigationProps) {
       <div className="studio-site-header-main">
         <Link href="/" className="studio-site-brand" aria-label="Thendisch Studio ana sayfa">
           <span className="studio-site-brand-name">THENDISCH STUDIO</span>
-          <span className="studio-site-brand-sub">Bağımsız müzik topluluğu</span>
+          <span className="studio-site-brand-sub">Müzik · Medya · Dijital projeler</span>
         </Link>
         <div className="studio-site-header-actions">
           {!actions && <Link href="/yukle" className="studio-site-upload">Şarkını yükle</Link>}
