@@ -19,26 +19,26 @@ type NowPlaying = {
 
 function Vinyl({ playing, coverUrl }: { playing: boolean; coverUrl?: string }) {
   return (
-    <div className="relative mx-auto mt-6 flex h-64 w-64 sm:h-80 sm:w-80 items-center justify-center rounded-full bg-[#100F0E] shadow-sm border border-white/[0.08]">
+    <div className="relative mx-auto mt-8 flex aspect-square w-full max-w-[320px] items-center justify-center rounded-full bg-[#090b0e] shadow-sm border border-white/[0.08]">
       {/* Plak yivleri (grooves) */}
       <div className="absolute inset-2 rounded-full border border-white/[0.03] pointer-events-none" />
       <div className="absolute inset-6 rounded-full border border-white/[0.02] pointer-events-none" />
       <div className="absolute inset-10 rounded-full border border-white/[0.04] pointer-events-none" />
       <div className="absolute inset-16 rounded-full border border-white/[0.02] pointer-events-none" />
       <div className="absolute inset-24 rounded-full border border-white/[0.03] pointer-events-none" />
-      
+
       {/* Merkez Etiket */}
       <motion.div
         animate={{ rotate: playing ? 360 : 0 }}
         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        className="relative flex h-24 w-24 sm:h-32 sm:w-32 items-center justify-center rounded-full bg-[#151515] border-4 border-[#100F0E] shadow-inner overflow-hidden"
+        className="relative flex h-24 w-24 sm:h-32 sm:w-32 items-center justify-center rounded-full bg-[#090b0e] border-4 border-[#090b0e] shadow-inner overflow-hidden"
       >
         {coverUrl ? (
-          <img src={coverUrl} alt="Cover" className="w-full h-full object-cover opacity-80" />
+          <img src={coverUrl} alt="Parça kapağı" className="w-full h-full object-cover opacity-80" />
         ) : (
-          <Disc3 className="h-8 w-8 text-[#D0B98D]/50" />
+          <Disc3 className="h-8 w-8 text-[#ff6c55]/50" />
         )}
-        <div className="absolute h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-[#100F0E] border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] z-10" />
+        <div className="absolute h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-[#090b0e] border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] z-10" />
       </motion.div>
     </div>
   );
@@ -49,12 +49,12 @@ function LyricsView({ activeIndex, lines, rawLyrics }: { activeIndex: number; li
     if (rawLyrics && rawLyrics.trim().length > 0) {
       // Olası herhangi bir köşeli parantezli zaman etiketini temizle (örn. [00:15:20] veya [00:15.22])
       const cleanedLyrics = rawLyrics.replace(/\[[^\]]*\]/g, "");
-      
+
       return (
         <div className="relative mt-8 h-48 overflow-y-auto no-scrollbar [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
           <div className="flex flex-col items-center py-12 px-4 gap-4">
             {cleanedLyrics.split("\n").map((line, i) => (
-              <p key={i} className="text-center font-serif text-lg text-zinc-400 w-full max-w-md">
+              <p key={i} className="text-center font-display text-lg text-[#b8bec8] w-full max-w-md">
                 {line.trim()}
               </p>
             ))}
@@ -64,9 +64,9 @@ function LyricsView({ activeIndex, lines, rawLyrics }: { activeIndex: number; li
     }
 
     return (
-      <div className="relative mt-8 h-40 flex flex-col items-center justify-center text-zinc-600">
+      <div className="relative mt-8 h-40 flex flex-col items-center justify-center text-[#adb5c0]">
         <Disc3 className="w-6 h-6 mb-2 opacity-20" />
-        <span className="font-mono text-[10px] uppercase tracking-widest opacity-50">Sözler Bulunamadı</span>
+        <span className="px-4 text-center text-sm leading-6">Bu parçanın sözleri henüz eklenmedi</span>
       </div>
     );
   }
@@ -84,12 +84,12 @@ function LyricsView({ activeIndex, lines, rawLyrics }: { activeIndex: number; li
           return (
             <p
               key={i}
-              className={`h-12 text-center leading-[48px] transition-all duration-700 w-full max-w-md px-4 truncate font-serif text-lg ${
+              className={`h-12 text-center leading-[48px] transition-all duration-700 w-full max-w-md px-4 truncate font-display text-lg ${
                 active
-                  ? "font-bold text-[#D0B98D]"
-                  : past 
-                    ? "scale-95 text-zinc-500 opacity-50"
-                    : "scale-95 text-zinc-600"
+                  ? "font-semibold text-[#ff6c55]"
+                  : past
+                    ? "scale-95 text-[#adb5c0] opacity-50"
+                    : "scale-95 text-[#adb5c0]"
               }`}
             >
               {line.text}
@@ -123,12 +123,12 @@ export default function RadioPlayer() {
       });
       if (!res.ok) {
         const error = await res.json();
-        alert(error.error || "Oy verirken bir hata oluştu");
+        alert(error.error || "Oyun kaydedilemedi. Lütfen tekrar dene.");
       } else {
-        alert("Oyunuz başarıyla kaydedildi!");
+        alert("Oyun kaydedildi.");
       }
     } catch (error) {
-      alert("Oy verirken bir hata oluştu");
+      alert("Oyun kaydedilemedi. Lütfen tekrar dene.");
     } finally {
       setIsVoting(false);
     }
@@ -178,7 +178,7 @@ export default function RadioPlayer() {
   useEffect(() => {
     if (!audioRef.current) return;
     const el = audioRef.current;
-    
+
     // Uygulanan Ses Seviyesi
     el.volume = volume;
 
@@ -215,64 +215,64 @@ export default function RadioPlayer() {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="relative w-full max-w-2xl rounded-lg border border-white/[0.08] bg-[#171614] p-7 shadow-md sm:p-12">
-        <div className="absolute top-8 left-8 flex items-center gap-2">
+      <div className="relative w-full max-w-2xl rounded-none border border-[#2a3038] bg-[#12161b] p-5 sm:p-10">
+        <div className="absolute top-5 left-5 sm:top-7 sm:left-7 flex items-center gap-2">
           <span className="relative flex h-1.5 w-1.5">
-            <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${now?.playing ? 'animate-ping bg-[#9A7950]' : 'bg-zinc-600'}`} />
-            <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${now?.playing ? 'bg-[#9A7950]' : 'bg-zinc-600'}`} />
+            <span className={`absolute inline-flex h-full w-full rounded-none opacity-75 ${now?.playing ? 'animate-ping bg-[#ff543b]' : 'bg-zinc-600'}`} />
+            <span className={`relative inline-flex h-1.5 w-1.5 rounded-none ${now?.playing ? 'bg-[#ff543b]' : 'bg-zinc-600'}`} />
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">CANLI YAYIN</span>
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#adb5c0]">CANLI YAYIN</span>
         </div>
 
         {!now?.playing ? (
-          <div className="flex h-64 flex-col items-center justify-center text-zinc-500">
+          <div className="flex h-64 flex-col items-center justify-center text-[#adb5c0]">
             <Disc3 className="mb-4 h-8 w-8 animate-spin opacity-20 duration-[3000ms]" />
-            <p className="font-mono text-xs uppercase tracking-widest">Kuyruk Boş</p>
+            <p className="font-mono text-xs uppercase tracking-widest">Yeni parçalar bekleniyor</p>
           </div>
         ) : (
           <>
             <Vinyl playing={isPlayingLocally} coverUrl={now.coverUrl} />
-            
-            <div className="mt-12 text-center flex flex-col items-center">
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2 truncate max-w-full">
+
+            <div className="mt-8 text-center flex flex-col items-center">
+              <h2 className="text-2xl sm:text-4xl font-semibold text-[#f7f8fa] tracking-tight mb-2 truncate max-w-full">
                 {now.title}
               </h2>
-              <p className="text-sm sm:text-base text-zinc-400 font-medium mb-4">
+              <p className="text-sm sm:text-base text-[#b8bec8] font-medium mb-4">
                 {now.artist}
               </p>
-              
-              <button 
+
+              <button
                 onClick={() => handleVote(now.songId)}
                 disabled={isVoting}
-                className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-[#9A7950]/20 border border-white/10 hover:border-[#9A7950]/50 rounded-full text-zinc-300 hover:text-[#D0B98D] transition-all disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-[#ff543b]/20 border border-white/10 hover:border-[#ff543b]/50 rounded-none text-[#dde2e9] hover:text-[#ff6c55] transition-all disabled:opacity-50"
               >
                 <Trophy className="w-4 h-4" />
-                <span className="text-[10px] font-bold uppercase tracking-widest">{isVoting ? "Bekleyin..." : "Bu Şarkıya Oy Ver"}</span>
+                <span className="text-xs font-semibold uppercase tracking-widest">{isVoting ? "Kaydediliyor…" : "Bu şarkıya oy ver"}</span>
               </button>
             </div>
 
-            <div className="mt-10 relative flex items-center justify-center w-full max-w-sm mx-auto h-16">
-              
+            <div className="mx-auto mt-8 grid h-16 w-full max-w-sm grid-cols-[minmax(0,1fr)_64px_minmax(0,1fr)] items-center gap-3">
+
               {/* Sol: Ses Kontrolü (Daima görünür, Mobil uyumlu) */}
-              <div className="absolute left-0 flex items-center gap-3">
-                <button onClick={toggleMute} className="text-zinc-500 hover:text-[#D0B98D] transition-colors" aria-label="Sesi Kapat/Aç">
+              <div className="flex min-w-0 items-center gap-2">
+                <button onClick={toggleMute} className="shrink-0 text-[#adb5c0] hover:text-[#ff6c55] transition-colors" aria-label="Sesi kapat veya aç">
                   {volume === 0 ? <VolumeX className="h-5 w-5" /> : volume < 0.5 ? <Volume1 className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                 </button>
-                <input 
-                  type="range" 
-                  min="0" max="1" step="0.01" 
+                <input
+                  type="range"
+                  min="0" max="1" step="0.01"
                   value={volume}
                   onChange={handleVolumeChange}
-                  className="w-16 sm:w-24 h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-[#9A7950] hover:bg-white/20 transition-all [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#9A7950] [&::-webkit-slider-thumb]:shadow-sm"
-                  aria-label="Ses Seviyesi"
+                  className="h-1 w-full min-w-0 max-w-24 bg-white/10 rounded-none appearance-none cursor-pointer accent-[#ff543b] hover:bg-white/20 transition-all [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:bg-[#ff543b] [&::-webkit-slider-thumb]:shadow-sm"
+                  aria-label="Ses seviyesi"
                 />
               </div>
 
               {/* Orta: Play/Pause Butonu */}
               <button
                 onClick={togglePlay}
-                className="group flex h-16 w-16 items-center justify-center rounded-full border border-[#9A7950]/50 text-[#D0B98D] transition-all duration-500 hover:bg-[#9A7950]/10 hover:border-[#9A7950] active:scale-95 hover:shadow-sm z-10"
-                aria-label={isPlayingLocally ? "Duraklat" : "Oynat"}
+                className="group flex h-16 w-16 items-center justify-center rounded-none border border-[#ff543b]/50 text-[#ff6c55] transition-all duration-500 hover:bg-[#ff543b]/10 hover:border-[#ff543b] active:scale-95 hover:shadow-sm z-10"
+                aria-label={isPlayingLocally ? "Duraklat" : "Dinlemeye başla"}
               >
                 {isPlayingLocally ? (
                   <Pause className="h-5 w-5" strokeWidth={2} />
@@ -280,16 +280,16 @@ export default function RadioPlayer() {
                   <Play className="h-5 w-5 translate-x-[2px]" strokeWidth={2} />
                 )}
               </button>
-              
+
               {/* Sağ: İlerleme Yüzdesi */}
-              <div className="absolute right-0 font-mono text-sm tabular-nums text-zinc-500 font-medium">
+              <div className="justify-self-end font-mono text-sm tabular-nums text-[#adb5c0] font-medium">
                 {progress}%
               </div>
             </div>
 
             <div className="mt-10 flex items-center gap-4 opacity-50">
               <span className="h-px flex-1 bg-white/10" />
-              <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-zinc-500">
+              <span className="font-mono text-xs uppercase tracking-[0.12em] text-[#adb5c0]">
                 Thendisch Studio
               </span>
               <span className="h-px flex-1 bg-white/10" />

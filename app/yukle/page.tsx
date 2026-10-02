@@ -11,32 +11,28 @@ export default async function YuklePage() {
   const session = await getServerSession(authOptions);
 
   return (
-    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased overflow-x-hidden selection:bg-[#9A7950]/30 selection:text-[#D0B98D]">
+    <main className="relative min-h-screen bg-[#090b0e] text-[#f7f8fa] antialiased overflow-x-hidden selection:bg-[#ff543b]/30 selection:text-[#ff6c55]">
       <SiteNavigation actions={<AuthStatus session={session} />} />
-      {/* Avant-Garde Background Glows */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#9A7950]/5 hidden" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#9A7950]/5 hidden" />
-      </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
+      <div className="studio-page-width relative z-10 py-12 sm:py-16">
         <div className="mb-8 flex items-center justify-end">
           {session?.user?.role === "ARTIST" && session?.user?.isVerifiedArtist && (
-            <div className="bg-[#9A7950]/10 border border-[#9A7950]/20 px-3 py-1.5 rounded-full flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#D0B98D]" />
-              <span className="text-[#D0B98D] font-bold text-xs tracking-wide uppercase">Doğrulanmış Sanatçı</span>
+            <div className="bg-[#ff543b]/10 border border-[#ff543b]/20 px-3 py-1.5 rounded-none flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#ff6c55]" />
+              <span className="text-[#ff6c55] font-bold text-sm tracking-wide uppercase">Doğrulanmış Sanatçı</span>
             </div>
           )}
         </div>
 
-        <div className="mb-12 text-center">
-          <h1 className="studio-page-title mb-4">Şarkını <span className="studio-page-title-accent">Sahnele</span></h1>
-          <p className="text-zinc-400 text-sm md:text-base max-w-xl mx-auto font-light">
-            Eserini Thendisch topluluğu ile paylaş. VIP Lounge radyo kuyruğunda yerini al.
+        <div className="mb-10">
+          <p className="studio-page-kicker mb-3">Üretimini paylaş</p>
+          <h1 className="studio-page-title mb-4">Şarkını <span className="studio-page-title-accent">paylaş.</span></h1>
+          <p className="text-[#adb5c0] text-base sm:text-lg max-w-2xl leading-relaxed">
+            Şarkını Thendisch Studio topluluğuyla paylaş, Müzik Odası’nda dinleyicilerle buluştur.
           </p>
         </div>
 
-        <div className="bg-[#171614]/50  border border-white/[0.05] rounded-xl p-8 shadow-2xl relative">
+        <div className="bg-[#12161b] border border-white/[0.12] rounded-none p-5 sm:p-8 relative">
           <YukleClientView session={session} />
         </div>
       </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import { BrandIcon } from "@/components/BrandIcon";
+
 import { useState } from "react";
 import { Music2, CheckCircle2, ShieldAlert, Clock, ArrowRight, Edit3, X, Edit2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -27,14 +29,14 @@ export default function ProfileClient({ user }: { user: UserData }) {
   const [instagram, setInstagram] = useState(user.instagramUrl || "");
   const [spotify, setSpotify] = useState(user.spotifyUrl || "");
   const [youtube, setYoutube] = useState(user.youtubeUrl || "");
-  
+
   // Edit Profile States
   const [isEditing, setIsEditing] = useState(false);
   const [editingSong, setEditingSong] = useState<any>(null);
   const [editName, setEditName] = useState(user.name || "");
   const [editImage, setEditImage] = useState(user.image || "");
   const [editBio, setEditBio] = useState(user.bio || "");
-  
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const router = useRouter();
@@ -70,9 +72,9 @@ export default function ProfileClient({ user }: { user: UserData }) {
       const res = await fetch("/api/profile/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          name: editName, 
-          image: editImage, 
+        body: JSON.stringify({
+          name: editName,
+          image: editImage,
           bio: editBio,
           instagramUrl: instagram,
           spotifyUrl: spotify,
@@ -94,49 +96,49 @@ export default function ProfileClient({ user }: { user: UserData }) {
 
   return (
     <div className="flex flex-col gap-8">
-      
+
       {/* Edit Profile Modal */}
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-          <div className="bg-[#171614] border border-white/10 rounded-xl w-full max-w-xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative">
-            <div className="flex items-center justify-between p-6 border-b border-white/5 bg-[#1A1C23]">
-              <h3 className="font-black text-white text-xl">Profili Düzenle</h3>
-              <button onClick={() => setIsEditing(false)} className="p-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors text-zinc-400">
+          <div className="bg-[#12161b] border border-white/10 rounded-none w-full max-w-xl max-h-[90vh] flex flex-col shadow-none overflow-hidden relative">
+            <div className="flex items-center justify-between p-6 border-b border-white/[0.12] bg-[#12161b]">
+              <h3 className="font-semibold text-[#f7f8fa] text-xl">Profili düzenle</h3>
+              <button onClick={() => setIsEditing(false)} aria-label="Profil düzenlemeyi kapat" className="p-3 bg-white/5 hover:bg-white/10 rounded-none transition-colors text-[#adb5c0]">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-6 no-scrollbar">
               <form onSubmit={handleUpdateProfile} className="flex flex-col gap-5">
                 <div>
-                  <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Kullanıcı Adı</label>
-                  <input type="text" value={editName} onChange={(e) => setEditName(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9A7950] border border-white/5" />
+                  <label className="block text-sm font-mono tracking-wide text-[#adb5c0] mb-2">Kullanıcı adı</label>
+                  <input type="text" value={editName} onChange={(e) => setEditName(e.target.value)} className="w-full bg-[#090b0e] text-[#f7f8fa] px-4 py-3.5 rounded-none focus:outline-none focus:ring-1 focus:ring-[#ff543b] border border-white/5" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Profil Fotoğrafı (URL)</label>
-                  <input type="url" value={editImage} onChange={(e) => setEditImage(e.target.value)} placeholder="https://..." className="w-full bg-black/50 text-white px-4 py-3.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9A7950] border border-white/5" />
+                  <label className="block text-sm font-mono tracking-wide text-[#adb5c0] mb-2">Profil fotoğrafı bağlantısı</label>
+                  <input type="url" value={editImage} onChange={(e) => setEditImage(e.target.value)} placeholder="https://..." className="w-full bg-[#090b0e] text-[#f7f8fa] px-4 py-3.5 rounded-none focus:outline-none focus:ring-1 focus:ring-[#ff543b] border border-white/5" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Hakkımda</label>
-                  <textarea value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} placeholder="Müzik zevkinden, kendinden bahset..." className="w-full bg-black/50 text-white px-4 py-3.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9A7950] border border-white/5 resize-none"></textarea>
+                  <label className="block text-sm font-mono tracking-wide text-[#adb5c0] mb-2">Hakkımda</label>
+                  <textarea value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} placeholder="Müzik zevkinden, kendinden bahset..." className="w-full bg-[#090b0e] text-[#f7f8fa] px-4 py-3.5 rounded-none focus:outline-none focus:ring-1 focus:ring-[#ff543b] border border-white/[0.12] resize-none"></textarea>
                 </div>
 
-                <div className="border-t border-white/5 my-2"></div>
-                <h4 className="text-sm font-bold text-[#D0B98D]">Sosyal Medya Bağlantıları</h4>
-                
+                <div className="border-t border-white/[0.12] my-2"></div>
+                <h4 className="text-base font-bold text-[#ff6c55]">Sosyal medya bağlantıları</h4>
+
                 <div>
-                  <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Instagram Profil Linki</label>
-                  <input type="url" value={instagram} onChange={(e) => setInstagram(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9A7950] border border-white/5" />
+                  <label className="block text-sm font-mono tracking-wide text-[#adb5c0] mb-2">Instagram profil bağlantısı</label>
+                  <input type="url" value={instagram} onChange={(e) => setInstagram(e.target.value)} className="w-full bg-[#090b0e] text-[#f7f8fa] px-4 py-3.5 rounded-none focus:outline-none focus:ring-1 focus:ring-[#ff543b] border border-white/5" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">Spotify Linki</label>
-                  <input type="url" value={spotify} onChange={(e) => setSpotify(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9A7950] border border-white/5" />
+                  <label className="block text-sm font-mono tracking-wide text-[#adb5c0] mb-2">Spotify bağlantısı</label>
+                  <input type="url" value={spotify} onChange={(e) => setSpotify(e.target.value)} className="w-full bg-[#090b0e] text-[#f7f8fa] px-4 py-3.5 rounded-none focus:outline-none focus:ring-1 focus:ring-[#ff543b] border border-white/5" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-2">YouTube Kanal Linki</label>
-                  <input type="url" value={youtube} onChange={(e) => setYoutube(e.target.value)} className="w-full bg-black/50 text-white px-4 py-3.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#9A7950] border border-white/5" />
+                  <label className="block text-sm font-mono tracking-wide text-[#adb5c0] mb-2">YouTube kanal bağlantısı</label>
+                  <input type="url" value={youtube} onChange={(e) => setYoutube(e.target.value)} className="w-full bg-[#090b0e] text-[#f7f8fa] px-4 py-3.5 rounded-none focus:outline-none focus:ring-1 focus:ring-[#ff543b] border border-white/5" />
                 </div>
 
-                <button type="submit" disabled={loading} className="w-full mt-4 bg-[#9A7950] hover:bg-[#D0B98D] text-white font-black py-4 rounded-lg transition-all disabled:opacity-50 tracking-widest uppercase">
+                <button type="submit" disabled={loading} className="w-full mt-4 bg-[#ff543b] hover:bg-[#ff6c55] text-[#090b0e] font-semibold py-4 rounded-none transition-all disabled:opacity-50 tracking-wide uppercase">
                   {loading ? "Kaydediliyor..." : "Kaydet"}
                 </button>
               </form>
@@ -146,89 +148,85 @@ export default function ProfileClient({ user }: { user: UserData }) {
       )}
 
       {/* Profil Kartı */}
-      <div className="bg-[#171614]/50  border border-white/[0.05] rounded-xl p-8 md:p-12 shadow-2xl relative overflow-hidden group">
-        
-        {/* Dekoratif Yansıma */}
-        <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-          {user.isVerifiedArtist ? <CheckCircle2 className="w-64 h-64 text-[#D0B98D]" /> : <UserDecoration />}
-        </div>
-        
-        <button 
+      <div className="bg-[#12161b]  border border-white/[0.12] rounded-none p-8 md:p-12 shadow-none relative overflow-hidden group">
+
+
+        <button
           onClick={() => setIsEditing(true)}
-          className="absolute top-8 right-8 z-20 flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-[#9A7950]/20 hover:text-[#D0B98D] text-zinc-400 rounded-lg transition-all border border-white/5 font-bold text-sm"
+          className="relative z-20 mb-6 flex items-center gap-2 px-4 py-3 bg-white/5 hover:bg-[#ff543b]/10 hover:text-[#ff6c55] text-[#f7f8fa] rounded-none transition-colors border border-white/[0.12] font-semibold text-base"
         >
-          <Edit3 className="w-4 h-4" /> Profili Düzenle
+          <Edit3 className="w-4 h-4" /> Profili düzenle
         </button>
 
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10 mt-6 md:mt-0">
-          <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-[#171614] md:h-40 md:w-40">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
+          <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-none border border-white/15 bg-[#12161b] md:h-40 md:w-40">
             {user.image ? (
-              <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />
+              <img src={user.image} alt="Profil fotoğrafı" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-5xl md:text-7xl font-black text-[#D0B98D]">{user.name?.charAt(0).toUpperCase()}</span>
+              <span className="text-5xl md:text-7xl font-semibold text-[#ff6c55]">{user.name?.charAt(0).toLocaleUpperCase("tr-TR")}</span>
             )}
           </div>
-          
-          <div className="text-center md:text-left flex-1">
-            <h2 className="text-3xl md:text-4xl font-black text-white flex flex-col md:flex-row items-center gap-3 mb-2">
+
+          <div className="text-center md:text-left flex-1 min-w-0 w-full">
+            <h2 className="text-3xl md:text-4xl font-semibold text-[#f7f8fa] flex flex-col md:flex-row items-center gap-3 mb-2">
               {user.name}
               <div className="flex items-center gap-2">
                 {user.isVerifiedArtist && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#9A7950]/10 border border-[#9A7950]/30 text-[#D0B98D] text-xs uppercase tracking-widest font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> VIP
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-none bg-[#ff543b]/10 border border-[#ff543b]/30 text-[#ff6c55] text-sm tracking-wide font-bold">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Sanatçı
                   </span>
                 )}
                 {user.role === "ADMIN" && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-500 text-xs uppercase tracking-widest font-bold">
-                    <ShieldAlert className="w-3.5 h-3.5" /> Admin
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-none bg-red-500/10 border border-red-500/30 text-red-500 text-sm tracking-wide font-bold">
+                    <ShieldAlert className="w-3.5 h-3.5" /> Yönetici
                   </span>
                 )}
               </div>
             </h2>
-            <p className="text-zinc-400 font-mono text-sm mb-6">{user.email}</p>
-            
+            <p className="text-[#adb5c0] text-base mb-6 break-all">{user.email}</p>
+
             {user.bio && (
-              <p className="text-zinc-300 mb-6 max-w-2xl leading-relaxed bg-black/30 p-4 rounded-lg border border-white/5">{user.bio}</p>
+              <p className="text-[#f7f8fa] mb-6 max-w-2xl leading-relaxed bg-[#090b0e] p-4 rounded-none border border-white/5">{user.bio}</p>
             )}
 
             {/* Sosyal Linkler */}
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-8">
               {user.instagramUrl && (
-                <a href={user.instagramUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-pink-500/20 text-zinc-300 hover:text-pink-400 border border-white/10 px-4 py-2 rounded-lg transition-all text-sm font-bold">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> Instagram
+                <a href={user.instagramUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-[#ff543b]/10 text-[#f7f8fa] hover:text-[#ff6c55] border border-white/10 px-4 py-2 rounded-none transition-all text-base font-bold">
+                  <BrandIcon name="instagram" className="w-6 h-6" /> Instagram
                 </a>
               )}
               {user.spotifyUrl && (
-                <a href={user.spotifyUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-green-500/20 text-zinc-300 hover:text-green-400 border border-white/10 px-4 py-2 rounded-lg transition-all text-sm font-bold">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.659.3 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.02.6-1.14C9.6 9.9 15.001 10.62 18.66 12.9c.42.24.6.84.3 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.72 1.621.539.3.719 1.02.419 1.56-.239.54-.899.72-1.439.42z"/></svg>
+                <a href={user.spotifyUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-[#ff543b]/10 text-[#f7f8fa] hover:text-[#ff6c55] border border-white/10 px-4 py-2 rounded-none transition-all text-base font-bold">
+                  <BrandIcon name="spotify" className="w-6 h-6" />
                   Spotify
                 </a>
               )}
               {user.youtubeUrl && (
-                <a href={user.youtubeUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-red-500/20 text-zinc-300 hover:text-red-500 border border-white/10 px-4 py-2 rounded-lg transition-all text-sm font-bold">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.13 1 12 1 12s0 3.87.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.87 23 12 23 12s0-3.87-.46-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg> YouTube
+                <a href={user.youtubeUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-red-500/20 text-[#f7f8fa] hover:text-red-500 border border-white/10 px-4 py-2 rounded-none transition-all text-base font-bold">
+                  <BrandIcon name="youtube" className="w-6 h-6" /> YouTube
                 </a>
               )}
             </div>
-            
+
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-                <div className="bg-[#171614] border border-white/10 rounded-lg p-4 sm:p-5 flex flex-col justify-center transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-[#D0B98D] mb-1.5 opacity-90">Şarkı Hakkı</p>
-                  <p className="text-2xl font-black text-white">{user.uploadCredits}</p>
+                <div className="bg-[#12161b] border border-white/10 rounded-none p-4 sm:p-5 flex flex-col justify-center transition-colors">
+                  <p className="text-sm tracking-[0.04em] text-[#ff6c55] mb-1.5 opacity-90">Yükleme hakkı</p>
+                  <p className="text-2xl font-semibold text-[#f7f8fa]">{user.uploadCredits}</p>
                 </div>
-                <div className="bg-[#171614] border border-white/10 rounded-lg p-4 sm:p-5 flex flex-col justify-center transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90">Statü</p>
-                  <p className="text-xl font-black text-white">
-                    {user.isVerifiedArtist ? "VIP Sanatçı" : user.role === "ADMIN" ? "Yönetici" : "Dinleyici"}
+                <div className="bg-[#12161b] border border-white/10 rounded-none p-4 sm:p-5 flex flex-col justify-center transition-colors">
+                  <p className="text-sm tracking-[0.04em] text-[#adb5c0] mb-1.5 opacity-90">Hesap türü</p>
+                  <p className="text-xl font-semibold text-[#f7f8fa]">
+                    {user.isVerifiedArtist ? "Doğrulanmış sanatçı" : user.role === "ADMIN" ? "Yönetici" : "Dinleyici"}
                   </p>
                 </div>
-                <div className="bg-[#171614] border border-white/10 rounded-lg p-4 sm:p-5 flex flex-col justify-center transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90">Dinlenen</p>
-                  <p className="text-2xl font-black text-white">{user.songsListened}</p>
+                <div className="bg-[#12161b] border border-white/10 rounded-none p-4 sm:p-5 flex flex-col justify-center transition-colors">
+                  <p className="text-sm tracking-[0.04em] text-[#adb5c0] mb-1.5 opacity-90">Dinlenen parça</p>
+                  <p className="text-2xl font-semibold text-[#f7f8fa]">{user.songsListened}</p>
                 </div>
-                <div className="bg-[#171614] border border-white/10 rounded-lg p-4 sm:p-5 flex flex-col justify-center transition-colors">
-                  <p className="text-[9px] uppercase tracking-[0.15em] text-zinc-500 mb-1.5 opacity-90">Katılım</p>
-                  <p className="text-xl font-black text-white" suppressHydrationWarning>
+                <div className="bg-[#12161b] border border-white/10 rounded-none p-4 sm:p-5 flex flex-col justify-center transition-colors">
+                  <p className="text-sm tracking-[0.04em] text-[#adb5c0] mb-1.5 opacity-90">Katılım tarihi</p>
+                  <p className="text-xl font-semibold text-[#f7f8fa]" suppressHydrationWarning>
                     {new Date(user.createdAt).toLocaleDateString("tr-TR")}
                   </p>
                 </div>
@@ -239,37 +237,37 @@ export default function ProfileClient({ user }: { user: UserData }) {
 
       {/* Sanatçı Başvurusu Bölümü */}
       {!user.isVerifiedArtist && (
-        <div className="bg-[#171614]/50  border border-white/[0.05] rounded-xl p-8 md:p-12 shadow-2xl mt-4">
+        <div className="bg-[#12161b]  border border-white/[0.12] rounded-none p-8 md:p-12 shadow-none mt-4">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-lg bg-[#9A7950]/10 flex items-center justify-center text-[#D0B98D]">
+            <div className="w-12 h-12 rounded-none bg-[#ff543b]/10 flex items-center justify-center text-[#ff6c55]">
               <Music2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-2xl font-black text-white">VIP Sanatçı Başvurusu</h3>
-              <p className="text-zinc-400 text-sm mt-1">Eserlerinizi Thendisch radyosunda yayınlamak için sanatçı hesabı edinin.</p>
+              <h3 className="text-2xl font-semibold text-[#f7f8fa]">Sanatçı başvurusu</h3>
+              <p className="text-[#adb5c0] text-base mt-1">Üretimlerini toplulukla paylaşmak için sanatçı hesabına başvur.</p>
             </div>
           </div>
 
           {user.artistApplication ? (
-            <div className="bg-[#9A7950]/5 border border-[#9A7950]/20 rounded-lg p-6 flex flex-col items-center text-center">
-              <Clock className="w-12 h-12 text-[#D0B98D] mb-4" />
-              <h4 className="text-lg font-bold text-[#D0B98D] mb-2">Başvurunuz İncelemede</h4>
-              <p className="text-zinc-400 text-sm max-w-md">Yöneticilerimiz sosyal medya hesaplarınızı inceliyor. Onaylandığında e-posta ile bilgilendirileceksiniz ve VIP Sanatçı rozetinize kavuşacaksınız.</p>
+            <div className="bg-[#ff543b]/5 border border-[#ff543b]/20 rounded-none p-6 flex flex-col items-center text-center">
+              <Clock className="w-12 h-12 text-[#ff6c55] mb-4" />
+              <h4 className="text-lg font-bold text-[#ff6c55] mb-2">Başvurun inceleniyor</h4>
+              <p className="text-[#adb5c0] text-base max-w-md leading-relaxed">Sosyal medya hesapların inceleniyor. Başvurun onaylandığında e-posta ile haber vereceğiz.</p>
             </div>
           ) : (
             <form onSubmit={handleApplyArtist} className="flex flex-col gap-5 mt-8">
               {message && (
-                <div className="p-4 rounded-lg bg-white/5 border border-white/10 text-center font-medium text-zinc-300">
+                <div className="p-4 rounded-none bg-white/5 border border-white/10 text-center font-medium text-[#f7f8fa]">
                   {message}
                 </div>
               )}
-              
-              <div className="text-sm text-zinc-400 mb-4 bg-white/5 p-4 rounded-lg border border-white/10">
-                Sosyal medya linklerinizi yukarıdaki <strong>"Profili Düzenle"</strong> menüsünden eklediyseniz buraya otomatik gelecektir. Eksik olanları tamamlayıp başvurabilirsiniz.
+
+              <div className="text-base text-[#adb5c0] mb-4 bg-white/5 p-4 rounded-none border border-white/10">
+                Profiline eklediğin sosyal medya bağlantıları başvurunda kullanılır. Eksik bağlantıları <strong>Profili düzenle</strong> bölümünden tamamlayabilirsin.
               </div>
 
-              <button type="submit" disabled={loading} className="w-full bg-[#9A7950] hover:bg-[#D0B98D] text-white font-black py-4 rounded-lg transition-all shadow-sm hover:shadow-sm disabled:opacity-50 tracking-widest uppercase flex justify-center items-center gap-2">
-                {loading ? "Gönderiliyor..." : "Başvuruyu Gönder"} <ArrowRight className="w-5 h-5" />
+              <button type="submit" disabled={loading} className="w-full bg-[#ff543b] hover:bg-[#ff6c55] text-[#090b0e] font-semibold py-4 rounded-none transition-all shadow-none hover:shadow-none disabled:opacity-50 tracking-wide flex justify-center items-center gap-2">
+                {loading ? "Gönderiliyor..." : "Başvuruyu gönder"} <ArrowRight className="w-5 h-5" />
               </button>
             </form>
           )}
@@ -278,33 +276,34 @@ export default function ProfileClient({ user }: { user: UserData }) {
 
       {/* Yüklediği Şarkılar */}
       {user.songs && user.songs.length > 0 && (
-        <div className="bg-[#171614]/50  border border-white/[0.05] rounded-xl p-8 md:p-12 shadow-2xl mt-4">
-          <h3 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
-            <Music2 className="w-6 h-6 text-[#D0B98D]" />
-            Radyoya Yüklediğiniz Şarkılar
+        <div className="bg-[#12161b]  border border-white/[0.12] rounded-none p-8 md:p-12 shadow-none mt-4">
+          <h3 className="text-2xl font-semibold text-[#f7f8fa] mb-6 flex items-center gap-3">
+            <Music2 className="w-6 h-6 text-[#ff6c55]" />
+            Paylaştığın parçalar
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {user.songs.map((song) => (
-              <div key={song.id} className="flex items-center justify-between bg-black/40 p-4 rounded-lg border border-white/5 hover:border-[#9A7950]/30 transition-colors group">
+              <div key={song.id} className="flex items-center justify-between bg-[#090b0e] p-4 rounded-none border border-white/[0.12] hover:border-[#ff543b]/30 transition-colors group">
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-14 h-14 rounded-lg bg-zinc-900 border border-white/10 overflow-hidden shrink-0">
+                  <div className="w-14 h-14 rounded-none bg-[#090b0e] border border-white/10 overflow-hidden shrink-0">
                     {song.coverUrl ? (
-                      <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      <img src={song.coverUrl} alt="Parça kapağı" className="w-full h-full object-cover transition-opacity duration-200" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <Music2 className="w-6 h-6 text-[#D0B98D]/50" />
+                        <Music2 className="w-6 h-6 text-[#ff6c55]" />
                       </div>
                     )}
                   </div>
                   <div className="truncate">
-                    <p className="font-bold text-white truncate group-hover:text-[#D0B98D] transition-colors">{song.title}</p>
-                    <p className="text-xs text-zinc-400 truncate">{song.artist}</p>
+                    <p className="font-bold text-[#f7f8fa] truncate group-hover:text-[#ff6c55] transition-colors">{song.title}</p>
+                    <p className="text-sm text-[#adb5c0] truncate">{song.artist}</p>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => setEditingSong(song)}
-                  className="p-3 hover:bg-white/10 rounded-lg transition-colors text-zinc-500 hover:text-[#D0B98D] shrink-0"
+                  className="p-3 hover:bg-white/10 rounded-none transition-colors text-[#adb5c0] hover:text-[#ff6c55] shrink-0"
                   title="Düzenle"
+                  aria-label={`${song.title} parçasını düzenle`}
                 >
                   <Edit2 className="w-5 h-5" />
                 </button>
@@ -319,14 +318,5 @@ export default function ProfileClient({ user }: { user: UserData }) {
         <SongEditModal song={editingSong} onClose={() => setEditingSong(null)} />
       )}
     </div>
-  );
-}
-
-function UserDecoration() {
-  return (
-    <svg width="256" height="256" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-800">
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
   );
 }

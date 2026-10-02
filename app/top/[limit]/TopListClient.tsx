@@ -23,10 +23,10 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
       audioRef.current = new Audio();
     }
     const audio = audioRef.current;
-    
+
     const handleEnded = () => setPlayingId(null);
     audio.addEventListener("ended", handleEnded);
-    
+
     return () => {
       audio.removeEventListener("ended", handleEnded);
       audio.pause();
@@ -35,7 +35,7 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
 
   const togglePlay = (songId: string, playbackUrl: string) => {
     if (!audioRef.current) return;
-    
+
     if (playingId === songId) {
       audioRef.current.pause();
       setPlayingId(null);
@@ -70,7 +70,7 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
   if (songs.length === 0) {
     return (
       <div className="chart-empty">
-        <Music className="h-8 w-8 text-zinc-700" />
+        <Music className="h-8 w-8 text-[#adb5c0]" />
         <h3>Henüz parça yok</h3>
         <p>Yeni parçalar eklendikçe burada görünecek.</p>
       </div>
@@ -86,25 +86,25 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
           <div className="chart-song-rank">
             {idx + 1}
           </div>
-          
+
           {/* Cover */}
           <div className="chart-song-cover">
             {song.coverUrl ? (
-              <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover" />
+              <img src={song.coverUrl} alt="Parça kapağı" className="w-full h-full object-cover" />
             ) : (
-              <Music className="w-8 h-8 text-zinc-700" />
+              <Music className="w-8 h-8 text-[#adb5c0]" />
             )}
-            
+
             {/* Oynatma Butonu Overlay */}
-            <button 
+            <button
               onClick={() => togglePlay(song.id, song.playbackUrl)}
               aria-label={playingId === song.id ? `${song.title} parçasını duraklat` : `${song.title} parçasını çal`}
               className="chart-song-play"
             >
               {playingId === song.id ? (
-                <Pause className="w-8 h-8 text-[#D0B98D]" fill="currentColor" />
+                <Pause className="w-8 h-8 text-[#ff6c55]" fill="currentColor" />
               ) : (
-                <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
+                <Play className="w-8 h-8 text-[#f7f8fa] ml-1" fill="currentColor" />
               )}
             </button>
           </div>
@@ -114,7 +114,7 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
             <h3>{song.title}</h3>
             <p>{song.artist}</p>
           </div>
-          
+
           {/* Oylama ve Oy Sayısı */}
           <div className="chart-song-voting">
             <button
@@ -123,7 +123,7 @@ export default function TopListClient({ initialSongs }: { initialSongs: TopSong[
               className="chart-vote-button"
             >
               <Trophy className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase tracking-widest">{isVoting === song.id ? "..." : "Oy Ver"}</span>
+              <span className="text-sm font-bold tracking-wide">{isVoting === song.id ? "..." : "Oy ver"}</span>
             </button>
             <div className="chart-vote-count">
               <span>{song.monthlyVotes}</span>

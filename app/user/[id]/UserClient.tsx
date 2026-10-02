@@ -1,5 +1,7 @@
 "use client";
 
+import { BrandIcon } from "@/components/BrandIcon";
+
 import { Calendar, CheckCircle2, Music, ShieldAlert } from "lucide-react";
 
 type PublicUser = {
@@ -20,73 +22,69 @@ type PublicUser = {
 export default function UserClient({ user }: { user: PublicUser }) {
   return (
     <div className="flex flex-col gap-8">
-      
+
       {/* Profil Kartı */}
-      <div className="bg-[#171614]/50  border border-white/[0.05] rounded-xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
-        
-        {/* Dekoratif Yansıma */}
-        <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-          {user.isVerifiedArtist ? <CheckCircle2 className="w-64 h-64 text-[#D0B98D]" /> : <UserDecoration />}
-        </div>
-        
+      <div className="bg-[#12161b]  border border-white/[0.12] rounded-none p-8 md:p-12 shadow-none relative overflow-hidden">
+
+
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
-          <div className="w-40 h-40 rounded-xl border-4 border-[#9A7950]/30 flex items-center justify-center bg-zinc-900 overflow-hidden shadow-sm shrink-0">
+          <div className="w-40 h-40 rounded-none border-4 border-[#ff543b]/30 flex items-center justify-center bg-[#090b0e] overflow-hidden shadow-none shrink-0">
             {user.image ? (
-              <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />
+              <img src={user.image} alt="Profil fotoğrafı" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-7xl font-black text-[#D0B98D]">{user.name?.charAt(0).toUpperCase()}</span>
+              <span className="text-7xl font-semibold text-[#ff6c55]">{user.name?.charAt(0).toLocaleUpperCase("tr-TR")}</span>
             )}
           </div>
-          
+
           <div className="text-center md:text-left flex-1 w-full">
-            <h2 className="text-4xl md:text-5xl font-black text-white flex flex-col md:flex-row items-center gap-4 mb-4">
+            <h2 className="text-4xl md:text-5xl font-semibold text-[#f7f8fa] flex flex-col md:flex-row items-center gap-4 mb-4">
               {user.name}
               <div className="flex items-center gap-2">
                 {user.isVerifiedArtist && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#9A7950]/10 border border-[#9A7950]/30 text-[#D0B98D] text-sm uppercase tracking-widest font-bold">
-                    <CheckCircle2 className="w-4 h-4" /> VIP
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-none bg-[#ff543b]/10 border border-[#ff543b]/30 text-[#ff6c55] text-base tracking-wide font-bold">
+                    <CheckCircle2 className="w-4 h-4" /> Sanatçı
                   </span>
                 )}
                 {user.role === "ADMIN" && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-500 text-sm uppercase tracking-widest font-bold">
-                    <ShieldAlert className="w-4 h-4" /> Admin
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-none bg-red-500/10 border border-red-500/30 text-red-500 text-base tracking-wide font-bold">
+                    <ShieldAlert className="w-4 h-4" /> Yönetici
                   </span>
                 )}
               </div>
             </h2>
-            
+
             {user.bio ? (
-              <p className="text-zinc-300 mb-6 max-w-2xl leading-relaxed bg-black/30 p-5 rounded-lg border border-white/5 text-lg">{user.bio}</p>
+              <p className="text-[#f7f8fa] mb-6 max-w-2xl leading-relaxed bg-[#090b0e] p-5 rounded-none border border-white/[0.12] text-lg">{user.bio}</p>
             ) : (
-              <p className="text-zinc-500 italic mb-6">Bu kullanıcı henüz kendinden bahsetmemiş.</p>
+              <p className="text-[#adb5c0] italic mb-6">Henüz bir profil açıklaması eklenmemiş.</p>
             )}
 
             {/* Sosyal Linkler */}
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-8">
               {user.instagramUrl && (
-                <a href={user.instagramUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-pink-500/20 text-zinc-300 hover:text-pink-400 border border-white/10 px-5 py-2.5 rounded-lg transition-all text-sm font-bold">
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> Instagram
+                <a href={user.instagramUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-[#ff543b]/10 text-[#f7f8fa] hover:text-[#ff6c55] border border-white/10 px-5 py-2.5 rounded-none transition-all text-base font-bold">
+                  <BrandIcon name="instagram" className="w-6 h-6" /> Instagram
                 </a>
               )}
               {user.spotifyUrl && (
-                <a href={user.spotifyUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-green-500/20 text-zinc-300 hover:text-green-400 border border-white/10 px-5 py-2.5 rounded-lg transition-all text-sm font-bold">
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.659.3 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.02.6-1.14C9.6 9.9 15.001 10.62 18.66 12.9c.42.24.6.84.3 1.26zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.72 1.621.539.3.719 1.02.419 1.56-.239.54-.899.72-1.439.42z"/></svg>
+                <a href={user.spotifyUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-[#ff543b]/10 text-[#f7f8fa] hover:text-[#ff6c55] border border-white/10 px-5 py-2.5 rounded-none transition-all text-base font-bold">
+                  <BrandIcon name="spotify" className="w-6 h-6" />
                   Spotify
                 </a>
               )}
               {user.youtubeUrl && (
-                <a href={user.youtubeUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-red-500/20 text-zinc-300 hover:text-red-500 border border-white/10 px-5 py-2.5 rounded-lg transition-all text-sm font-bold">
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.13 1 12 1 12s0 3.87.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.87 23 12 23 12s0-3.87-.46-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg> YouTube
+                <a href={user.youtubeUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 hover:bg-red-500/20 text-[#f7f8fa] hover:text-red-500 border border-white/10 px-5 py-2.5 rounded-none transition-all text-base font-bold">
+                  <BrandIcon name="youtube" className="w-6 h-6" /> YouTube
                 </a>
               )}
             </div>
-            
-            <div className="flex items-center justify-center md:justify-start gap-4 text-zinc-500 text-sm font-medium">
+
+            <div className="flex items-center justify-center md:justify-start gap-4 text-[#adb5c0] text-base font-medium">
               <div className="flex items-center gap-1.5" suppressHydrationWarning>
-                <Calendar className="w-4 h-4" /> 
+                <Calendar className="w-4 h-4" />
                 {new Date(user.createdAt).toLocaleDateString("tr-TR")}
               </div>
-              <div className="w-1 h-1 rounded-full bg-zinc-700" />
+              <div className="w-1 h-1 rounded-none bg-white/20" />
               <div className="flex items-center gap-1.5">
                 <Music className="w-4 h-4" />
                 {user.songsListened} şarkı dinledi
@@ -97,30 +95,30 @@ export default function UserClient({ user }: { user: PublicUser }) {
       </div>
 
       {/* Yüklediği Şarkılar */}
-      <div className="bg-[#171614]/50  border border-white/[0.05] rounded-xl p-8 md:p-12 shadow-2xl mt-4">
-        <h3 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
-          <Music className="w-6 h-6 text-[#D0B98D]" />
-          Radyoya Yüklediği Şarkılar
+      <div className="bg-[#12161b]  border border-white/[0.12] rounded-none p-8 md:p-12 shadow-none mt-4">
+        <h3 className="text-2xl font-semibold text-[#f7f8fa] mb-6 flex items-center gap-3">
+          <Music className="w-6 h-6 text-[#ff6c55]" />
+          Paylaştığı parçalar
         </h3>
 
         {user.songs.length === 0 ? (
-          <p className="text-zinc-500 italic bg-white/5 p-6 rounded-lg text-center border border-white/5">Henüz radyoya hiç şarkı yüklememiş.</p>
+          <p className="text-[#adb5c0] italic bg-white/5 p-6 rounded-none text-center border border-white/5">Henüz paylaşılan parça yok.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {user.songs.map((song) => (
-              <div key={song.id} className="flex items-center gap-4 bg-black/40 p-4 rounded-lg border border-white/5 hover:border-[#9A7950]/30 transition-colors group">
-                <div className="w-14 h-14 rounded-lg bg-zinc-900 border border-white/10 overflow-hidden shrink-0">
+              <div key={song.id} className="flex items-center gap-4 bg-[#090b0e] p-4 rounded-none border border-white/[0.12] hover:border-[#ff543b]/30 transition-colors group">
+                <div className="w-14 h-14 rounded-none bg-[#090b0e] border border-white/10 overflow-hidden shrink-0">
                   {song.coverUrl ? (
-                    <img src={song.coverUrl} alt="Cover" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={song.coverUrl} alt="Parça kapağı" className="w-full h-full object-cover transition-opacity duration-200" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Music className="w-6 h-6 text-[#D0B98D]/50" />
+                      <Music className="w-6 h-6 text-[#ff6c55]" />
                     </div>
                   )}
                 </div>
                 <div className="flex-1 truncate">
-                  <p className="font-bold text-white truncate group-hover:text-[#D0B98D] transition-colors">{song.title}</p>
-                  <p className="text-xs text-zinc-400 truncate">{song.artist}</p>
+                  <p className="font-bold text-[#f7f8fa] truncate group-hover:text-[#ff6c55] transition-colors">{song.title}</p>
+                  <p className="text-sm text-[#adb5c0] truncate">{song.artist}</p>
                 </div>
               </div>
             ))}
@@ -129,14 +127,5 @@ export default function UserClient({ user }: { user: PublicUser }) {
       </div>
 
     </div>
-  );
-}
-
-function UserDecoration() {
-  return (
-    <svg width="256" height="256" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-800">
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
   );
 }

@@ -9,7 +9,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-space)", "system-ui", "sans-serif"],
-        display: ["var(--font-italiana)", "Georgia", "serif"],
+        display: ["var(--font-editorial)", "Georgia", "serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
     },

@@ -46,13 +46,10 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
   };
 
   return (
-    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased overflow-x-hidden selection:bg-[#9A7950]/30 selection:text-[#D0B98D] pb-32">
+    <main className="relative min-h-screen bg-[#090b0e] text-[#f7f8fa] antialiased overflow-x-hidden selection:bg-[#ff543b]/30 selection:text-[#ff6c55] pb-32">
       <SiteNavigation active="community" />
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#9A7950]/5 hidden" />
-      </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
+      <div className="studio-page-width relative z-10 py-12 sm:py-16">
         <UserClient user={userWithUrls} />
       </div>
     </main>

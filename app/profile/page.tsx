@@ -57,24 +57,20 @@ export default async function ProfilePage() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased overflow-x-hidden selection:bg-[#9A7950]/30 selection:text-[#D0B98D] pb-32">
+    <main className="relative min-h-screen bg-[#090b0e] text-[#f7f8fa] antialiased overflow-x-hidden selection:bg-[#ff543b]/30 selection:text-[#ff6c55] pb-32">
       <SiteNavigation actions={<AuthStatus session={session} />} />
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#9A7950]/5 hidden" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#9A7950]/5 hidden" />
-      </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
+      <div className="studio-page-width relative z-10 py-12 sm:py-16">
         <div className="mb-12">
           <p className="studio-page-kicker mb-3">Hesap</p>
           <h1 className="studio-page-title mb-3">
-            VIP <span className="studio-page-title-accent">Profiliniz</span>
+            <span className="studio-page-title-accent">Profilin</span>
           </h1>
-          <p className="text-zinc-400 font-light">
-            Hesap bilgilerinizi görüntüleyin ve Thendisch ayrıcalıklarını yönetin.
+          <p className="text-[#adb5c0] font-normal">
+            Hesap bilgilerini düzenle, paylaştığın parçaları ve dinleme bilgilerini gör.
           </p>
         </div>
-        
+
         <ProfileClient user={userWithUrls as any} />
       </div>
     </main>

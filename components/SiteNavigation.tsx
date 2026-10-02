@@ -28,8 +28,8 @@ export function SiteNavigation({ active, actions }: SiteNavigationProps) {
           </span>
         </Link>
         <div className="studio-site-header-actions">
-          {!actions && <Link href="/yukle" className="studio-site-upload">Şarkını yükle</Link>}
-          {actions || <Link href="/login" className="studio-site-account">Giriş / Üyelik</Link>}
+          {!actions && <Link href="/yukle" className="studio-site-upload">Parçanı paylaş</Link>}
+          {actions || <Link href="/login" className="studio-site-account">Giriş veya üyelik</Link>}
         </div>
       </div>
       <nav className="studio-site-nav" aria-label="Site bölümleri">
@@ -45,6 +45,7 @@ export function SiteNavigation({ active, actions }: SiteNavigationProps) {
         ))}
         <Link href="/top/20" className="studio-site-nav-link studio-site-nav-extra">Yeni Keşifler</Link>
         <Link href="/top/50" className="studio-site-nav-link studio-site-nav-extra">Arşiv</Link>
+        <a href="https://mais.thendisch.com/" className="studio-site-nav-link">Sizden Gelenler</a>
       </nav>
     </header>
   );

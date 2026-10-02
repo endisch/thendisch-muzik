@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import AdminClient from "./AdminClient";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { SiteNavigation } from "@/components/SiteNavigation";
+import AuthStatus from "@/components/AuthStatus";
 
 export const dynamic = "force-dynamic";
 
@@ -46,27 +48,24 @@ export default async function AdminPage() {
   const stats = { totalUsers, totalSongs, messagesToday, totalListens };
 
   return (
-    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased overflow-x-hidden selection:bg-[#9A7950]/30 selection:text-[#D0B98D] pb-32">
-      {/* Avant-Garde Background Glows */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#9A7950]/5 hidden" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#9A7950]/5 hidden" />
-      </div>
+    <main className="relative min-h-screen bg-[#090b0e] text-[#f7f8fa] antialiased overflow-x-hidden selection:bg-[#ff543b]/30 selection:text-[#ff6c55] pb-32">
+      <SiteNavigation actions={<AuthStatus session={session} />} />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-12">
+      <div className="studio-page-width relative z-10 py-12 sm:py-16">
         <div className="mb-12">
-          <Link href="/muzik" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm font-medium mb-8">
+          <Link href="/muzik" className="inline-flex items-center gap-2 text-[#adb5c0] hover:text-[#f7f8fa] transition-colors text-base font-medium mb-8">
             <ArrowLeft className="w-4 h-4" />
-            Radyoya Dön
+            Müzik Odası’na dön
           </Link>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-2">
-            Yönetim <span className="text-[#D0B98D]">Paneli</span>
+          <p className="studio-page-kicker mb-3">Yönetim</p>
+          <h1 className="studio-page-title mb-3">
+            Yönetim <span className="studio-page-title-accent">paneli.</span>
           </h1>
-          <p className="text-zinc-400 font-light max-w-xl">
-            Sistemi ve sanatçı başvurularını lüks ve güvenli bir şekilde yönetin.
+          <p className="text-[#adb5c0] font-normal max-w-xl">
+            Sanatçı başvurularını, kullanıcıları ve yükleme haklarını tek yerden yönet.
           </p>
         </div>
-        
+
         <AdminClient initialArtists={pendingArtists} stats={stats} />
       </div>
     </main>

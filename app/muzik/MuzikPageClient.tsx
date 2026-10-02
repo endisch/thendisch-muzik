@@ -37,28 +37,28 @@ function ChartsStrip() {
 
 export default function MuzikPageClient({ session }: { session: Session | null }) {
   return (
-    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased pb-32">
+    <main className="relative min-h-screen bg-[#090b0e] text-[#f7f8fa] antialiased pb-32">
       <SiteNavigation active="music" actions={<AuthStatus session={session} />} />
 
       <div className="flex flex-col items-center">
         <header className="studio-page-width pt-12 sm:pt-16">
           <p className="studio-page-kicker mb-4">
-            THENDISCH STUDIO <span className="text-white/30">/</span> CANLI MÜZİK
+            THENDISCH STUDIO <span className="text-[#adb5c0]">/</span> CANLI MÜZİK
           </p>
           <h1 className="studio-page-title">
             Müzik <span className="studio-page-title-accent">odası</span>
           </h1>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-400 sm:text-base">
-            Birlikte dinle. Sıradaki parçayı birlikte seç.
+          <p className="mt-3 max-w-xl text-sm leading-6 text-[#b8bec8] sm:text-base">
+            Canlı yayına katıl, yeni parçalar keşfet ve sıradaki şarkıya oy ver.
           </p>
         </header>
 
-        <div className="studio-page-width w-full">
+        <div className="studio-page-width">
           <ChartsStrip />
         </div>
 
         <div className="studio-page-width grid items-start gap-8 pt-8 pb-24 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:gap-10">
-          
+
           <div className="order-2 mt-8 w-full xl:order-1 xl:mt-0">
             <LiveChat />
           </div>

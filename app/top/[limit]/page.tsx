@@ -18,12 +18,12 @@ export const dynamic = "force-dynamic";
 export default async function TopPage({ params }: { params: Promise<{ limit: string }> }) {
   const { limit } = await params;
   const limitNum = parseInt(limit) || 10;
-  
+
   if (![10, 20, 50].includes(limitNum)) {
     return (
-      <div className="min-h-screen bg-[#100F0E] flex items-center justify-center">
-        <div className="text-zinc-500 font-mono text-sm uppercase tracking-widest border border-white/10 px-8 py-4 rounded-full">
-          Geçersiz liste limiti.
+      <div className="min-h-screen bg-[#090b0e] flex items-center justify-center">
+        <div className="text-[#adb5c0] font-mono text-base tracking-wide border border-white/10 px-8 py-4 rounded-none">
+          Bu liste bulunamadı.
         </div>
       </div>
     );
@@ -117,7 +117,7 @@ export default async function TopPage({ params }: { params: Promise<{ limit: str
   const subTitle = titles[limitNum as keyof typeof titles] || "Koleksiyon";
 
   return (
-    <main className="relative min-h-screen bg-[#100F0E] text-white antialiased overflow-x-hidden selection:bg-[#9A7950]/30 selection:text-[#D0B98D] pb-24">
+    <main className="relative min-h-screen bg-[#090b0e] text-[#f7f8fa] antialiased overflow-x-hidden selection:bg-[#ff543b]/30 selection:text-[#ff6c55] pb-24">
       <SiteNavigation active="charts" />
       <div className="studio-page-width relative z-10 py-12 sm:py-16">
         <header className="chart-page-heading">

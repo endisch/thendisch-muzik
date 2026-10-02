@@ -5,11 +5,11 @@ import { SiteNavigation } from "@/components/SiteNavigation";
 import { BrandIcon, type BrandIconName } from "@/components/BrandIcon";
 
 const destinations = [
-  { number: "01", icon: Radio, title: "Müzik Odası", description: "Canlı yayına katıl, sıradaki parçayı dinle ve sohbete dahil ol.", href: "/muzik", action: "Dinlemeye başla", style: "featured" },
-  { number: "02", icon: Trophy, title: "Topluluk listeleri", description: "Bu ayın favorilerini ve arşivde iz bırakan parçaları keşfet.", href: "/top/10", action: "Top 10'u aç", style: "" },
-  { number: "03", icon: Upload, title: "Parçanı sahnele", description: "Üretimini paylaş, topluluğun ortak akışında yerini al.", href: "/yukle", action: "Şarkı yükle", style: "" },
-  { number: "04", icon: UsersRound, title: "Topluluk", description: "En aktif dinleyicileri ve üreticileri tanı.", href: "/liderler", action: "Liderlik tablosu", style: "" },
-  { number: "05", icon: UserRound, title: "Hesabın", description: "Giriş yap, profilini düzenle ve dinleme geçmişine ulaş.", href: "/login", action: "Giriş / Üyelik", style: "" },
+  { number: "01", icon: Radio, title: "Canlı akışa katıl", description: "Bir parça açılır, yeni bir sohbet başlar. Birlikte dinle, sıradaki sesi keşfet.", href: "/muzik", action: "Müzik odasına gir", style: "featured" },
+  { number: "02", icon: Trophy, title: "Yeni sesler keşfet", description: "Topluluğun seçtiği parçalar, yeni keşifler ve yeniden dinlemek isteyeceğin sesler.", href: "/top/10", action: "Top 10'u keşfet", style: "" },
+  { number: "03", icon: Upload, title: "Sıra senin sesinde", description: "Parçanı paylaş. Hikâyene eşlik edecek dinleyicilerle burada buluş.", href: "/yukle", action: "Parçanı paylaş", style: "" },
+  { number: "04", icon: UsersRound, title: "Birlikte daha çok", description: "Müziği paylaşan, dinleyen ve yeni seslere alan açan insanları tanı.", href: "/liderler", action: "Topluluğu tanı", style: "" },
+  { number: "05", icon: UserRound, title: "Burada bir yerin var", description: "Profilini oluştur, paylaştığın parçaları ve dinleme geçmişini tek yerde tut.", href: "/login", action: "Giriş yap veya katıl", style: "" },
 ];
 
 const channels = [
@@ -66,23 +66,23 @@ export default function LandingPage() {
         <div className="home-copy">
           <p className="home-eyebrow"><span /> THENDISCH STUDIO · MÜZİK · MEDYA · DİJİTAL PROJELER</p>
           <h1 id="home-title" className="home-title">
-            Müziğin
-            <span>buluştuğu yer.</span>
+            Sesini duyur.
+            <span>İzini bırak.</span>
           </h1>
           <p className="home-description">
-            Canlı dinle, yeni parçalar keşfet ve kendi üretimini müzik topluluğuyla paylaş.
+            Yeni seslere kulak ver. Kendi hikâyeni müzikle anlat. Üreten ve dinleyen herkes için Thendisch Studio.
           </p>
           <div className="home-actions">
             <Link href="/muzik" className="home-primary-action">
-              Müzik odasına geç <ArrowRight size={17} strokeWidth={1.8} />
+              Canlı akışa katıl <ArrowRight size={17} strokeWidth={1.8} />
             </Link>
             <Link href="/top/10" className="home-secondary-action">
-              <Trophy size={16} strokeWidth={1.6} /> Listeleri keşfet
+              <Trophy size={16} strokeWidth={1.6} /> Yeni sesler keşfet
             </Link>
           </div>
           <div className="home-proof">
             <span className="home-proof-line" />
-            <span>Dinle · Keşfet · Paylaş</span>
+            <span>Birlikte dinle. Birlikte üret.</span>
           </div>
         </div>
 
@@ -96,8 +96,8 @@ export default function LandingPage() {
         </div>
         <div className="home-about-copy">
           <p className="home-eyebrow"><span /> HAKKIMDA</p>
-          <h2 id="home-about-title">Her proje için<br /><em>kendine özgü bir ses.</em></h2>
-          <p>Ben Thendisch. Müzik kanalları ve dijital projeler yönetiyor, her birine kendine özgü bir çevrim içi kimlik kazandırıyorum.</p>
+          <h2 id="home-about-title">Her sesin<br /><em>bir hikâyesi var.</em></h2>
+          <p>Ben Thendisch. Müzik kanalları ve dijital projeler yönetiyorum. Üretimlerin kendi kimliğini bulması, doğru insanlara ulaşması ve kalıcı bir iz bırakması için çalışıyorum.</p>
         </div>
       </section>
 
@@ -105,9 +105,9 @@ export default function LandingPage() {
         <div className="home-destinations-heading">
           <div>
             <p className="home-eyebrow"><span /> PLATFORM</p>
-            <h2 id="home-destinations-title">Stüdyoyu<br /><em>keşfet.</em></h2>
+            <h2 id="home-destinations-title">Senin sesin.<br /><em>Senin alanın.</em></h2>
           </div>
-          <p className="home-destinations-summary">Dinleme, keşif, paylaşım ve topluluk araçlarına tek yerden ulaş.</p>
+          <p className="home-destinations-summary">Dinlemek, paylaşmak ve bağlantı kurmak için ihtiyacın olan her şey burada.</p>
         </div>
         <div className="home-destination-grid">
           {destinations.map(({ number, icon: Icon, title, description, href, action, style }) => (
@@ -139,9 +139,9 @@ export default function LandingPage() {
         <div className="home-projects-heading">
           <div>
             <p className="home-eyebrow"><span /> PROJELER</p>
-            <h2 id="home-projects-title">Bir çatı altında,<br /><em>farklı üretimler.</em></h2>
+            <h2 id="home-projects-title">Farklı sesler.<br /><em>Ortak bir vizyon.</em></h2>
           </div>
-          <p className="home-destinations-summary">Yönettiğim kanalları, dinleme alanını ve müzik gönderim projesini buradan keşfet.</p>
+          <p className="home-destinations-summary">Birlikte çalıştığım kanalları tanı. Kendi parçanla bu hikâyenin bir parçası ol.</p>
         </div>
 
         <a className="home-submission-card" href="https://mais.thendisch.com/" aria-label="Sizden Gelenler — şarkını gönder">
@@ -180,9 +180,9 @@ export default function LandingPage() {
         <div className="home-social-heading">
           <div>
             <p className="home-eyebrow"><span /> BAĞLANTIDA KAL</p>
-            <h2 id="home-social-title">Takip et.</h2>
+            <h2 id="home-social-title">Stüdyo hep açık.</h2>
           </div>
-          <p>Yeni üretimler, stüdyodan anlar ve daha fazlası.</p>
+          <p>Yeni parçalar, yaratım süreci ve stüdyodan anlar. İstediğin platformdan bize katıl.</p>
         </div>
         <div className="home-social-grid">
           {socialLinks.map((social) => (
@@ -195,7 +195,7 @@ export default function LandingPage() {
         </div>
         <a className="home-contact" href="mailto:info@thendisch.com">
           <BrandIcon name="mail" />
-          <span><span>Birlikte üretelim.</span><strong>info@thendisch.com</strong></span>
+          <span><span>Bir fikrin mi var? Birlikte üretelim.</span><strong>info@thendisch.com</strong></span>
           <ArrowUpRight size={24} aria-hidden="true" />
         </a>
       </section>
@@ -203,7 +203,7 @@ export default function LandingPage() {
       <footer className="home-footer">
         <Link href="/" className="home-footer-brand">THENDISCH STUDIO</Link>
         <span>© 2026 · Müzik, medya ve dijital projeler.</span>
-        <Link href="/muzik" className="home-footer-link">Frekansa katıl <ArrowRight size={14} /></Link>
+        <Link href="/muzik" className="home-footer-link">Canlı akışa katıl <ArrowRight size={14} /></Link>
       </footer>
     </main>
   );
