@@ -24,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Thendisch Studio",
-  description: "Thendisch Studio: canlı müzik, yeni keşifler ve bağımsız üreticiler için bir topluluk.",
+  description: "Thendisch Studio: müzik, medya ve dijital projelere tek bir yerden ulaş.",
   manifest: "/manifest.json",
   appleWebApp: {
     title: "Thendisch Studio",
