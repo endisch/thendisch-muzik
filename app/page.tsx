@@ -31,8 +31,8 @@ function VinylArtwork() {
     <div className="home-art" aria-hidden="true">
       <div className="home-art-index">
         <span className="home-art-index-dot" />
-        <span>THENDISCH RADIO</span>
-        <span className="home-art-index-live">MÜZİK · TOPLULUK</span>
+        <span>CANLI RADYO</span>
+        
       </div>
       <div className="vinyl-disc">
         <svg className="vinyl-grooves" viewBox="0 0 440 440" fill="none">
@@ -49,7 +49,7 @@ function VinylArtwork() {
         <div className="vinyl-label">
           <span className="vinyl-label-mark">T</span>
           <span className="vinyl-label-name">THENDISCH</span>
-          <span className="vinyl-label-sub">BAĞIMSIZ MÜZİK</span>
+          <span className="vinyl-label-sub">STUDIO</span>
           <span className="vinyl-label-hole" />
         </div>
       </div>

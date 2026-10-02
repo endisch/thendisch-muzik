@@ -254,7 +254,7 @@
 .home-proof-line { width: 30px; height: 1px; background: var(--home-accent); }
 
 .home-art { position: relative; display: grid; min-height: 510px; place-items: center; }
-.home-art-index { position: absolute; z-index: 2; top: 8%; right: 2%; display: flex; align-items: center; gap: 9px; color: #9e9893; font-size: 12px; letter-spacing: .13em; }
+.home-art-index { position: absolute; z-index: 2; top: 8%; right: 2%; display: flex; align-items: center; gap: 9px; color: #adb5c0; font-size: 12px; letter-spacing: .08em; white-space: nowrap; }
 .home-art-index-live { margin-left: 9px; color: #e2deda; }
 .vinyl-disc {
   position: relative;
@@ -273,8 +273,8 @@
 .vinyl-grooves path { stroke: var(--home-accent); stroke-width: 2; stroke-linecap: round; }
 .vinyl-label { position: relative; display: flex; width: 35%; aspect-ratio: 1; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #ff543b; border-radius: 50%; background: #201414; }
 .vinyl-label-mark { color: var(--home-accent-light); font-family: var(--font-editorial), Georgia, serif; font-size: clamp(48px, 7vw, 79px); line-height: .83; }
-.vinyl-label-name { margin-top: 13px; color: #eee8e1; font-size: clamp(6px, .8vw, 9px); font-weight: 700; letter-spacing: .2em; }
-.vinyl-label-sub { margin-top: 5px; color: #8d8581; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; letter-spacing: .14em; }
+.vinyl-label-name { margin-top: 9px; color: #f7f8fa; font-size: clamp(6px, .8vw, 9px); font-weight: 700; letter-spacing: .2em; }
+.vinyl-label-sub { margin-top: 5px; color: #8d8581; font-family: var(--font-mono), ui-monospace, monospace; font-size: 8px; letter-spacing: .14em; white-space: nowrap; }
 .vinyl-label-hole { position: absolute; top: 50%; left: 50%; width: 6px; height: 6px; border: 1px solid #d3c8c1; border-radius: 50%; background: #111; transform: translate(-50%, -50%); }
 .vinyl-orbit { position: absolute; border: 1px solid rgba(255, 255, 255, .07); border-radius: 50%; pointer-events: none; }
 .vinyl-orbit-outer { width: 98%; aspect-ratio: 1; }
@@ -471,12 +471,12 @@
 .studio-site-upload:hover { background: #ff806c; border-color: #ff806c; }
 .studio-site-account { border-color: rgba(255, 255, 255, .14); color: #aaa39e; }
 .studio-site-account:hover { border-color: rgba(255, 255, 255, .35); color: #fff; }
-.studio-site-nav { display: flex; min-height: 42px; align-items: stretch; gap: 26px; overflow-x: auto; scrollbar-width: none; }
+.studio-site-nav { display: flex; min-height: 44px; flex-wrap: wrap; align-items: stretch; gap: 0 24px; overflow-x: visible; scrollbar-width: none; }
 .studio-site-nav::-webkit-scrollbar { display: none; }
-.studio-site-nav-link { position: relative; display: inline-flex; flex: 0 0 auto; align-items: center; color: #adb5c0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; transition: color .18s ease; }
+.studio-site-nav-link { min-height: 44px; position: relative; display: inline-flex; flex: 0 0 auto; align-items: center; color: #adb5c0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; transition: color .18s ease; }
 .studio-site-nav-link:hover,.studio-site-nav-link[aria-current="page"] { color: #f3efea; }
 .studio-site-nav-link[aria-current="page"]::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: #ff543b; content: ""; }
-.studio-site-nav-extra { color: #6f6966; }
+.studio-site-nav-extra { color: #929ba8; }
 .studio-chart-shortcuts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 30px; }
 .studio-chart-shortcut { display: flex; min-height: 88px; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 18px; border: 1px solid rgba(255, 255, 255, .1); background: #12161b; color: #f7f8fa; text-decoration: none; transition: border-color .18s ease, background .18s ease; }
 .studio-chart-shortcut:hover { border-color: rgba(255, 108, 85, .55); background: #1b222c; }
@@ -566,3 +566,5 @@
 @media (prefers-reduced-motion: reduce) {
   .studio-site-upload,.studio-site-account,.studio-site-nav-link,.chart-range-nav a,.chart-song-rank,.chart-song-info h3,.chart-song-play { transition: none; }
 }
+
+@media (min-width:641px) and (max-width:900px) { .vinyl-label-mark { font-size:48px; } .vinyl-label-name { margin-top:8px; } }
