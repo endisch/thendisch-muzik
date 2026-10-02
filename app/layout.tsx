@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#100F0E",
+  themeColor: "#090b0e",
 };
 
 export default function RootLayout({
@@ -43,7 +43,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className={`${spaceGrotesk.variable} ${italiana.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans bg-[#100F0E] text-gray-100 min-h-screen selection:bg-[#9A7950]/30 selection:text-[#D0B98D]">
+      <body className="font-sans bg-[#090b0e] text-gray-100 min-h-screen selection:bg-[#ff543b]/30 selection:text-white">
         <Providers>
           {children}
         </Providers>

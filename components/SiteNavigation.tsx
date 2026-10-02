@@ -19,8 +19,13 @@ export function SiteNavigation({ active, actions }: SiteNavigationProps) {
     <header className="studio-site-header">
       <div className="studio-site-header-main">
         <Link href="/" className="studio-site-brand" aria-label="Thendisch Studio ana sayfa">
-          <span className="studio-site-brand-name">THENDISCH STUDIO</span>
-          <span className="studio-site-brand-sub">Müzik · Medya · Dijital projeler</span>
+          <svg className="studio-site-logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <path d="M8 11h48v5H35v29h8l-3 6H24l-3-6h8V16H8z" fill="currentColor" />
+          </svg>
+          <span className="studio-site-brand-copy">
+            <span className="studio-site-brand-name">THENDISCH STUDIO</span>
+            <span className="studio-site-brand-sub">Müzik · Medya · Dijital projeler</span>
+          </span>
         </Link>
         <div className="studio-site-header-actions">
           {!actions && <Link href="/yukle" className="studio-site-upload">Şarkını yükle</Link>}

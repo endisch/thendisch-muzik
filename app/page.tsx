@@ -1,6 +1,8 @@
-import { ArrowRight, ArrowUpRight, Trophy, Radio, Upload, UsersRound, UserRound, Music2, Send, Disc3 } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Trophy, Radio, Upload, UsersRound, UserRound, Send } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { SiteNavigation } from "@/components/SiteNavigation";
+import { BrandIcon, type BrandIconName } from "@/components/BrandIcon";
 
 const destinations = [
   { number: "01", icon: Radio, title: "Müzik Odası", description: "Canlı yayına katıl, sıradaki parçayı dinle ve sohbete dahil ol.", href: "/muzik", action: "Dinlemeye başla", style: "featured" },
@@ -11,17 +13,17 @@ const destinations = [
 ];
 
 const channels = [
-  { name: "Saz Band", href: "https://www.youtube.com/@sazbandmusic" },
-  { name: "Mustafa İnce", href: "https://www.youtube.com/@mustafaincemuzik" },
-  { name: "DJ Thendisch", href: "https://www.youtube.com/@DjThendisch" },
-  { name: "Serdar Ateş", href: "https://www.youtube.com/@serdaratesmuzik" },
+  { name: "Saz Band", image: "sazband", href: "https://www.youtube.com/@sazbandmusic" },
+  { name: "Mustafa İnce", image: "mustafa-ince", href: "https://www.youtube.com/@mustafaincemuzik" },
+  { name: "DJ Thendisch", image: "dj-thendisch", href: "https://www.youtube.com/@DjThendisch" },
+  { name: "Serdar Ateş", image: "serdar-ates", href: "https://www.youtube.com/@serdaratesmuzik" },
 ];
 
-const socialLinks = [
-  { label: "Spotify", href: "https://open.spotify.com/intl-tr/artist/57s3u3Z5MuRnvupktxaPSB" },
-  { label: "Instagram", href: "https://www.instagram.com/thendisch.studio/" },
-  { label: "TikTok", href: "https://www.tiktok.com/@thendisch/" },
-  { label: "Facebook", href: "https://www.facebook.com/thendisch/" },
+const socialLinks: { label: string; icon: BrandIconName; caption: string; href: string }[] = [
+  { label: "Spotify", icon: "spotify", caption: "Müziğimi dinle", href: "https://open.spotify.com/intl-tr/artist/57s3u3Z5MuRnvupktxaPSB" },
+  { label: "Instagram", icon: "instagram", caption: "Stüdyodan anlar", href: "https://www.instagram.com/thendisch.studio/" },
+  { label: "TikTok", icon: "tiktok", caption: "Yeni videoları keşfet", href: "https://www.tiktok.com/@thendisch/" },
+  { label: "Facebook", icon: "facebook", caption: "Gelişmeleri takip et", href: "https://www.facebook.com/thendisch/" },
 ];
 
 function VinylArtwork() {
@@ -88,7 +90,10 @@ export default function LandingPage() {
       </section>
 
       <section className="home-about" aria-labelledby="home-about-title">
-        <div className="home-about-mark" aria-hidden="true">T<span>STUDIO</span></div>
+        <div className="home-about-portrait">
+          <Image src="/images/studio/thendisch.webp" alt="Thendisch" width={960} height={960} unoptimized />
+          <span className="home-portrait-caption">THENDISCH / STUDIO</span>
+        </div>
         <div className="home-about-copy">
           <p className="home-eyebrow"><span /> HAKKIMDA</p>
           <h2 id="home-about-title">Her proje için<br /><em>kendine özgü bir ses.</em></h2>
@@ -139,15 +144,15 @@ export default function LandingPage() {
           <p className="home-destinations-summary">Yönettiğim kanalları, dinleme alanını ve müzik gönderim projesini buradan keşfet.</p>
         </div>
 
-        <a className="home-mais-card" href="https://mais.thendisch.com/" aria-label="MAİS Sizden Gelenler projesini aç">
-          <span className="home-project-index">01 <span>/</span> MAİS PROJESİ</span>
+        <a className="home-submission-card" href="https://mais.thendisch.com/" aria-label="Sizden Gelenler — şarkını gönder">
+          <span className="home-project-index">01 <span>/</span> HAFTALIK PROGRAM</span>
           <span className="home-mais-icon"><Send size={20} strokeWidth={1.5} aria-hidden="true" /></span>
-          <span className="home-mais-copy">
-            <span className="home-project-overline">SİZDEN GELENLER</span>
-            <strong>MAİS</strong>
-            <span className="home-project-description">Parçanı gönder, Thendisch Studio ekibiyle paylaşım sürecini başlat.</span>
+          <span className="home-submission-copy">
+            <span className="home-project-overline">MUSTAFA İNCE YOUTUBE KANALI</span>
+            <strong>SİZDEN GELENLER</strong>
+            <span className="home-project-description">Mustafa İNCE youtube kanalının haftalık programı sizden gelenlere katılmak için şarkını gönder</span>
           </span>
-          <span className="home-project-action">Projeyi aç <ArrowUpRight size={17} strokeWidth={1.6} /></span>
+          <span className="home-project-action">Şarkını gönder <ArrowUpRight size={19} strokeWidth={1.6} /></span>
         </a>
 
         <div className="home-channel-heading">
@@ -157,23 +162,42 @@ export default function LandingPage() {
         <div className="home-channel-grid">
           {channels.map((channel) => (
             <a className="home-channel-card" href={channel.href} target="_blank" rel="noopener noreferrer" key={channel.name}>
-              <span className="home-channel-icon"><Music2 size={17} strokeWidth={1.6} aria-hidden="true" /></span>
+              <span className="home-channel-image">
+                <Image src={`/images/studio/${channel.image}.webp`} alt="" width={480} height={480} unoptimized />
+              </span>
               <span className="home-channel-copy">
                 <strong>{channel.name}</strong>
-                <span>YouTube kanalı</span>
+                <span><BrandIcon name="youtube" /> YouTube kanalı</span>
               </span>
               <ArrowUpRight className="home-channel-arrow" size={15} strokeWidth={1.6} aria-hidden="true" />
             </a>
           ))}
         </div>
 
-        <div className="home-social-row" aria-label="Sosyal medya ve iletişim">
-          <span className="home-project-index"><Disc3 size={14} aria-hidden="true" /> TAKİP ET</span>
-          {socialLinks.map((social) => (
-            <a href={social.href} target="_blank" rel="noopener noreferrer" key={social.label}>{social.label}<ArrowUpRight size={12} /></a>
-          ))}
-          <a href="mailto:info@thendisch.com">İletişim <ArrowUpRight size={12} /></a>
+      </section>
+
+      <section className="home-social" aria-labelledby="home-social-title">
+        <div className="home-social-heading">
+          <div>
+            <p className="home-eyebrow"><span /> BAĞLANTIDA KAL</p>
+            <h2 id="home-social-title">Takip et.</h2>
+          </div>
+          <p>Yeni üretimler, stüdyodan anlar ve daha fazlası.</p>
         </div>
+        <div className="home-social-grid">
+          {socialLinks.map((social) => (
+            <a className={`home-social-card home-social-${social.icon}`} href={social.href} target="_blank" rel="noopener noreferrer" key={social.label}>
+              <BrandIcon name={social.icon} className="home-social-logo" />
+              <span className="home-social-copy"><strong>{social.label}</strong><span>{social.caption}</span></span>
+              <ArrowUpRight className="home-social-arrow" size={20} aria-hidden="true" />
+            </a>
+          ))}
+        </div>
+        <a className="home-contact" href="mailto:info@thendisch.com">
+          <BrandIcon name="mail" />
+          <span><span>Birlikte üretelim.</span><strong>info@thendisch.com</strong></span>
+          <ArrowUpRight size={24} aria-hidden="true" />
+        </a>
       </section>
 
       <footer className="home-footer">
